@@ -1,0 +1,22 @@
+{
+  "name": "qutbio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobjmarks/qutbio.git"
+  },
+  "author": "Jacob Marks <jacobjmarks@outlook.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacobjmarks/qutbio/issues"
+  },
+  "homepage": "https://github.com/jacobjmarks/qutbio#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
