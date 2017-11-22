@@ -1,0 +1,12 @@
+- var tool_name = 'Tool B';
+- var tool_func = 'Tool_B';
+
+.card(id=tool_name)
+    button.btn.card-header(
+        data-toggle='collapse'
+        data-target=`.card[id='${tool_name}'] > .collapse`
+    ) #{tool_name}
+    .collapse
+        .card-body
+            p World
+            button.btn.btn-primary Run

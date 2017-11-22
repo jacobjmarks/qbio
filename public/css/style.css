@@ -1,0 +1,7 @@
+html {
+    padding-top: 15px;
+}
+
+button:hover {
+    cursor: pointer;
+}
