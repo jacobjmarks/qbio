@@ -4,7 +4,7 @@
             .col-3
                 h1.mb-0 Qbio
             .col-9
-                form.float-right.mb-0#uploadform
+                form.float-right.mb-0#uploadform(method="POST" action="/uploadfile" encType="multipart/form-data")
                     .form-row.align-items-center
-                        input.form-control-file.mr-1(type='file')
-                        button.btn.btn-primary(type="submit") Upload
+                        input.form-control-file.mr-1(type='file' name='file')
+                        button.btn.btn-primary(type='submit') Upload
