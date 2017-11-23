@@ -6,15 +6,21 @@ html
              integrity='sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb'
              crossorigin='anonymous')
         
-        link(rel='stylesheet' href='./css/style.css')
+        link(rel='stylesheet' href='/css/style.css')
 
-        title qutbio
+        title Qbio
     body
         .container-fluid
+            .row.mb-3
+                .col
+                    include header.pug
             .row
-                .col-4.w-100
+                .col-md-4.mb-3.mb-md-0
                     include tools/toolA.pug
                     include tools/toolB.pug
+                .col-md-8.pl-md-0
+                    .card
+                        .card-body#results Results...
 
         //- jQuery
         script(src='https://code.jquery.com/jquery-3.2.1.min.js'
