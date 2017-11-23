@@ -1,6 +1,6 @@
 .card
     .card-body
-        .row.align-items-center
+        .row.align-items-center.mb-3
             .col-3
                 h1.mb-0 Qbio
             .col-9
@@ -8,3 +8,10 @@
                     .form-row.align-items-center
                         input.form-control-file.mr-1(type='file' name='file')
                         button.btn.btn-primary(type='submit') Upload
+        .row
+            table#dataTable.table.table-sm.table-hover.mb-0
+                thead
+                    tr
+                        th #
+                        th Filename
+                tbody#dataTableBody

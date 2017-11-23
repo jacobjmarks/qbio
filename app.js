@@ -1,5 +1,6 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
+const fs = require('fs');
 const app = express();
 
 const PORT = 3000;
@@ -18,6 +19,13 @@ app.post('/uploadfile', (req, res) => {
     file.mv(`data/${file.name}`, (err) => {
         if (err) return res.status(500).send("Error uploading file.\n" + err);
         res.end();
+    })
+})
+
+app.post('/getAvailableData', (req, res) => {
+    fs.readdir('./data/', (err, files) => {
+        if (err) return res.status(500).send("Error retrieving available datafiles.\n" + err)
+        res.send(files);
     })
 })
 
