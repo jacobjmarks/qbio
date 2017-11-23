@@ -1,4 +1,11 @@
 $(document).ready(() => {
+    dataTable = $("#dataTable").DataTable({
+        "paging": false,
+        "info": false,
+        columns: [
+            {title: "#"}, {title: "Filename"}, {title: "Size (mb)"}
+        ]
+    })
     populateDataList();
 })
 
@@ -31,24 +38,9 @@ function populateDataList() {
         method: "POST",
         url: "/getAvailableData",
         success: (data, status, req) => {
-            $("#dataTableBody").empty();
+            dataTable.clear();
             data.forEach((datafile, index) => {
-                $("#dataTableBody").append(
-                    $("<tr/>")
-                        .append(
-                            $("<th/>")
-                            .attr("scope", "row")
-                            .text(index + 1)
-                        )
-                        .append(
-                            $("<td/>")
-                            .text(datafile.filename)
-                        )
-                        .append(
-                            $("<td/>")
-                            .text(datafile.size)
-                        )
-                );
+                dataTable.row.add([index+1, datafile.filename, datafile.size]).draw(false);
             })
         },
         error: (req, status, error) => {
