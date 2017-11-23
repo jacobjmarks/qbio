@@ -32,16 +32,21 @@ function populateDataList() {
         url: "/getAvailableData",
         success: (data, status, req) => {
             $("#dataTableBody").empty();
-            data.forEach((filename, index) => {
+            data.forEach((datafile, index) => {
                 $("#dataTableBody").append(
                     $("<tr/>")
                         .append(
                             $("<th/>")
+                            .attr("scope", "row")
                             .text(index + 1)
                         )
                         .append(
                             $("<td/>")
-                            .text(filename)
+                            .text(datafile.filename)
+                        )
+                        .append(
+                            $("<td/>")
+                            .text(datafile.size)
                         )
                 );
             })

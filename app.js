@@ -4,6 +4,7 @@ const fs = require('fs');
 const app = express();
 
 const PORT = 3000;
+const dataDir = './data/';
 
 app.use(express.static('public'));
 app.use(fileUpload());
@@ -23,9 +24,28 @@ app.post('/uploadfile', (req, res) => {
 })
 
 app.post('/getAvailableData', (req, res) => {
-    fs.readdir('./data/', (err, files) => {
+    fs.readdir(dataDir, (err, files) => {
         if (err) return res.status(500).send("Error retrieving available datafiles.\n" + err)
-        res.send(files);
+
+        let datafileInfo = [];
+        files.forEach((filename, _) => {
+            fs.stat(dataDir + filename, (err, stats) => {
+                if (err) {
+                    datafileInfo.push({
+                        filename: filename,
+                        size: "error"
+                    })
+                } else {
+                    datafileInfo.push({
+                        filename: filename,
+                        size: stats.size / 1000000.0
+                    })
+                }
+                if (datafileInfo.length == files.length) {
+                    res.send(datafileInfo);
+                }
+            })
+        })
     })
 })
 
