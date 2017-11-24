@@ -66,3 +66,24 @@ function populateDataTable() {
         }
     })
 }
+
+function runTool(toolname) {
+    if (!selectedDataFile) {
+        return alert("No datafile selected.");
+    }
+
+    $.ajax({
+        method: "GET",
+        url: "/run",
+        data: {
+            "tool": false,
+            "file": selectedDataFile
+        },
+        success: (data, status, req) => {
+            $("#results").html(data);
+        },
+        error: (req, status, error) => {
+            alert(req.responseText);
+        }
+    })
+}

@@ -49,6 +49,19 @@ app.post('/getAvailableData', (req, res) => {
     })
 })
 
+app.get('/run', (req, res) => {
+    let tool = req.query.tool;
+    let file = req.query.file;
+
+    if (!tool) return res.status(400).send("Invalid tool.");
+    if (!file) return res.status(400).send("Invalid datafile.");
+
+    fs.readFile(dataDir + file, (err, data) => {
+        if (err) return res.status(500).send("Error reading datafile.");
+        res.send(data);
+    })
+})
+
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })
