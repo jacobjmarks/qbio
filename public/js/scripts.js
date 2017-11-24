@@ -6,7 +6,25 @@ $(document).ready(() => {
             {title: "#"}, {title: "Filename"}, {title: "Size (mb)"}
         ]
     })
-    populateDataList();
+
+    selectedDataFile = null;
+
+    $("#dataTable tbody").on("click", "tr", (e) => {
+        let row = e.target.parentElement;
+        let data = dataTable.row(row).data();
+
+        if ($(row).hasClass("table-primary")) {
+            $(row).removeClass("table-primary");
+            selectedDataFile = null;
+        } else {
+            dataTable.$("tr.table-primary").removeClass("table-primary");
+            $(row).addClass("table-primary");
+            selectedDataFile = data[1];
+        }
+    })
+
+
+    populateDataTable();
 })
 
 const fileInput = $("#uploadform :input")[0];
@@ -20,11 +38,11 @@ $("#uploadform").submit((e) => {
         processData: false,
         data: (() => {
             let formdata = new FormData();
-            formdata.append('file', fileInput.files[0]);
+            formdata.append("file", fileInput.files[0]);
             return formdata;
         })(),
         success: (data, status, req) => {
-            populateDataList();
+            populateDataTable();
         },
         error: (req, status, error) => {
             alert(req.responseText);
@@ -33,7 +51,7 @@ $("#uploadform").submit((e) => {
     return false;
 })
 
-function populateDataList() {
+function populateDataTable() {
     $.ajax({
         method: "POST",
         url: "/getAvailableData",
