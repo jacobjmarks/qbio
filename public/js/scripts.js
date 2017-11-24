@@ -23,7 +23,6 @@ $(document).ready(() => {
         }
     })
 
-
     populateDataTable();
 })
 
@@ -76,7 +75,7 @@ function runTool(toolname) {
         method: "GET",
         url: "/run",
         data: {
-            "tool": false,
+            "tool": toolname,
             "file": selectedDataFile
         },
         success: (data, status, req) => {

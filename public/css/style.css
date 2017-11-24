@@ -6,3 +6,9 @@ html {
 button:hover {
     cursor: pointer;
 }
+
+#results {
+    white-space: pre;
+    font-family: monospace;
+    overflow: auto;
+}
