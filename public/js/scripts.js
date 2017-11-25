@@ -56,6 +56,7 @@ function populateDataTable() {
         url: "/getAvailableData",
         success: (data, status, req) => {
             dataTable.clear();
+            if (!data) return;
             data.forEach((datafile, index) => {
                 dataTable.row.add([index+1, datafile.filename, datafile.size]).draw(false);
             })
