@@ -10,6 +10,7 @@ $(document).ready(() => {
     selectedDataFile = null;
 
     $("#dataTable tbody").on("click", "tr", (e) => {
+        if ($(e.target).hasClass("dataTables_empty")) return;
         let row = e.target.parentElement;
         let data = dataTable.row(row).data();
 
