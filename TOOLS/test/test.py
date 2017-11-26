@@ -1,5 +1,13 @@
 import sys
-datafile = sys.argv[1]
-results = open("./data/results.txt", "w")
-results.write(datafile)
-results.write("\nWOW!")
+
+def main():
+    length = 0
+    with open(sys.argv[1]) as datafile:
+        for line in datafile:
+            length += len(line)
+
+    with open('./data/results.txt', 'w') as results:
+        results.write(str(length))
+        results.close()
+
+main()
