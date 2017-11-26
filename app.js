@@ -6,6 +6,7 @@ const app = express();
 const PORT = 3000;
 
 const datafile = require('./libs/datafile.js');
+const tool_controller = require('./libs/tool-controller.js');
 
 app.use(express.static('public'));
 app.use(fileUpload());
@@ -29,7 +30,7 @@ app.post('/getAvailableData', (req, res) => {
 })
 
 app.get('/run', (req, res) => {
-    datafile.process(req.query.file, req.query.tool, (err, results) => {
+    tool_controller.process(req.query.file, req.query.tool, (err, results) => {
         if (err) return res.status(500).send(err.message);
         res.send(results);
     })
