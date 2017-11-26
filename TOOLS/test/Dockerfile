@@ -1,3 +1,3 @@
-FROM ubuntu:latest
+FROM python:slim
 COPY . /app/
 WORKDIR /app/
