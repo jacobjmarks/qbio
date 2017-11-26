@@ -6,8 +6,10 @@ def main():
         for line in datafile:
             length += len(line)
 
-    with open('./data/results.txt', 'w') as results:
-        results.write(str(length))
-        results.close()
+    print str(length)
+
+    # with open('./data/results.txt', 'w') as results:
+    #     results.write(str(length))
+    #     results.close()
 
 main()
