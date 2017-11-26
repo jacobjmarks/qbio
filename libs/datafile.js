@@ -66,14 +66,14 @@ module.exports.process = (file, tool, cb) => {
     if (!tool) return cb(new Error("Invalid tool."));
     if (!file) return cb(new Error("Invalid datafile."));
 
-    const tcb = (err) => {
+    const tcb = (err, result) => {
         if (err) return cb(new Error("Internal tool error."));
-        cb();
+        cb(null, result);
     }
 
     switch (tool) {
         case tools.toolA.name:
-            tools.toolA.lib.process(file, tcb);
+            tools.toolA.lib.process(conf.dataDir + file, tcb);
             break;
     }
 
