@@ -1,6 +1,13 @@
 const fs = require('fs');
 const conf = require('../conf.json');
 
+const tools = {
+    toolA: {
+        name: "Tool A",
+        lib: require('./tools/toolA.js')
+    }
+}
+
 module.exports.upload = (file, cb) => {   
     if (!file) return cb(new Error("No file selected.")); 
 
@@ -59,8 +66,19 @@ module.exports.process = (file, tool, cb) => {
     if (!tool) return cb(new Error("Invalid tool."));
     if (!file) return cb(new Error("Invalid datafile."));
 
-    fs.readFile(conf.dataDir + file, (err, data) => {
-        if (err) return cb(new Error("Error reading datafile."));
-        cb(null, data);
-    })
+    const tcb = (err) => {
+        if (err) return cb(new Error("Internal tool error."));
+        cb();
+    }
+
+    switch (tool) {
+        case tools.toolA.name:
+            tools.toolA.lib.process(file, tcb);
+            break;
+    }
+
+    // fs.readFile(conf.dataDir + file, (err, data) => {
+    //     if (err) return cb(new Error("Error reading datafile."));
+    //     cb(null, data);
+    // })
 }
