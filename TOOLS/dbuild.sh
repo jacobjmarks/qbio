@@ -1,6 +1,4 @@
-docker container stop $(docker ps -q -f NAME=qbio-t)
-docker container prune -f
-docker image remove $(docker images -q -f REFERENCE=qbio-t*)
+sh ./dclean.sh
 
 # Tool A
 docker build -t qbio-t_toola ./TOOLS/test/
