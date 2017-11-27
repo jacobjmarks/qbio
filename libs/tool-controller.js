@@ -14,6 +14,7 @@ module.exports.process = (file, tool, cb) => {
 
     let t = tools.find((t) => t.name == tool);
     if (!t) return cb(new Error("Invalid tool."));
+
     t.func(conf.dataDir + file, (err, result) => {
         if (err) return cb(new Error("Internal tool error."));
         cb(null, result);
@@ -21,7 +22,7 @@ module.exports.process = (file, tool, cb) => {
 }
 
 function toolA(file, cb) {
-    exec(`docker exec toolA bash -c "python test.py '${file}'"`, (error, stdout, stderr) => {
+    exec(`docker exec qbio-t_toola bash -c "python test.py '${file}'"`, (error, stdout, stderr) => {
         if (error) {
             console.log(error);
             return cb(true);
