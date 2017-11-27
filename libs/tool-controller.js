@@ -22,7 +22,7 @@ module.exports.process = (file, tool, cb) => {
 }
 
 function toolA(file, cb) {
-    exec(`docker exec qbio-t_toola bash -c "python test.py '${file}'"`, (error, stdout, stderr) => {
+    exec(`docker exec qbio_toola bash -c "python test.py '${file}'"`, (error, stdout, stderr) => {
         if (error) {
             console.log(error);
             return cb(true);

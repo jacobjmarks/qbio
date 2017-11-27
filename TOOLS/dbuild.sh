@@ -7,4 +7,4 @@ cd $SCRIPTPATH
 sh ./dclean.sh
 
 # Tool A
-docker build -t qbio-t_toola ./test/
+docker build -t qbio_toola ./test/

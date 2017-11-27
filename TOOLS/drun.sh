@@ -1,1 +1,1 @@
-docker run -itd --name qbio-t_toola -v datavol:/app/data/ qbio-t_toola bash
+docker run -itd --name qbio_toola -v datavol:/app/data/ qbio_toola bash
