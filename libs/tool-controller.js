@@ -1,4 +1,5 @@
 const { exec } = require('child_process');
+const conf = require('../conf.json');
 
 const tools = [
     {
@@ -8,15 +9,15 @@ const tools = [
 ]
 
 module.exports.process = (file, tool, cb) => {
-    if (!tool) return cb(new Error("Invalid tool."));
     if (!file) return cb(new Error("Invalid datafile."));
+    if (!tool) return cb(new Error("No tool specified."));
 
-    tools.find((t) => t.name == tool, (tool) => {
-        tool.func(conf.dataDir + file, (err, result) => {
-            if (err) return cb(new Error("Internal tool error."));
-            cb(null, result);
-        });
-    })
+    let t = tools.find((t) => t.name == tool);
+    if (!t) return cb(new Error("Invalid tool."));
+    t.func(conf.dataDir + file, (err, result) => {
+        if (err) return cb(new Error("Internal tool error."));
+        cb(null, result);
+    });
 }
 
 function toolA(file, cb) {
