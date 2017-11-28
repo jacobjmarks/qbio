@@ -6,6 +6,8 @@ RUN apk update && \
 
 WORKDIR /app/
 RUN npm install
-CMD sh startup_script.sh
+CMD sh ./TOOLS/dbuild.sh && \
+    sh ./TOOLS/drun.sh && \
+    npm start
 
 # docker run -it -p 80:3000 -v /var/run/:/var/run/ -v datavol:/app/data/ [IMAGE]
