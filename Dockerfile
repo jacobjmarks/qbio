@@ -1,13 +1,13 @@
 FROM docker:latest
-COPY . /app/
+COPY . /src/
 
 RUN apk update && \
     apk add --update nodejs nodejs-npm
 
-WORKDIR /app/
+WORKDIR /src/
 RUN npm install
-CMD sh ./TOOLS/dbuild.sh && \
-    sh ./TOOLS/drun.sh && \
+CMD sh ./TOOLS/docker-build-all.sh && \
+    sh ./TOOLS/docker-run-all.sh && \
     npm start
 
-# docker run -it -p 80:3000 -v /var/run/:/var/run/ -v datavol:/app/data/ [IMAGE]
+# docker run -it -p 80:3000 -v /var/run/:/var/run/ -v datavol:/src/data/ [IMAGE]

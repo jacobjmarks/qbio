@@ -1,1 +1,0 @@
-docker run -itd --name qbio_toola -v datavol:/app/data/ qbio_toola bash
