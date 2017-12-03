@@ -1,5 +1,4 @@
-- var tool_name = 'Tool B';
-- var tool_func = 'Tool_B';
+block variables
 
 .card(id=tool_name)
     button.btn.card-header(
@@ -8,5 +7,5 @@
     ) #{tool_name}
     .collapse
         .card-body
-            //- SETTINGS
+            block settings
             button.btn.btn-primary.float-right.mb-3(onclick=`runTool("${tool_name}")`) Run
