@@ -12,7 +12,13 @@ module.exports.process = (file, tool, cb) => {
 
     try {
         this[tool](conf.dataDir + file, (err, result) => {
-            if (err) return jobs.update(job, {error: true});
+            if (err) {
+                jobs.update(job, {
+                    finished_at: Date.now(),
+                    error: true
+                });
+            }
+            
             jobs.update(job, {
                 finished_at: Date.now(),
                 result: result

@@ -11,7 +11,18 @@ $(document).ready(() => {
         "paging": false,
         "info": false,
         columns: [
-            {title: "#"}, {title: "Created At"}, {title: "Tool"}, {title: "Datafile"}, {title: "Finshed At"}
+            {title: "#"},
+            {title: "Created At"},
+            {title: "Tool"},
+            {title: "Datafile"},
+            {title: "Finshed At"},
+            {title: "Result", render: {
+                "ERROR": "plain",
+                "_": (data) => {
+                    if (!data) return null;
+                    return (data == "ERROR") ? "ERROR" : `<a href="/result/${data}" target="_blank">View</a>`
+                }
+            }}
         ]
     })
 
@@ -105,7 +116,14 @@ function updateJobs() {
         success: (data, status, req) => {
             jobTable.clear();
             data.forEach((job, index) => {
-                jobTable.row.add([index+1, job.created_at, job.tool, job.file, job.finished_at]).draw(false);
+                jobTable.row.add([
+                    index+1,
+                    new Date(job.created_at).toLocaleString(),
+                    job.tool,
+                    job.file,
+                    job.finished_at && new Date(job.finished_at).toLocaleString(),
+                    job.finished_at && (job.error ? "ERROR" : job.created_at)
+                ]).draw(false);
             })
         },
         error: (req, status, error) => {
