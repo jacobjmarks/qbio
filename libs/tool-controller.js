@@ -16,17 +16,6 @@ module.exports.process = (file, tool, cb) => {
     }
 }
 
-module.exports.test = (file, cb) => {
-    let cmd = `
-        python test.py '${file}'
-    `;
-
-    docker_exec("qbio_test", cmd, (err, result) => {
-        if (error) return cb(true);
-        cb(null, result);
-    })
-}
-
 module.exports.bloom_filter = (file, cb) => {
     let cmd = ` \
         rm -f ${file}_queries* && \
