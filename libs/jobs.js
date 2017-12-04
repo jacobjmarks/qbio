@@ -16,7 +16,7 @@ module.exports.create = (created_at, tool, file, cb) => {
         results: null
     }
 
-    fs.writeFile(jobDir + Date.now() + '.json', JSON.stringify(job), (err) => {
+    fs.writeFile(jobDir + created_at + '.json', JSON.stringify(job), (err) => {
         if (err) return cb(new Error("Error storing job.\n" + err));
         cb();
     })
@@ -37,5 +37,19 @@ module.exports.getAll = (cb) => {
                 }
             })
         });
+    })
+}
+
+module.exports.update = (id, params) => {
+    fs.readFile(jobDir + id + '.json', (err, data) => {
+        if (err) return console.log("Error reading job file.\n" + err);
+        let job = JSON.parse(data);
+        job.finished_at = params.finished_at || job.finished_at;
+        job.result = params.result || job.result;
+        job.error = params.error || job.error;
+
+        fs.writeFile(jobDir + id + '.json', JSON.stringify(job), (err) => {
+            if (err) console.log("Error storing updated job.\n" + err);
+        })
     })
 }

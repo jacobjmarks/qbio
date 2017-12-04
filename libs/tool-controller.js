@@ -12,11 +12,11 @@ module.exports.process = (file, tool, cb) => {
 
     try {
         this[tool](conf.dataDir + file, (err, result) => {
-            // if (err) return cb(new Error("Internal tool error."));
-            // jobs.update(job, {
-            //     finished_at: Date.now(),
-            //     result: result
-            // });
+            if (err) return jobs.update(job, {error: true});
+            jobs.update(job, {
+                finished_at: Date.now(),
+                result: result
+            });
         });
     } catch(err) {
         cb(new Error("Error creating child process.\n" + err));
