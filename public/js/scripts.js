@@ -7,6 +7,14 @@ $(document).ready(() => {
         ]
     })
 
+    jobTable = $("#jobTable").DataTable({
+        "paging": false,
+        "info": false,
+        columns: [
+            {title: "#"}, {title: "Created At"}, {title: "Tool"}, {title: "Datafile"}, {title: "Finshed At"}
+        ]
+    })
+
     selectedDataFile = null;
 
     $("#dataTable tbody").on("click", "tr", (e) => {
@@ -95,13 +103,9 @@ function updateJobs() {
         method: "POST",
         url: "/jobStatus",
         success: (data, status, req) => {
-            data.forEach((job) => {
-                let row = $("<tr>");
-                row.append($("<td>").html(job.created_at));
-                row.append($("<td>").html(job.tool));
-                row.append($("<td>").html(job.finshed_at));
-
-                $("#job-table").append(row);
+            jobTable.clear();
+            data.forEach((job, index) => {
+                jobTable.row.add([index+1, job.created_at, job.tool, job.file, job.finished_at]).draw(false);
             })
         },
         error: (req, status, error) => {

@@ -17,17 +17,13 @@ html
                 .col
                     include header.pug
             .row
-                .col-md-6.mb-3.mb-md-0
+                .col-md-4.mb-3.mb-md-0
                     include tools/bloom-filter.pug
-                .col-md-6.pl-md-0
+                .col-md-8.pl-md-0
                     .card
                         .card-body
                             h3 Jobs
-                            table.table.table-sm#job-table
-                                tr
-                                    th Created At
-                                    th Tool
-                                    th Finshed At
+                            table#jobTable.table.table-sm
 
         //- jQuery
         script(src='https://code.jquery.com/jquery-3.2.1.min.js'
