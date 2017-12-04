@@ -5,7 +5,6 @@ cd $SCRIPTPATH
 # --------------------------------------------------
 
 for dir in */ ; do
-    dir_trim=${dir%*/}
-    container=qbio_$dir_trim
+    container=qbio_${dir%*/}
     docker run -itd --name "$container" -v datavol:/src/data/ "$container" bash
 done
