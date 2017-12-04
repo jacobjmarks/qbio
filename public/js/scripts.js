@@ -25,6 +25,7 @@ $(document).ready(() => {
     })
 
     populateDataTable();
+    updateJobs();
 })
 
 const fileInput = $("#uploadform :input")[0];
@@ -94,14 +95,17 @@ function updateJobs() {
         method: "POST",
         url: "/jobStatus",
         success: (data, status, req) => {
-            console.log(data);
+            data.forEach((job) => {
+                let row = $("<tr>");
+                row.append($("<td>").html(job.created_at));
+                row.append($("<td>").html(job.tool));
+                row.append($("<td>").html(job.finshed_at));
+
+                $("#job-table").append(row);
+            })
         },
         error: (req, status, error) => {
             alert(req.responseText);
         }
     })
-}
-
-function addJob() {
-
 }
