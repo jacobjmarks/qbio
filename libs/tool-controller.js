@@ -2,18 +2,33 @@ const { exec } = require('child_process');
 const conf = require('../conf.json');
 const fs = require('fs');
 
+const jobs = require('./jobs.js');
+
 module.exports.process = (file, tool, cb) => {
     if (!file) return cb(new Error("Invalid datafile."));
     if (!tool) return cb(new Error("No tool specified."));
 
+    let job = Date.now();
+
     try {
         this[tool](conf.dataDir + file, (err, result) => {
-            if (err) return cb(new Error("Internal tool error."));
-            cb(null, result);
+            // if (err) return cb(new Error("Internal tool error."));
+            // jobs.update(job, {
+            //     finished_at: Date.now(),
+            //     result: result
+            // });
         });
     } catch(err) {
         cb(new Error("Error creating child process.\n" + err));
     }
+
+    jobs.create({
+        created_at: job,
+        tool: tool
+    }, (err) => {
+        if (err) return cb(new Error("Error creating job.\n" + err));
+        cb(null);
+    });
 }
 
 module.exports.bloom_filter = (file, cb) => {

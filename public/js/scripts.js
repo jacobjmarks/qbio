@@ -81,10 +81,27 @@ function runTool(toolname) {
             "file": selectedDataFile
         },
         success: (data, status, req) => {
-            $("#results").html(data);
+            updateJobs();
         },
         error: (req, status, error) => {
             alert(req.responseText);
         }
     })
+}
+
+function updateJobs() {
+    $.ajax({
+        method: "POST",
+        url: "/jobStatus",
+        success: (data, status, req) => {
+            console.log(data);
+        },
+        error: (req, status, error) => {
+            alert(req.responseText);
+        }
+    })
+}
+
+function addJob() {
+
 }
