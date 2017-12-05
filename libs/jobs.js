@@ -31,22 +31,25 @@ module.exports.get = (id, cb) => {
         fs.readFile(jobDir + id + '/result.txt', (err, result) => {
             cb(null, {
                 meta: JSON.parse(meta),
-                result: result.toString() || "Error."
+                result: result ? result.toString() : "Error"
             });
         })
     })
 }
 
-module.exports.getAll = (cb) => {
+module.exports.stats = (cb) => {
     fs.readdir(jobDir, (err, files) => {
         if (err) return cb(new Error("Error reading job directory.\n" + err));
         if (files.length == 0) return cb(null, []);
         
         let jobs = [];
-        files.forEach((job) => {
-            fs.readFile(jobDir + job + '/meta.json', (err, data) => {
+        files.forEach((id) => {
+            fs.readFile(jobDir + id + '/meta.json', (err, data) => {
                 if (err) return cb(new Error("Error reading job file.\n" + err));
-                jobs.push(JSON.parse(data));
+                let job = JSON.parse(data);
+                job.error = job.error ? true : false;
+                job.log = null;
+                jobs.push(job);
                 if (jobs.length == files.length) {
                     cb(null, jobs);
                 }

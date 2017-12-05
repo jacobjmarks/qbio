@@ -38,7 +38,7 @@ app.get('/run', (req, res) => {
 })
 
 app.post('/jobStatus', (req, res) => {
-    jobs.getAll((err, jobs) => {
+    jobs.stats((err, jobs) => {
         if (err) return res.status(500).send(err.message);
         res.json(jobs);
     })

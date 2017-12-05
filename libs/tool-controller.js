@@ -40,6 +40,6 @@ module.exports.bloom_filter = (job, file, cb) => {
 
 function docker_exec(container, command, cb) {
     exec(`docker exec ${container} bash -c "${command}"`, (error, stdout, stderr) => {
-        cb(error, stdout || stderr);
+        cb(error && error.message, stdout || stderr);
     })
 }
