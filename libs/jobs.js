@@ -31,7 +31,14 @@ module.exports.get = (id, cb) => {
         fs.readFile(jobDir + id + '/result.txt', (err, result) => {
             cb(null, {
                 meta: JSON.parse(meta),
-                result: result ? result.toString() : "Error"
+                result: ((result) => {
+                    if (!result) return;
+                    result = result.toString();
+                    if (result.length > 5000) {
+                        return result.substring(0, 5000) + " [DOWNLOAD TO VIEW MORE]"
+                    }
+                    return result;
+                })(result)
             });
         })
     })
