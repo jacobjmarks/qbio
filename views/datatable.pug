@@ -1,14 +1,11 @@
-extends layout
-
-block content
-    .card
-        .card-body
-            .row
-                .col
-                    table#dataTable.table.table-sm.table-hover.mb-0
-        .card-footer
-            .row.align-items-center.justify-content-center
-                form.mb-0#uploadform(method="POST" action="/uploadfile" encType="multipart/form-data")
-                    .form-row.align-items-center
-                        input.form-control-file.mr-1(type='file' name='file')
-                        button.btn.btn-primary(type='submit') Upload
+.card
+    .card-body
+        .row
+            .col
+                table#dataTable.table.table-sm.table-hover.mb-0
+    .card-footer
+        .row.align-items-center.justify-content-center
+            form.mb-0#uploadform(method="POST" action="/uploadfile" encType="multipart/form-data")
+                .form-row.align-items-center
+                    input.form-control-file.mr-1(type='file' name='file')
+                    button.btn.btn-primary(type='submit') Upload
