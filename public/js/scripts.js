@@ -19,7 +19,7 @@ $(document).ready(() => {
             {title: "Result", render: {
                 "_": (data) => {
                     if (!data) return null;
-                    return `<a href="/result/${data.created_at}" target="_blank">${data.error ? "ERROR" : "View"}</a>`
+                    return `<a href="/job/${data.created_at}" target="_blank">${data.error ? "Error" : "View"}</a>`
                 }
             }}
         ]

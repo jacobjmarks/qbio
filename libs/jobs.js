@@ -26,9 +26,14 @@ module.exports.create = (created_at, tool, file, cb) => {
 }
 
 module.exports.get = (id, cb) => {
-    fs.readFile(jobDir + id + '/meta.json', (err, data) => {
+    fs.readFile(jobDir + id + '/meta.json', (err, meta) => {
         if (err) return cb(new Error("Error reading job file.\n" + err));
-        cb(null, JSON.parse(data));
+        fs.readFile(jobDir + id + '/result.txt', (err, result) => {
+            cb(null, {
+                meta: JSON.parse(meta),
+                result: result.toString() || "Error."
+            });
+        })
     })
 }
 
