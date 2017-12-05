@@ -6,5 +6,5 @@ cd $SCRIPTPATH
 
 for dir in */ ; do
     container=qbio_${dir%*/}
-    docker run -itd --name "$container" -v datavol:/src/data/ "$container" bash
+    docker run -itd --name "$container" -v datavol:/src/data/ -v jobvol:/src/jobs/ "$container" bash
 done

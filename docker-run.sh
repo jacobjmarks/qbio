@@ -1,0 +1,1 @@
+docker run -it --rm -p 80:3000 -v /var/run/:/var/run/ -v datavol:/src/data/ -v jobvol:/src/jobs/ qbio

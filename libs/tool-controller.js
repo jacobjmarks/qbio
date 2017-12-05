@@ -11,16 +11,11 @@ module.exports.process = (file, tool, cb) => {
     let job = Date.now();
 
     try {
-        this[tool](conf.dataDir + file, (err, result) => {
-            if (err) {
-                jobs.update(job, {
-                    finished_at: Date.now(),
-                    error: true
-                });
-            }
-            
+        this[tool](job, conf.dataDir + file, (err, result) => {
+            console.log("DONE");
             jobs.update(job, {
                 finished_at: Date.now(),
+                error: err,
                 result: result
             });
         });
@@ -34,12 +29,11 @@ module.exports.process = (file, tool, cb) => {
     });
 }
 
-module.exports.bloom_filter = (file, cb) => {
+module.exports.bloom_filter = (job, file, cb) => {
     let cmd = ` \
         rm -f ${file}_queries* && \
         fsharpi executor.fsx --seqfile ${file} && \
-        cat ${file}_queries* && \
-        rm ${file}_queries* \
+        mv ${file}_queries* ./jobs/${job}/result.txt \
     `;
 
     docker_exec("qbio_bloom-filter", cmd, (err, result) => {
