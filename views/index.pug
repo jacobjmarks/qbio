@@ -1,43 +1,15 @@
-html
-    head
-        //- Bootstrap
-        link(rel='stylesheet'
-             href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css'
-             integrity='sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb'
-             crossorigin='anonymous')
-        //-  DataTables
-        link(rel='stylesheet' href='https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.css')
-        
-        link(rel='stylesheet' href='/css/style.css')
+extends layout
 
-        title Qbio
-    body
-        .container-fluid
-            .row.mb-3
-                .col
-                    include header.pug
-            .row
-                .col-md-4.mb-3.mb-md-0
-                    include tools/bloom-filter.pug
-                .col-md-8.pl-md-0
-                    .card
-                        .card-body
-                            h3 Jobs
-                            table#jobTable.table.table-sm
-
-        //- jQuery
-        script(src='https://code.jquery.com/jquery-3.2.1.min.js'
-               integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='
-               crossorigin='anonymous')
-        //- Popper.js
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js'
-               integrity='sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh'
-               crossorigin='anonymous')
-        //- Bootstrap
-        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js'
-               integrity='sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ'
-               crossorigin='anonymous')
-        //- DataTables
-        script(src='https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js')
-
-        script(src='/js/scripts.js')
+block content
+    .container
+        .row.justify-content-center
+            .col-md-8.text-center
+                h4.my-3 Welcome to the unified bioinformatic toolset platform.
+                p We currently support the following tools: [...]
+                .row
+                    .col-6
+                        a(href="/newjob")
+                            button.w-100.btn.btn-lg.btn-primary NEW JOB
+                    .col-6
+                        a(href="/jobs")
+                            button.w-100.btn.btn-lg.btn-secondary VIEW JOBS

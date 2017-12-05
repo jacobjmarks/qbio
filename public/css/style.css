@@ -1,14 +1,10 @@
-html {
-    min-width: 600px;
-    padding-top: 15px;
-}
-
 button:hover {
     cursor: pointer;
 }
 
-#results {
-    white-space: pre;
-    font-family: monospace;
-    overflow: auto;
+#index-menu {
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
 }

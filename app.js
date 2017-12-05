@@ -16,6 +16,14 @@ app.get('/', (req, res) => {
     res.render('index.pug');
 })
 
+app.get('/newjob', (req, res) => {
+    res.render('new-job.pug');
+})
+
+app.get('/jobs', (req, res) => {
+    res.render('jobs.pug');
+})
+
 app.post('/uploadfile', (req, res) => {
     datafile.upload(req.files && req.files.file, (err) => {
         if (err) return res.status(500).send(err.message);
