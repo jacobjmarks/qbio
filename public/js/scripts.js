@@ -13,11 +13,18 @@ $(document).ready(() => {
             {title: "Created At"},
             {title: "Tool"},
             {title: "Datafile"},
-            {title: "Finshed At"},
+            {title: "Finshed At", render: {
+                "_": (data) => {
+                    return data ? data : "<div style='text-align:center'><i class='fa fa-spinner fa-spin'></i></div>";
+                }
+            }},
             {title: "Result", render: {
                 "_": (data) => {
-                    if (!data) return "Pending...";
-                    return data.error ? "Error" : "Success";
+                    const indicator = (colour) => {
+                        return `<i class='fa fa-fw fa-circle' style='color: ${colour}'></i>&nbsp;`;
+                    };
+                    if (!data) return indicator("orange") + "Pending";
+                    return data.error ? indicator("red") + "Error" : indicator("green") + "Success";
                 }
             }}
         ]
@@ -134,7 +141,8 @@ function updateJobs() {
                 row.on("click", () => {
                     window.location.href = `/job/${job.created_at}`;
                 })
-                // row.addClass(job.finished_at ? (job.error ? "job-error" : "job-success") : "job-pending");
+
+                if (!job.finished_at) setTimeout(updateJobs, 5000);
             })
         },
         error: (req, status, error) => {

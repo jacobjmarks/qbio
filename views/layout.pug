@@ -12,10 +12,10 @@ html
 
         title Qbio
     body.bg-light
-        include navbar.pug
+        include includes/navbar.pug
         hr.mt-0
         block content
-        include modal.pug
+        include includes/modal.pug
 
         //- jQuery
         script(src='https://code.jquery.com/jquery-3.2.1.min.js'
@@ -31,5 +31,7 @@ html
                crossorigin='anonymous')
         //- DataTables
         script(src='https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js')
+        //- FontAwesome
+        script(src="https://use.fontawesome.com/1d0aebf98c.js")
 
         script(src='/js/scripts.js')
