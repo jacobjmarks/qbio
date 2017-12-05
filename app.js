@@ -55,7 +55,7 @@ app.post('/jobStatus', (req, res) => {
 app.get('/job/:id', (req, res) => {
     jobs.get(req.params.id, (err, job) => {
         if (err) return res.status(500).send(err.message);
-        res.send(job);
+        res.render('job.pug', {job: job});
     })
 })
 
