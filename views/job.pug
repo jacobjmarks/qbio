@@ -4,15 +4,15 @@ block content
     .container#job-page
         .row
             .col
-                h2 Job #{job.meta.created_at}
+                h2 !{`<i class="fa fa-circle" style="color:${!job.meta.finished_at ? "orange" : job.meta.error ? "red" : "green"}"></i> Job ` + job.meta.created_at}
                 p.mb-0 Created: #{new Date(job.meta.created_at).toLocaleString()}
                 p.mb-0 Finished: #{new Date(job.meta.finished_at).toLocaleString()}
                 p.mb-0 Tool: #{job.meta.tool}
                 p Datafile: #{job.meta.file}
                 
                 nav.nav.nav-tabs(role="tablist")
-                    a#nav-result-tab.nav-item.nav-link(data-toggle="tab" href="#nav-result" role="tab" aria-controls="nav-result" aria-selected="true").active #{job.error ? "Error" : "Result"}
+                    a#nav-result-tab.nav-item.nav-link(data-toggle="tab" href="#nav-result" role="tab" aria-controls="nav-result" aria-selected="true").active #{job.meta.error ? "Error" : "Result"}
                     a#nav-log-tab.nav-item.nav-link(data-toggle="tab" href="#nav-log" role="tab" aria-controls="nav-log" aria-selected="false") Log
                 .tab-content.p-2.bg-white.border.border-top-0
-                    #nav-result.tab-pane(role="tabpanel" aria-labelledby="nav-home-tab").show.active #{job.error || job.result}
+                    #nav-result.tab-pane(role="tabpanel" aria-labelledby="nav-home-tab").show.active #{job.meta.error || job.result}
                     #nav-log.tab-pane(role="tabpanel" aria-labelledby="nav-log-tab") #{job.meta.log}
