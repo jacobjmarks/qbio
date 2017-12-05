@@ -1,7 +1,5 @@
 $(document).ready(() => {
     dataTable = $("#dataTable").DataTable({
-        "paging": false,
-        "info": false,
         columns: [
             {title: "#"}, {title: "Filename"}, {title: "Size (mb)"}
         ]
