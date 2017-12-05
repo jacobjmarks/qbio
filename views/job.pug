@@ -6,7 +6,7 @@ block content
             .col
                 h2 Job #{job.meta.created_at}
                 p.mb-0 Created: #{new Date(job.meta.created_at).toLocaleString()}
-                p.mb-0 Finished: #{new Date(job.meta.created_at).toLocaleString()}
+                p.mb-0 Finished: #{new Date(job.meta.finished_at).toLocaleString()}
                 p.mb-0 Tool: #{job.meta.tool}
                 p Datafile: #{job.meta.file}
                 

@@ -122,9 +122,11 @@ function updateJobs() {
                     job.finished_at && { error: job.error, created_at: job.created_at }
                 ]).draw(false);
 
-                $("#jobTable tbody > tr:last-child").on("click", () => {
+                let row = $("#jobTable tbody > tr:last-child");
+                row.on("click", () => {
                     window.location.href = `/job/${job.created_at}`;
                 })
+                // row.addClass(job.finished_at ? (job.error ? "job-error" : "job-success") : "job-pending");
             })
         },
         error: (req, status, error) => {
