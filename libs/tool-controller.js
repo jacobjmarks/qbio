@@ -24,7 +24,7 @@ module.exports.process = (file, tool, cb) => {
 
     jobs.create(job, tool, file, (err) => {
         if (err) return cb(new Error("Error creating job.\n" + err));
-        cb(null);
+        cb(null, job);
     });
 }
 

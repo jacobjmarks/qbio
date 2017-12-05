@@ -85,20 +85,28 @@ function populateDataTable() {
     })
 }
 
-function runTool(toolname) {
+function runTool(tool_func) {
     if (!selectedDataFile) {
         return alert("No datafile selected.");
     }
+
+    $(`#${tool_func} button:last-child`).attr("disabled", true);
 
     $.ajax({
         method: "GET",
         url: "/run",
         data: {
-            "tool": toolname,
+            "tool": tool_func,
             "file": selectedDataFile
         },
         success: (data, status, req) => {
-            updateJobs();
+            $(`#${tool_func} button:last-child`).attr("disabled", false);
+            showModal({
+                title: `Job ${data}`,
+                body: "Your job has been created successfully and is currently processing.",
+                btn_primary: "View Jobs",
+                href: "/jobs"
+            });
         },
         error: (req, status, error) => {
             alert(req.responseText);
@@ -133,4 +141,21 @@ function updateJobs() {
             alert(req.responseText);
         }
     })
+}
+
+function showModal(params) {
+    $("#modal").on("show.bs.modal", () => {
+        $("#modal .modal-title").text(params.title);
+        $("#modal .modal-body").text(params.body);
+        $("#modal .btn-primary").text(params.btn_primary || "OK");
+        if (!params.href) {
+            $("#modal .btn-primary").attr("data-dismiss", "modal");
+            $("#modal .btn-secondary").hide();
+        } else {
+            $("#modal a").attr("href", params.href);
+            $("#modal .btn-secondary").text(params.btn_secondary || "Dismiss");
+            $("#modal .btn-secondary").show();
+        }
+    })
+    $("#modal").modal("show");
 }

@@ -1,10 +1,8 @@
 block variables
 
-.card(id=tool_name)
-    button.btn.card-header(
-        data-toggle='collapse'
-        data-target=`.card[id='${tool_name}'] > .collapse`
-    ) #{tool_name}
+.card(id=tool_func)
+    button.btn.card-header(data-toggle='collapse' data-target=`.card[id='${tool_func}'] > .collapse`)
+        .float-left #{tool_name}
     .collapse
         .card-body
             block settings
