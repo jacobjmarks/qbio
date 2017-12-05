@@ -16,8 +16,8 @@ $(document).ready(() => {
             {title: "Finshed At"},
             {title: "Result", render: {
                 "_": (data) => {
-                    if (!data) return null;
-                    return `<a href="/job/${data.created_at}" target="_blank">${data.error ? "Error" : "View"}</a>`
+                    if (!data) return "Pending...";
+                    return data.error ? "Error" : "Success";
                 }
             }}
         ]
@@ -121,6 +121,10 @@ function updateJobs() {
                     job.finished_at && new Date(job.finished_at).toLocaleString(),
                     job.finished_at && { error: job.error, created_at: job.created_at }
                 ]).draw(false);
+
+                $("#jobTable tbody > tr:last-child").on("click", () => {
+                    window.location.href = `/job/${job.created_at}`;
+                })
             })
         },
         error: (req, status, error) => {

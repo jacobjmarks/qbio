@@ -2,6 +2,13 @@ button:hover {
     cursor: pointer;
 }
 
+table.dataTable {
+    border-collapse: collapse !important;
+}
+    table.dataTable tbody tr:hover {
+        cursor: pointer;
+    }
+
 #index-menu {
     position: absolute;
     left: 50%;
