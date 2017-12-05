@@ -21,7 +21,9 @@ html
                     include tools/bloom-filter.pug
                 .col-md-8.pl-md-0
                     .card
-                        .card-body#results Results...
+                        .card-body
+                            h3 Jobs
+                            table#jobTable.table.table-sm
 
         //- jQuery
         script(src='https://code.jquery.com/jquery-3.2.1.min.js'

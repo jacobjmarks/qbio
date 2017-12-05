@@ -7,6 +7,24 @@ $(document).ready(() => {
         ]
     })
 
+    jobTable = $("#jobTable").DataTable({
+        "paging": false,
+        "info": false,
+        columns: [
+            {title: "#"},
+            {title: "Created At"},
+            {title: "Tool"},
+            {title: "Datafile"},
+            {title: "Finshed At"},
+            {title: "Result", render: {
+                "_": (data) => {
+                    if (!data) return null;
+                    return `<a href="/job/${data.created_at}" target="_blank">${data.error ? "Error" : "View"}</a>`
+                }
+            }}
+        ]
+    })
+
     selectedDataFile = null;
 
     $("#dataTable tbody").on("click", "tr", (e) => {
@@ -25,6 +43,7 @@ $(document).ready(() => {
     })
 
     populateDataTable();
+    updateJobs();
 })
 
 const fileInput = $("#uploadform :input")[0];
@@ -81,7 +100,30 @@ function runTool(toolname) {
             "file": selectedDataFile
         },
         success: (data, status, req) => {
-            $("#results").html(data);
+            updateJobs();
+        },
+        error: (req, status, error) => {
+            alert(req.responseText);
+        }
+    })
+}
+
+function updateJobs() {
+    $.ajax({
+        method: "POST",
+        url: "/jobStatus",
+        success: (data, status, req) => {
+            jobTable.clear();
+            data.forEach((job, index) => {
+                jobTable.row.add([
+                    index+1,
+                    new Date(job.created_at).toLocaleString(),
+                    job.tool,
+                    job.file,
+                    job.finished_at && new Date(job.finished_at).toLocaleString(),
+                    job.finished_at && { error: job.error, created_at: job.created_at }
+                ]).draw(false);
+            })
         },
         error: (req, status, error) => {
             alert(req.responseText);

@@ -5,6 +5,7 @@ const app = express();
 
 const PORT = 3000;
 
+const jobs = require('./libs/jobs.js');
 const datafile = require('./libs/datafile.js');
 const tool_controller = require('./libs/tool-controller.js');
 
@@ -30,9 +31,23 @@ app.post('/getAvailableData', (req, res) => {
 })
 
 app.get('/run', (req, res) => {
-    tool_controller.process(req.query.file, req.query.tool, (err, results) => {
+    tool_controller.process(req.query.file, req.query.tool, (err) => {
         if (err) return res.status(500).send(err.message);
-        res.send(results);
+        res.end();
+    })
+})
+
+app.post('/jobStatus', (req, res) => {
+    jobs.stats((err, jobs) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(jobs);
+    })
+})
+
+app.get('/job/:id', (req, res) => {
+    jobs.get(req.params.id, (err, job) => {
+        if (err) return res.status(500).send(err.message);
+        res.send(job);
     })
 })
 
