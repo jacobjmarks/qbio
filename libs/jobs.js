@@ -13,7 +13,7 @@ module.exports.create = (created_at, tool, file, cb) => {
         file: file,
         finished_at: null,
         error: false,
-        results: null
+        log: null
     }
 
     fs.mkdir(jobDir + created_at, (err) => {
@@ -55,7 +55,7 @@ module.exports.update = (id, params) => {
         if (err) return console.log("Error reading job file.\n" + err);
         let job = JSON.parse(data);
         job.finished_at = params.finished_at || job.finished_at;
-        job.result = params.result || job.result;
+        job.log = params.log || job.log;
         job.error = params.error || job.error;
 
         fs.writeFile(jobDir + id + '/meta.json', JSON.stringify(job), (err) => {

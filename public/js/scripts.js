@@ -17,10 +17,9 @@ $(document).ready(() => {
             {title: "Datafile"},
             {title: "Finshed At"},
             {title: "Result", render: {
-                "ERROR": "plain",
                 "_": (data) => {
                     if (!data) return null;
-                    return (data == "ERROR") ? "ERROR" : `<a href="/result/${data}" target="_blank">View</a>`
+                    return `<a href="/result/${data.created_at}" target="_blank">${data.error ? "ERROR" : "View"}</a>`
                 }
             }}
         ]
@@ -122,7 +121,7 @@ function updateJobs() {
                     job.tool,
                     job.file,
                     job.finished_at && new Date(job.finished_at).toLocaleString(),
-                    job.finished_at && (job.error ? "ERROR" : job.created_at)
+                    job.finished_at && { error: job.error, created_at: job.created_at }
                 ]).draw(false);
             })
         },

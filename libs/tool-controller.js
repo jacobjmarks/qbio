@@ -11,12 +11,11 @@ module.exports.process = (file, tool, cb) => {
     let job = Date.now();
 
     try {
-        this[tool](job, conf.dataDir + file, (err, result) => {
-            console.log("DONE");
+        this[tool](job, conf.dataDir + file, (err, log) => {
             jobs.update(job, {
                 finished_at: Date.now(),
                 error: err,
-                result: result
+                log: log
             });
         });
     } catch(err) {
@@ -36,18 +35,11 @@ module.exports.bloom_filter = (job, file, cb) => {
         mv ${file}_queries* ./jobs/${job}/result.txt \
     `;
 
-    docker_exec("qbio_bloom-filter", cmd, (err, result) => {
-        if (err) return cb(true);
-        cb(null, result);
-    })
+    docker_exec("qbio_bloom-filter", cmd, (err, log) => cb(err, log));
 }
 
 function docker_exec(container, command, cb) {
     exec(`docker exec ${container} bash -c "${command}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.log(error);
-            return cb(true);
-        }
-        cb(null, stdout);
+        cb(error, stdout || stderr);
     })
 }
