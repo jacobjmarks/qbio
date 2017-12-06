@@ -33,11 +33,11 @@ module.exports.bloom_filter = (job, file, settings, cb) => {
         rm -f ${file}_queries* && \
         fsharpi executor.fsx \
             --seqfile ${file} \
-            --block_size ${settings['block-size']} \
+            --blocksize ${settings['block-size']} \
             --k ${settings['kmer-size']} \
-            --M ${settings['filter-size']} \
-            --F ${settings['hash-functions']} \
-            --comparekmers ${settings['compare-kmers'] ? "true" : "false"} && \
+            --m ${settings['filter-size']} \
+            --f ${settings['hash-functions']} \
+            --comparekmers ${settings['compare-kmers'] == 1 ? "true" : "false"} && \
         mv ${file}_queries* ./jobs/${job}/result.txt \
     `;
 

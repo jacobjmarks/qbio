@@ -153,7 +153,10 @@ function updateJobs() {
                     window.location.href = `/job/${job.created_at}`;
                 })
 
-                if (!job.finished_at && !autorefresh) setTimeout(updateJobs, 5000); autorefresh = true;
+                if (!job.finished_at && !autorefresh) {
+                    setTimeout(updateJobs, 5000);
+                    autorefresh = true;
+                }
             })
         },
         error: (req, status, error) => {

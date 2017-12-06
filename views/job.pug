@@ -14,5 +14,5 @@ block content
                     a#nav-result-tab.nav-item.nav-link(data-toggle="tab" href="#nav-result" role="tab" aria-controls="nav-result" aria-selected="true").active #{job.meta.error ? "Error" : "Result"}
                     a#nav-log-tab.nav-item.nav-link(data-toggle="tab" href="#nav-log" role="tab" aria-controls="nav-log" aria-selected="false") Log
                 .tab-content.p-2.bg-white.border.border-top-0
-                    #nav-result.tab-pane(role="tabpanel" aria-labelledby="nav-home-tab").show.active #{job.meta.error || job.result}
-                    #nav-log.tab-pane(role="tabpanel" aria-labelledby="nav-log-tab") #{job.meta.log}
+                    #nav-result.tab-pane(role="tabpanel" aria-labelledby="nav-home-tab").show.active #{job.meta.error || job.result || "[PENDING]"}
+                    #nav-log.tab-pane(role="tabpanel" aria-labelledby="nav-log-tab") #{job.meta.log || "[PENDING]"}
