@@ -1,12 +1,17 @@
 extends layout
 
+block scripts
+    script(src="/js/job.js")
+
 block content
     .container#job-page
         .row
             .col
                 h2 !{`<i class="fa fa-circle" style="color:${!job.meta.finished_at ? "orange" : job.meta.error ? "red" : "green"}"></i> Job ` + job.meta.created_at}
-                p.mb-0 Created: #{new Date(job.meta.created_at).toLocaleString()}
-                p.mb-0 Finished: #{new Date(job.meta.finished_at).toLocaleString()}
+                p.mb-0 Created:&nbsp;
+                    span#created_at(data-timestamp=job.meta.created_at)
+                p.mb-0 Finished:&nbsp;
+                    span#finished_at(data-timestamp=job.meta.finished_at)
                 p.mb-0 Tool: #{job.meta.tool}
                 p Datafile: #{job.meta.file}
                 
