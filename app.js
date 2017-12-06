@@ -52,6 +52,13 @@ app.post('/jobStatus', (req, res) => {
     })
 })
 
+app.post('/deleteJob/:id', (req, res) => {
+    jobs.delete(req.params.id, (err) => {
+        if (err) res.status(500).end();
+        res.end();
+    })
+})
+
 app.get('/job/:id', (req, res) => {
     jobs.get(req.params.id, (err, job) => {
         if (err) return res.status(500).send(err.message);

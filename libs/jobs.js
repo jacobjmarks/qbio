@@ -1,4 +1,5 @@
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const jobDir = "./jobs/";
 
@@ -22,6 +23,13 @@ module.exports.create = (created_at, tool, file, cb) => {
             if (err) return cb(new Error("Error storing job.\n" + err));
             cb();
         })
+    })
+}
+
+module.exports.delete = (id, cb) => {
+    rimraf(jobDir + id, (err) => {
+        if (err) return cb(err);
+        cb();
     })
 }
 

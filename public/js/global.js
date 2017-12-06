@@ -1,4 +1,4 @@
-function showModal(params) {
+function showModal(params, cb) {
     $("#modal").on("show.bs.modal", () => {
         $("#modal .modal-title").text(params.title);
         $("#modal .modal-body").text(params.body);
@@ -13,4 +13,6 @@ function showModal(params) {
         }
     })
     $("#modal").modal("show");
+
+    $("#modal").on("hide.bs.modal", cb);
 }
