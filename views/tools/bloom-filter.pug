@@ -5,4 +5,29 @@ block variables
     - var tool_func = 'bloom_filter';
 
 block settings
-    //- SETTINGS
+    form
+        .row
+            .form-group.col-sm-6
+                label(for="kmer-size") Kmer Size
+                input.form-control(name="kmer-size" type="number" placeholder="6")
+            .form-group.col-sm-6
+                label(for="block-size") Kmers per Block
+                input.form-control(name="block-size" type="number" placeholder="50")
+        .row
+            .form-group.col-sm-6
+                label(for="filter-size") Bloom Filter Size (bits)
+                input.form-control(name="filter-size" type="number" placeholder="50000")
+            .form-group.col-sm-6
+                label(for="hash-functions") Bloom Filter Hash Functions
+                select.form-control(name="hash-functions")
+                    option 1
+                    option 2
+                    option 3
+                    option 4
+                    option(selected) 5
+        .row
+            .form-group.col-sm-6
+                label(for="compare-kmers") Compare Kmer Blocks
+                select.form-control(name="compare-kmers")
+                    option(value=true selected) Yes
+                    option(value=false) No
