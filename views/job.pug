@@ -9,7 +9,7 @@ block content
             .col
                 .clearfix
                     h2.float-left !{`<i class="fa fa-circle" style="color:${!job.meta.finished_at ? "orange" : job.meta.error ? "red" : "green"}"></i> Job ` + job.meta.created_at}
-                    button.btn.btn-light.text-danger.float-right(onclick=`deleteJob(${job.meta.created_at})`) DELETE
+                    button.btn.btn-light.text-danger.float-right#btnDelete(onclick=`deleteJob(${job.meta.created_at})`) DELETE
                 p.mb-0 Created:&nbsp;
                     span#created_at(data-timestamp=job.meta.created_at)
                 p.mb-0 Finished:&nbsp;
