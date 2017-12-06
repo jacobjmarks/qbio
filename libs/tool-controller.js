@@ -4,14 +4,14 @@ const fs = require('fs');
 
 const jobs = require('./jobs.js');
 
-module.exports.process = (file, tool, cb) => {
+module.exports.process = (file, tool, settings, cb) => {
     if (!file) return cb(new Error("Invalid datafile."));
     if (!tool) return cb(new Error("No tool specified."));
 
     let job = Date.now();
 
     try {
-        this[tool](job, conf.dataDir + file, (err, log) => {
+        this[tool](job, conf.dataDir + file, settings, (err, log) => {
             jobs.update(job, {
                 finished_at: Date.now(),
                 error: err,
@@ -28,10 +28,16 @@ module.exports.process = (file, tool, cb) => {
     });
 }
 
-module.exports.bloom_filter = (job, file, cb) => {
+module.exports.bloom_filter = (job, file, settings, cb) => {
     let cmd = ` \
         rm -f ${file}_queries* && \
-        fsharpi executor.fsx --seqfile ${file} && \
+        fsharpi executor.fsx \
+            --seqfile ${file} \
+            --block_size ${settings['block-size']} \
+            --k ${settings['kmer-size']} \
+            --M ${settings['filter-size']} \
+            --F ${settings['hash-functions']} \
+            --comparekmers ${settings['compare-kmers'] ? "true" : "false"} && \
         mv ${file}_queries* ./jobs/${job}/result.txt \
     `;
 

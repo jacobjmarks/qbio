@@ -76,6 +76,7 @@ $("#uploadform").submit((e) => {
 })
 
 function populateDataTable() {
+    if (!$("#dataTable").length) return;
     $.ajax({
         method: "POST",
         url: "/getAvailableData",
@@ -107,10 +108,11 @@ function runTool(tool_func) {
             "file": selectedDataFile,
             "settings": (() => {
                 let settings = $(`#${tool_func} form`).serializeArray();
+                let obj = {};
                 settings.forEach((s) => {
-                    s.value |= $(`#${tool_func} .form-control[name^='${s.name}']`).data('default');
+                    obj[`${s.name}`] = s.value || $(`#${tool_func} .form-control[name^='${s.name}']`).data('default');
                 })
-                return settings;
+                return obj;
             })()
         },
         success: (data, status, req) => {
@@ -129,11 +131,13 @@ function runTool(tool_func) {
 }
 
 function updateJobs() {
+    if (!$("#jobTable").length) return;
     $.ajax({
         method: "POST",
         url: "/jobStatus",
         success: (data, status, req) => {
             jobTable.clear();
+            let autorefresh = false;
             data.forEach((job, index) => {
                 jobTable.row.add([
                     index+1,
@@ -149,7 +153,7 @@ function updateJobs() {
                     window.location.href = `/job/${job.created_at}`;
                 })
 
-                if (!job.finished_at) setTimeout(updateJobs, 5000);
+                if (!job.finished_at && !autorefresh) setTimeout(updateJobs, 5000); autorefresh = true;
             })
         },
         error: (req, status, error) => {
