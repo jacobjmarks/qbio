@@ -104,7 +104,14 @@ function runTool(tool_func) {
         url: "/run",
         data: {
             "tool": tool_func,
-            "file": selectedDataFile
+            "file": selectedDataFile,
+            "settings": (() => {
+                let settings = $(`#${tool_func} form`).serializeArray();
+                settings.forEach((s) => {
+                    s.value |= $(`#${tool_func} .form-control[name^='${s.name}']`).data('default');
+                })
+                return settings;
+            })()
         },
         success: (data, status, req) => {
             $(`#${tool_func} button:last-child`).attr("disabled", false);
