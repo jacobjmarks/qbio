@@ -7,5 +7,7 @@
         .row.align-items-center.justify-content-center
             form.mb-0#uploadform(method="POST" action="/uploadfile" encType="multipart/form-data")
                 .form-row.align-items-center
-                    input.form-control-file.mr-1(type='file' name='file')
-                    button.btn.btn-primary(type='submit') Upload
+                    .col-10
+                        input.form-control-file(type='file' name='file')
+                    .col-2
+                        button.btn.btn-primary.float-right(type='submit') Upload

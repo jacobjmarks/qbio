@@ -2,6 +2,10 @@ button:hover {
     cursor: pointer;
 }
 
+.clear-left {
+    clear: left !important;
+}
+
 table.dataTable {
     border-collapse: collapse !important;
 }
@@ -9,14 +13,8 @@ table.dataTable {
         cursor: pointer;
     }
 
-#index-menu {
-    position: absolute;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-}
-
 #job-page .tab-pane {
     white-space: pre-wrap;
     font-family: monospace;
+    overflow-x: auto;
 }
