@@ -66,6 +66,7 @@ module.exports.stats = (cb) => {
                 job.log = null;
                 jobs.push(job);
                 if (jobs.length == files.length) {
+                    jobs.sort((a, b) => a.created_at > b.created_at);
                     cb(null, jobs);
                 }
             })
