@@ -94,7 +94,10 @@ function runTool(tool_func) {
                 title: `Job ${data}`,
                 body: "Your job has been created successfully and is currently processing.",
                 btn_primary: "View Jobs",
-                href: "/jobs"
+                btn_secondary: "Dismiss",
+                confirm: () => {
+                    window.location.href = "/jobs"
+                }
             });
         },
         error: (req, status, error) => {

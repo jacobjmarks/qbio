@@ -7,23 +7,31 @@ $(document).ready(() => {
 
 function deleteJob(id) {
     $("#btnDelete").attr("disabled", true);
-    $.ajax({
-        method: "POST",
-        url: `/deleteJob/${id}`,
-        success: () => {
-            showModal({
-                title: "Success",
-                body: "Job successfully deleted."
-            }, () => window.location.href = "/jobs")            
-        },
-        error: () => {
-            showModal({
-                title: "Error",
-                body: "Error deleting job."
+    showModal({
+        title: "Delete Job",
+        body: "Are you sure you want to delete this job?",
+        btn_primary: "Yes",
+        btn_secondary: "Cancel",
+        confirm: () => {
+            $.ajax({
+                method: "POST",
+                url: `/deleteJob/${id}`,
+                success: () => {
+                    showModal({
+                        title: "Success",
+                        body: "Job successfully deleted."
+                    }, () => window.location.href = "/jobs")
+                },
+                error: () => {
+                    showModal({
+                        title: "Error",
+                        body: "Error deleting job."
+                    })
+                },
+                complete: () => {
+                    $("#btnDelete").attr("disabled", false);
+                }
             })
-        },
-        complete: () => {
-            $("#btnDelete").attr("disabled", false);
         }
     })
 }
