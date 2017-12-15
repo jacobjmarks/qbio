@@ -30,7 +30,8 @@ module.exports.process = (file, tool, settings, cb) => {
 
 module.exports.bloom_filter = (job, file, settings, cb) => {
     let cmd = ` \
-        rm -f ${file}_queries* && \
+        rm -f ${file}*queries* && \
+        rm -f ${file}*chart* && \
         fsharpi executor.fsx \
             --seqfile ${file} \
             --blocksize ${settings['block-size']} \
@@ -38,7 +39,8 @@ module.exports.bloom_filter = (job, file, settings, cb) => {
             --m ${settings['filter-size']} \
             --f ${settings['hash-functions']} \
             --comparekmers ${settings['compare-kmers'] == 1 ? "true" : "false"} && \
-        mv ${file}_queries* ${conf.jobDir}${job}/result.txt \
+        mv ${file}*queries* ${conf.jobDir}${job}/result.txt && \
+        mv ${file}*chart* ${conf.jobDir}${job}/chart.html \
     `;
 
     docker_exec("qbio_bloom-filter", cmd, (err, log) => cb(err, log));

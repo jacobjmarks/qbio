@@ -11,21 +11,21 @@ type Arguments =
     | SeqFile of seqfile:string
     | BlockSize of blocksize:int
     | K of k:int
-    | M of M:int
-    | F of F:int
-    | CompareKmers of compare_kmers:bool
-    | RunParallel of run_parallel:bool
+    | M of m:int
+    | F of f:int
+    | CompareKmers of comparekmers:bool
+    | RunParallel of runparallel:bool
 with
     interface IArgParserTemplate with
         member s.Usage =
             match s with
-            | SeqFile _ -> "Specify a sequence file."
-            | BlockSize _ -> "Specify a block size."
-            | K _ -> "Specify a k."
-            | M _ -> "Specify an m."
-            | F _ -> "Specify an F."
-            | CompareKmers _ -> "Specify a compare_kmers bool."
-            | RunParallel _ -> "Specify a run_parallel bool."
+            | SeqFile _ -> "The sequence file."
+            | BlockSize _ -> "The number of kmers per block."
+            | K _ -> "The size of each kmer."
+            | M _ -> "The size of the bloom filter in bits."
+            | F _ -> "The number of hash functions used for each bloom filter (max is 5)."
+            | CompareKmers _ -> "Whether or not the program should compare kmer blocks."
+            | RunParallel _ -> "Whether or not the program should run in parallel."
 
 let parser = ArgumentParser.Create<Arguments>(programName = "fsi executor.fsx")
 let results =
@@ -39,16 +39,16 @@ let blocksize = results.GetResult (<@ BlockSize @>, defaultValue = 50)
 let k = results.GetResult (<@ K @>, defaultValue = 6)
 let m = results.GetResult (<@ M @>, defaultValue = 50000)
 let f = results.GetResult (<@ F @>, defaultValue = 5)
-let compare_kmers = results.GetResult (<@ CompareKmers @>, defaultValue = true)
-let run_parallel = results.GetResult (<@ RunParallel @>, defaultValue = true)
+let comparekmers = results.GetResult (<@ CompareKmers @>, defaultValue = true)
+let runparallel = results.GetResult (<@ RunParallel @>, defaultValue = true)
 
 printfn "seqfile: %A" seqfile
 printfn "blocksize: %A" blocksize
 printfn "k: %A" k
 printfn "m: %A" m
 printfn "f: %A" f
-printfn "compare_kmers: %A" compare_kmers
-printfn "run_parallel: %A" run_parallel
+printfn "comparekmers: %A" comparekmers
+printfn "runparallel: %A" runparallel
 
 // read the sequencess
 let sequences = 
@@ -66,17 +66,16 @@ let sequences_as_kmer_blocks = sequences |> sequences_to_kmer_blocks
 let kmer_blocks = sequences_as_kmer_blocks |> Array.concat
 
 // populate a kmer matrix using the 2D array
-let kmer_matrix = if compare_kmers then create_matrix (Kmer_Blocks kmer_blocks) run_parallel else empty_matrix kmer_blocks.Length
+let kmer_matrix = if comparekmers then create_matrix (Kmer_Blocks kmer_blocks) runparallel else empty_matrix kmer_blocks.Length
 
 // convert the 2D array into bloom filters and populate the bloom matrix
 let bloom_blocks = kmer_blocks_to_bloom_blocks m f kmer_blocks
-let bloom_matrix = create_matrix (Bloom_Blocks bloom_blocks) run_parallel
+let bloom_matrix = create_matrix (Bloom_Blocks bloom_blocks) runparallel
 
 // write matrices
 //write_matrix kmer_matrix (data_dir + "kmer_matrix.csv")
 //write_matrix bloom_matrix (data_dir + "bloom_matrix.csv")
 
-let time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
-write_queries sequences_as_kmer_blocks kmer_matrix bloom_matrix (seqfile + "_queries_" + time + ".txt")
+write_queries sequences_as_kmer_blocks kmer_matrix bloom_matrix seqfile
 
 Console.WriteLine("\n\nprogram execution complete.\n")

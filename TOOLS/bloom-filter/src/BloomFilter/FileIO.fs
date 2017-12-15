@@ -2,15 +2,17 @@
 
 open System.IO
 open System
+open XPlot.GoogleCharts
 
 module FileIO =
-    /// abstract representation of blocks
-    type NotatedBlock(s:int, b:int) =
-        member this.S = s
-        member this.B = b
-        member this.GetString = "B" + (string this.S) + "." + (string this.B)
 
-    /// read sequences from a file
+    /// Sequence.Block notation (e.g. B2.1)
+    type NotatedBlock(sequence_index, block_index) =
+        member this.SequenceIndex = sequence_index
+        member this.Blockindex = block_index
+        member this.Notation = "B" + (string this.SequenceIndex) + "." + (string this.Blockindex)
+
+    /// Read sequences from a file
     let read_sequences (file_path:string) =
         printfn "\nreading sequences from %s" file_path
 
@@ -34,7 +36,7 @@ module FileIO =
         printfn "sequences are of respective sizes: %A" [| for sequence in sequences -> sequence.Length |]
         sequences
 
-    /// write a matrix to a csv file
+    /// Write a matrix to a csv file
     let write_matrix (matrix:int[][]) (file_name:string) =
         Console.Write("\nwriting a matrix to {0}... ", file_name)
         let wr = new System.IO.StreamWriter(file_name)
@@ -45,58 +47,57 @@ module FileIO =
         wr.Close()
         Console.Write("done")
 
-    /// write query columns
-    let write_queries (s:string[][][]) (kmer_matrix:int[][]) (bloom_matrix:int[][]) (file_name:string) =
-        Console.Write("\nwriting queries to {0}... ", file_name)
+    /// Write query columns
+    let write_queries (s:string[][][]) (kmer_matrix:int[][]) (bloom_matrix:int[][]) (seqfile:string) = 
+        let time = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
+        let queries_file = seqfile + "_" + time + "_queries.txt"
+        Console.Write("\nwriting queries to {0}... ", queries_file)
+        
         let num_sequences = s.Length
         let num_blocks_per_sequence = [| for sequence in s -> sequence.Length |]
+        let queries =   [|
+                            for sequence_index in 1..num_sequences do
+                                for block_index in 1..num_blocks_per_sequence.[sequence_index-1] do
+                                    yield new NotatedBlock(sequence_index, block_index)
+                        |]
 
-        let mutable queries = Array.empty
-        for s in 1..num_sequences do
-            let num_blocks = num_blocks_per_sequence.[s-1]
-            for b in 1..num_blocks do
-                let notated = new NotatedBlock(s, b)
-                queries <- Array.append queries [|notated|]
+        let rows =  [|   
+                        for i in 0..queries.Length-1 do 
+                            for j in i..queries.Length-1 do
+                                yield queries.[i], queries.[j], kmer_matrix.[j].[i], bloom_matrix.[j].[i]
+                    |]
 
-        //let mutable k_written = Array.empty
-
-
-
-
-        let wr = new System.IO.StreamWriter(file_name)
         let sep = "\t"
+        let wr = new System.IO.StreamWriter(queries_file)
         wr.Write("QuerySeq" + sep + "Query" + sep + "Target" + sep + "KBits" + sep + "BFBits")
-        for i in 0..(queries.Length-1) do
-            for j in i..queries.Length-1 do
 
-                let query = queries.[i]
-                let target = queries.[j]
-                let query_sequence = query.S
+        let write_val (header:string) (value:string) =
+            let count = header.Length - value.Length
+            if count > 0 then
+                wr.Write(String.replicate count " ")
+            wr.Write(value)
+            wr.Write(sep)
 
-                let kbits = kmer_matrix.[j].[i]
-                let bfbits = bloom_matrix.[j].[i]
-
-                //if not (Array.contains kbits k_written) then
-
-                // writing
-
-                let write_val (header:string) (value:string) =
-                    let mutable spaces = ""
-                    for i in 0..(header.Length - value.Length - 1) do
-                        spaces <- spaces + " "
-                    wr.Write(spaces)
-                    wr.Write(value)
-                    wr.Write(sep)
-
-                wr.Write(Environment.NewLine)
-
-                write_val "QuerySeq" ("Seq" + string query_sequence)
-                write_val "Query" (query.GetString)
-                write_val "Target" (target.GetString)
-                write_val "KBits" (string kbits)
-                write_val "BFBits" (string bfbits)
-                    //k_written <- Array.append k_written [| kbits |]
+        rows |> Array.iter 
+                (
+                    fun (query, target, kbits, bfbits) -> 
+                        wr.Write(Environment.NewLine)
+                        write_val "QuerySeq" ("Seq" + string query.SequenceIndex)
+                        write_val "Query" query.Notation 
+                        write_val "Target" target.Notation
+                        write_val "KBits" (string kbits)
+                        write_val "BFBits" (string bfbits)
+                )
 
         wr.Close()
+        Console.Write("done")
 
+        // Charting
+        let chart_file = seqfile + "_" + time + "_chart.html"
+        Console.Write("\nwriting chart to {0}... ", chart_file)
+        let wr = new System.IO.StreamWriter(chart_file)
+        let chart_data = rows |> Array.map (fun (_, _, kbits, bfbits) -> (kbits, bfbits)) |> Array.distinctBy (fun (kbits, bfbits) -> bfbits)
+        let chart = Chart.Scatter chart_data
+        wr.Write(chart.GetInlineHtml())
+        wr.Close()
         Console.Write("done")

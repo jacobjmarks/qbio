@@ -2,34 +2,34 @@
 
 F# bloom filter implementation for fast DNA sequence comparison.
 
-## Building (Windows)
+## Build (Windows)
 
 `.\build.cmd`
 
-## Building (Linux)
+## Build (Linux)
 
 `.\build.sh` (requires Mono)
 
-## Executing
+## Parameters
 
-Minimum execution requires a sequence file to be specified.
+| Parameter       | Default Value | Description                              |
+| --------------- | ------------- | ---------------------------------------- |
+| blocksize       | 50            | The number of kmers per block.   |
+| k               | 6             | The size of each kmer. |
+| m               | 50000         | The size of the bloom filter in bits.    |
+| f               | 5             | The number of hash functions used for each bloom filter (max is 5). |
+| comparekmers    | true          | Whether or not the program should compare kmer blocks. |
+| runparallel     | true          | Whether or not the program should run in parallel. |
+
+## Execute
+
+Minimum execution requires a sequence file to be specified. This will use the default values for the parameters (see above).
 
 ```
 fsi executor.fsx --seqfile data/sequences.fna
 ```
 
-This will use the default values for the parameters (see below table).
-
-| Parameter       | Default Value | Description                              |
-| --------------- | ------------- | ---------------------------------------- |
-| block_size      | 50            | The number of kmers within each block.   |
-| k               | 6             | The size of the kmers contained within each block. |
-| M               | 50000         | The size of the bloom filter in bits.    |
-| F               | 5             | The number of hash functions used for the bloom filter. Max is 5. |
-| comparekmers   | true          | A boolean flag which tells the program to compare kmer blocks. |
-| runparallel | true          | A boolean flag which tells the program to run in parallel. |
-
-Different values can be specified via the below format.
+Different values can be specified using the same syntax.
 
 ```
 fsi executor.fsx --seqfile seqs.fna --runparallel false
