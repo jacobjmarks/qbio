@@ -38,7 +38,7 @@ module.exports.bloom_filter = (job, file, settings, cb) => {
             --m ${settings['filter-size']} \
             --f ${settings['hash-functions']} \
             --comparekmers ${settings['compare-kmers'] == 1 ? "true" : "false"} && \
-        mv ${file}_queries* ./jobs/${job}/result.txt \
+        mv ${file}_queries* ${conf.jobDir}${job}/result.txt \
     `;
 
     docker_exec("qbio_bloom-filter", cmd, (err, log) => cb(err, log));

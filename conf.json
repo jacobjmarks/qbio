@@ -1,3 +1,4 @@
 {
-    "dataDir": "./data/"
+    "dataDir": "./qbio_data/",
+    "jobDir": "./qbio_jobs/"
 }

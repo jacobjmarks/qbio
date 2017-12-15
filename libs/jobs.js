@@ -1,10 +1,9 @@
 const fs = require('fs');
+const conf = require('../conf.json');
 const rimraf = require('rimraf');
 
-const jobDir = "./jobs/";
-
-fs.exists(jobDir, (exists) => {
-    if (!exists) fs.mkdir(jobDir);
+fs.exists(conf.jobDir, (exists) => {
+    if (!exists) fs.mkdir(conf.jobDir);
 })
 
 module.exports.create = (created_at, tool, file, cb) => {
@@ -17,9 +16,9 @@ module.exports.create = (created_at, tool, file, cb) => {
         log: null
     }
 
-    fs.mkdir(jobDir + created_at, (err) => {
+    fs.mkdir(conf.jobDir + created_at, (err) => {
         if (err) return cb(new Error("Error creating job.\n" + err));
-        fs.writeFile(jobDir + created_at + '/meta.json', JSON.stringify(job), (err) => {
+        fs.writeFile(conf.jobDir + created_at + '/meta.json', JSON.stringify(job), (err) => {
             if (err) return cb(new Error("Error storing job.\n" + err));
             cb();
         })
@@ -27,16 +26,16 @@ module.exports.create = (created_at, tool, file, cb) => {
 }
 
 module.exports.delete = (id, cb) => {
-    rimraf(jobDir + id, (err) => {
+    rimraf(conf.jobDir + id, (err) => {
         if (err) return cb(err);
         cb();
     })
 }
 
 module.exports.get = (id, cb) => {
-    fs.readFile(jobDir + id + '/meta.json', (err, meta) => {
+    fs.readFile(conf.jobDir + id + '/meta.json', (err, meta) => {
         if (err) return cb(new Error("Error reading job file.\n" + err));
-        fs.readFile(jobDir + id + '/result.txt', (err, result) => {
+        fs.readFile(conf.jobDir + id + '/result.txt', (err, result) => {
             cb(null, {
                 meta: JSON.parse(meta),
                 result: ((result) => {
@@ -53,13 +52,13 @@ module.exports.get = (id, cb) => {
 }
 
 module.exports.stats = (cb) => {
-    fs.readdir(jobDir, (err, files) => {
+    fs.readdir(conf.jobDir, (err, files) => {
         if (err) return cb(new Error("Error reading job directory.\n" + err));
         if (files.length == 0) return cb(null, []);
         
         let jobs = [];
         files.forEach((id) => {
-            fs.readFile(jobDir + id + '/meta.json', (err, data) => {
+            fs.readFile(conf.jobDir + id + '/meta.json', (err, data) => {
                 if (err) return cb(new Error("Error reading job file.\n" + err));
                 let job = JSON.parse(data);
                 job.error = job.error ? true : false;
@@ -75,14 +74,14 @@ module.exports.stats = (cb) => {
 }
 
 module.exports.update = (id, params) => {
-    fs.readFile(jobDir + id + '/meta.json', (err, data) => {
+    fs.readFile(conf.jobDir + id + '/meta.json', (err, data) => {
         if (err) return console.log("Error reading job file.\n" + err);
         let job = JSON.parse(data);
         job.finished_at = params.finished_at || job.finished_at;
         job.log = params.log || job.log;
         job.error = params.error || job.error;
 
-        fs.writeFile(jobDir + id + '/meta.json', JSON.stringify(job), (err) => {
+        fs.writeFile(conf.jobDir + id + '/meta.json', JSON.stringify(job), (err) => {
             if (err) console.log("Error storing updated job.\n" + err);
         })
     })
