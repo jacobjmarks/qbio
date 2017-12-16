@@ -51,6 +51,12 @@ module.exports.get = (id, cb) => {
     })
 }
 
+module.exports.chart = (id, cb) => {
+    fs.readFile(conf.jobDir + id + '/chart.html', (err, data) => {
+        cb(err, data);
+    })
+}
+
 module.exports.stats = (cb) => {
     fs.readdir(conf.jobDir, (err, files) => {
         if (err) return cb(new Error("Error reading job directory.\n" + err));

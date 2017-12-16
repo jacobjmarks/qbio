@@ -97,7 +97,14 @@ module FileIO =
         Console.Write("\nwriting chart to {0}... ", chart_file)
         let wr = new System.IO.StreamWriter(chart_file)
         let chart_data = rows |> Array.map (fun (_, _, kbits, bfbits) -> (kbits, bfbits)) |> Array.distinctBy (fun (kbits, bfbits) -> bfbits)
-        let chart = Chart.Scatter chart_data
-        wr.Write(chart.GetInlineHtml())
+        
+        let options = 
+            Options (
+                        hAxis = Axis(title = "kmers"),
+                        vAxis = Axis(title = "bits")
+                    )
+                                
+        let chart = chart_data |> Chart.Scatter |> Chart.WithOptions options |> Chart.WithLabel "kmers, bits"
+        wr.Write(chart.GetHtml())
         wr.Close()
         Console.Write("done")

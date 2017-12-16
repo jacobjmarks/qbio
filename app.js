@@ -45,6 +45,15 @@ app.get('/run', (req, res) => {
     })
 })
 
+app.post('/getChart/:id', (req, res) => {
+    let id = req.params.id;
+
+    jobs.chart(id, (err, chart) => {
+        if (err) return res.status(500).send(err.message);
+        res.send(chart);
+    })
+})
+
 app.post('/jobStatus', (req, res) => {
     jobs.stats((err, jobs) => {
         if (err) return res.status(500).send(err.message);

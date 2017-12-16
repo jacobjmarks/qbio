@@ -42,3 +42,24 @@ function deleteJob(id) {
         }
     })
 }
+
+function getChart(id) {
+    $.ajax({
+        method: "POST",
+        url: `/getChart/${id}`,
+        success: (data, status, req) => {
+            let iframe = $("#chart-frame")[0];
+            console.log(iframe);
+            let doc = iframe.document;
+            doc = iframe.contentDocument || doc;
+            doc = iframe.contentWindow && iframe.contentWindow.document || doc;
+            
+            doc.open();
+            doc.write(data);
+            doc.close();
+        },
+        error: (req, status, error) => {
+            $("#nav-chart").html("ERARARARAR");
+        }
+    })
+}
