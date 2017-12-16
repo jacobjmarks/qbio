@@ -49,7 +49,9 @@ function getChart(id) {
         url: `/getChart/${id}`,
         success: (data, status, req) => {
             let iframe = $("#chart-frame")[0];
-            console.log(iframe);
+            iframe.onload = () => {
+                $("#nav-chart").find(".fa-spinner").hide();
+            };
             let doc = iframe.document;
             doc = iframe.contentDocument || doc;
             doc = iframe.contentWindow && iframe.contentWindow.document || doc;
@@ -59,7 +61,7 @@ function getChart(id) {
             doc.close();
         },
         error: (req, status, error) => {
-            $("#nav-chart").html("ERARARARAR");
+            $("#nav-chart").html("Error Loading Chart");
         }
     })
 }

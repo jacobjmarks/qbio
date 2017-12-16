@@ -1,5 +1,8 @@
 extends layout
 
+block scripts
+    script(src="/js/job.js")
+
 block content
     .container#job-page
         .row
@@ -18,12 +21,10 @@ block content
                 nav.nav.nav-tabs(role="tablist")
                     a#nav-result-tab.nav-item.nav-link(data-toggle="tab" href="#nav-result" role="tab" aria-controls="nav-result" aria-selected="true").active #{job.meta.error ? "Error" : "Result"}
                     a#nav-log-tab.nav-item.nav-link(data-toggle="tab" href="#nav-log" role="tab" aria-controls="nav-log" aria-selected="false") Log
-                    a#nav-chart-tab.nav-item.nav-link(data-toggle="tab" href="#nav-chart" role="tab" aria-controls="nav-chart" aria-selected="false" style=`display: ${job.meta.tool == "bloom_filter" ? "block" : "none"}` onclick=`getChart(${job.meta.created_at})`) Chart
+                    a#nav-chart-tab.nav-item.nav-link(data-toggle="tab" href="#nav-chart" role="tab" aria-controls="nav-chart" aria-selected="false" style=`display: ${job.meta.tool == "bloom_filter" ? (job.result ? "block" : "none") : "none"}` onclick=`getChart(${job.meta.created_at})`) Chart
                 .tab-content.p-2.bg-white.border.border-top-0
                     #nav-result.tab-pane(role="tabpanel" aria-labelledby="nav-result-tab").show.active #{job.meta.error || job.result || "[PENDING]"}
                     #nav-log.tab-pane(role="tabpanel" aria-labelledby="nav-log-tab") #{job.meta.log || "[PENDING]"}
                     #nav-chart.tab-pane(role="tabpanel" aria-labelledby="nav-chart-tab" style="height:550px")
+                        i.fa.fa-2x.fa-spinner.fa-spin.position-absolute
                         iframe#chart-frame(style="width:100%;height:99%;border:none;")
-
-block scripts
-    script(src="/js/job.js")
