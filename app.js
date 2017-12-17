@@ -13,7 +13,7 @@ app.use(express.static('public'));
 app.use(fileUpload());
 
 app.get('/', (req, res) => {
-    res.render('index.pug');
+    res.render('index.pug', {tools:require('./tools.json')});
 })
 
 app.get('/newjob', (req, res) => {

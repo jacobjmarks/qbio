@@ -3,6 +3,21 @@ extends layout
 block content
     .container
         .row.justify-content-center
-            .col-md-8.text-center
-                h4.my-3 Welcome to the unified bioinformatic toolset platform.
-                p We currently support the following tools: [...]
+            .col-md-8
+                .text-center
+                    h4.my-3 Welcome to the unified bioinformatic toolset platform.
+                    p We currently support the following tools:
+
+                each tool in tools
+                    .card.mb-3
+                        .card-body
+                            h4.d-inline #{tool.name}
+                                if tool.caption
+                                    | &nbsp;
+                                    h6.d-inline #{tool.caption}
+                            h6.text-muted #{tool.author}
+                            p.mb-0 !{tool.description}
+                        .card-footer
+                            .small.text-muted.float-left #{tool.version}
+                            a.small.text-muted.float-right(href=tool.source target="_blank") Source &nbsp;
+                                .fa.fa-external-link.d-inline
