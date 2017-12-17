@@ -4,22 +4,9 @@ const conf = require('../conf.json');
 module.exports.upload = (file, cb) => {   
     if (!file) return cb(new Error("No file selected.")); 
 
-    const storeDatafile = () => {
-        file.mv(conf.dataDir + file.name, (err) => {
-            if (err) return cb(new Error("Error storing file."));
-            cb();
-        })
-    }
-
-    fs.exists(conf.dataDir, (exists) => {
-        if (!exists) {
-            fs.mkdir(conf.dataDir, (err) => {
-                if (err) return cb (new Error("Error creating new data directory."));
-                storeDatafile();
-            })
-        } else {
-            storeDatafile();
-        }
+    file.mv(conf.dataDir + file.name, (err) => {
+        if (err) return cb(new Error("Error storing file."));
+        cb();
     })
 }
 

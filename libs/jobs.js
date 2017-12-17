@@ -2,10 +2,6 @@ const fs = require('fs');
 const conf = require('../conf.json');
 const rimraf = require('rimraf');
 
-fs.exists(conf.jobDir, (exists) => {
-    if (!exists) fs.mkdir(conf.jobDir);
-})
-
 module.exports.create = (created_at, tool, file, cb) => {
     let job = {
         created_at: created_at,
