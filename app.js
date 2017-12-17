@@ -8,16 +8,17 @@ const PORT = 3000;
 const jobs = require('./libs/jobs.js');
 const datafile = require('./libs/datafile.js');
 const tool_controller = require('./libs/tool-controller.js');
+const tools = require('./tools.json');
 
 app.use(express.static('public'));
 app.use(fileUpload());
 
 app.get('/', (req, res) => {
-    res.render('index.pug', {tools:require('./tools.json')});
+    res.render('index.pug', {tools:tools});
 })
 
 app.get('/newjob', (req, res) => {
-    res.render('new-job.pug');
+    res.render('new-job.pug', {tools:tools});
 })
 
 app.get('/jobs', (req, res) => {

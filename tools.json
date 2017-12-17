@@ -1,6 +1,7 @@
 [
     {
         "name": "BIGSI",
+        "func": "bigsi",
         "caption": "BItsliced Genomic Signature Index",
         "author": "Phelim Bradley, Henk den Bakker, Eduardo Rocha, Gil McVean, Zamin Iqbal",
         "version": "0.1.5",
@@ -9,6 +10,7 @@
     },
     {
         "name": "Bloom Filter",
+        "func": "bloom_func",
         "caption": "",
         "author": "Benjamin Saljooghi",
         "version": "0.0.0",

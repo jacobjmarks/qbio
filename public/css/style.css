@@ -18,3 +18,11 @@ table.dataTable {
     font-family: monospace;
     overflow-x: auto;
 }
+
+
+.tool-card .fa {
+    transition: .3s transform ease-in-out;
+}
+.tool-card .collapsed .fa {
+    transform: rotate(-90deg);
+}
