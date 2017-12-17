@@ -89,7 +89,6 @@ function runTool(tool_func) {
             })()
         },
         success: (data, status, req) => {
-            $(`#${tool_func} button:last-child`).attr("disabled", false);
             showModal({
                 title: `Job ${data}`,
                 body: "Your job has been created successfully and is currently processing.",
@@ -102,6 +101,9 @@ function runTool(tool_func) {
         },
         error: (req, status, error) => {
             alert(req.responseText);
+        },
+        complete: () => {
+            $(`#${tool_func} button:last-child`).attr("disabled", false);
         }
     })
 }

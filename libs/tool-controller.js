@@ -19,13 +19,18 @@ module.exports.process = (file, tool, settings, cb) => {
             });
         });
     } catch(err) {
-        cb(new Error("Error creating child process.\n" + err));
+        return cb(new Error("Error creating child process.\n" + err));
     }
 
     jobs.create(job, tool, file, (err) => {
         if (err) return cb(new Error("Error creating job.\n" + err));
         cb(null, job);
     });
+}
+
+module.exports.bigsi = (job, file, settings, cb) => {
+
+    docker_exec("qbio_bigsi", cmd, (err, log) => cb(err, log));
 }
 
 module.exports.bloom_filter = (job, file, settings, cb) => {
