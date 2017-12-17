@@ -71,22 +71,32 @@ function runTool(tool_func) {
         return alert("No datafile selected.");
     }
 
-    $(`#${tool_func} button:last-child`).attr("disabled", true);
+    let valid = true;
 
+    let form_data = $(`#${tool_func} form`).serializeArray();
+    let settings = {};
+    form_data.forEach((param) => {
+        let control = $(`#${tool_func} .form-control[name^='${param.name}']`);
+
+        let val = param.value || control.data('default');
+        if (!val && control.attr("required")) {
+            control.effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+            return valid = false;
+        }
+
+        settings[`${param.name}`] = val;
+    })
+
+    if (!valid) return;
+
+    $(`#${tool_func} button:last-child`).attr("disabled", true);
     $.ajax({
         method: "GET",
         url: "/run",
         data: {
             "tool": tool_func,
             "file": selectedDataFile,
-            "settings": (() => {
-                let settings = $(`#${tool_func} form`).serializeArray();
-                let obj = {};
-                settings.forEach((s) => {
-                    obj[`${s.name}`] = s.value || $(`#${tool_func} .form-control[name^='${s.name}']`).data('default');
-                })
-                return obj;
-            })()
+            "settings": settings
         },
         success: (data, status, req) => {
             showModal({
