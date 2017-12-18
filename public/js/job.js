@@ -10,8 +10,10 @@ $(document).ready(() => {
     if (!job.finished_at) {
         setTimeout(update, 5000);
     } else {
-        !job.error && getResult();
+        getResult();
     }
+
+    requestedChart = false;
 })
 
 function update() {
@@ -32,6 +34,7 @@ function update() {
                     $("#nav-result-tab").html("Error");
                     $("#nav-result").html(job.error);
                 } else {
+                    $("#nav-chart-tab").css("display", "block");
                     getResult();
                 }
             }
@@ -80,7 +83,7 @@ function getLog() {
         method: "GET",
         url: `/job/${job.created_at}/log`,
         success: (data, status, req) => {
-            $("#nav-log").html(data);
+            data && $("#nav-log").html(data);
 
             if (!job.finished_at) setTimeout(getLog, 1000);
 
@@ -93,6 +96,7 @@ function getLog() {
 }
 
 function getResult() {
+    if (job.error) return $("#nav-result").html(job.error);
     $.ajax({
         method: "GET",
         url: `/job/${job.created_at}/result`,
@@ -106,9 +110,12 @@ function getResult() {
 }
 
 function getChart() {
+    if (requestedChart) return;
+    requestedChart = true;
+
     $.ajax({
         method: "POST",
-        url: `/getChart/${deleteJob.created_at}`,
+        url: `/getChart/${job.created_at}`,
         success: (data, status, req) => {
             let iframe = $("#chart-frame")[0];
             iframe.onload = () => {
