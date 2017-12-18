@@ -10,7 +10,7 @@ $(document).ready(() => {
     if (!job.finished_at) {
         setTimeout(update, 5000);
     } else {
-        getResult();
+        !job.error && getResult();
     }
 })
 
@@ -25,10 +25,15 @@ function update() {
                 setTimeout(update, 5000);
             } else {
                 // Job Complete
-                $("i.fa:first-child").css("color", "green");
+                $("i.fa:first-child").css("color", job.error ? "red" : "green");
                 $("#finished_at").html(new Date(job.finished_at).toLocaleString());
                 $("#btnDelete").prop("disabled", false);
-                getResult();
+                if (job.error) {
+                    $("#nav-result-tab").html("Error");
+                    $("#nav-result").html(job.error);
+                } else {
+                    getResult();
+                }
             }
         },
         error: (req, status, error) => {
