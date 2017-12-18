@@ -57,6 +57,7 @@ module.exports.bloom_filter = (job, file, settings, cb) => {
             --k ${settings['kmer-size']} \
             --m ${settings['filter-size']} \
             --f ${settings['hash-functions']} \
+            --threshold ${settings['kmer-threshold']} \
             --comparekmers ${settings['compare-kmers'] == 1 ? "true" : "false"} && \
         mv ${file}*queries* ${conf.jobDir}${job}/result.txt && \
         mv ${file}*chart* ${conf.jobDir}${job}/chart.html \
