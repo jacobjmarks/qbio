@@ -48,8 +48,15 @@ module.exports.get = (id, cb) => {
 
 module.exports.getLog = (id, cb) => {
     fs.readFile(conf.jobDir + id + '/log.txt', (err, log) => {
-        if (err) return cb(new Error("Error reading Logfile."));
+        if (err) return cb(new Error("Error reading Log file."));
         cb(null, log);
+    })
+}
+
+module.exports.getResult = (id, cb) => {
+    fs.readFile(conf.jobDir + id + '/result.txt', (err, result) => {
+        if (err) return cb(new Error("Error reading Result file."));
+        cb(null, result);
     })
 }
 

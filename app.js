@@ -90,6 +90,13 @@ app.get('/job/:id/log', (req, res) => {
     })
 })
 
+app.get('/job/:id/result', (req, res) => {
+    jobs.getResult(req.params.id, (err, result) => {
+        if (err) return res.status(500).send(err.message);
+        res.send(result);
+    })
+})
+
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })

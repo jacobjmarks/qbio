@@ -9,8 +9,12 @@ $(document).ready(() => {
         $("#btnDelete").attr("disabled", true);
     }
 
-    if (!job.meta.finished_at) setTimeout(update, 5000);
     getLog();
+    if (!job.meta.finished_at) {
+        setTimeout(update, 5000);
+    } else {
+        getResult();
+    }
 })
 
 function update() {
@@ -20,7 +24,11 @@ function update() {
         success: (data, status, req) => {
             job = data;
 
-            if (!job.meta.finished_at) setTimeout(update, 5000);
+            if (!job.meta.finished_at) {
+                setTimeout(update, 5000);
+            } else {
+                getResult();
+            }
         },
         error: (req, status, error) => {
             console.error(error.message);
@@ -74,6 +82,19 @@ function getLog() {
         },
         error: (req, status, error) => {
             $("#nav-log").html("Error Loading Log");
+        }
+    })
+}
+
+function getResult() {
+    $.ajax({
+        method: "GET",
+        url: `/job/${job.meta.created_at}/result`,
+        success: (data, status, req) => {
+            $("#nav-result").html(data);
+        },
+        error: (req, status, error) => {
+            $("#nav-result").html("Error Loading Result");
         }
     })
 }
