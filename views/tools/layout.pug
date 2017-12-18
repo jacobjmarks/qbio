@@ -3,11 +3,11 @@ block variables
 - var tool = tools.find((t) => t.name == this_tool);
 
 .card.tool-card.mb-3
-    button.btn.card-header.text-left.bg-white.collapsed(data-toggle='collapse' href=`#${tool.func}_form`)
+    button.btn.card-header.text-left.bg-white.collapsed(data-toggle='collapse' href=`#${tool.func}`)
         h4.mb-0 #{tool.name} &nbsp;
             .d-inline.small.text-muted v#{tool.version}
             .float-right.fa.fa-chevron-down
-    .collapse(id=tool.func + '_form')
+    .collapse(id=tool.func)
         .card-body
             block settings
             button.btn.btn-primary.float-right.mb-3(onclick=`runTool("${tool.func}")`) Run
