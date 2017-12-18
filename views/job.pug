@@ -11,7 +11,7 @@ block content
             .col
                 .clearfix
                     h2.float-left !{`<i class="fa fa-circle" style="color:${!job.finished_at ? "orange" : job.error ? "red" : "green"}"></i> Job ` + job.created_at}
-                    button.btn.btn-light.text-danger.float-right#btnDelete(onclick=`deleteJob(${job.created_at})`) DELETE
+                    button.btn.btn-light.text-danger.float-right#btnDelete(onclick=`deleteJob()`) DELETE
                     .clear-left
                         p.mb-0 Created:&nbsp;
                             span#created_at(data-timestamp=job.created_at)
@@ -23,7 +23,7 @@ block content
                 nav.nav.nav-tabs(role="tablist")
                     a#nav-result-tab.nav-item.nav-link(data-toggle="tab" href="#nav-result" role="tab" aria-controls="nav-result" aria-selected="true").active #{job.error ? "Error" : "Result"}
                     a#nav-log-tab.nav-item.nav-link(data-toggle="tab" href="#nav-log" role="tab" aria-controls="nav-log" aria-selected="false") Log
-                    a#nav-chart-tab.nav-item.nav-link(data-toggle="tab" href="#nav-chart" role="tab" aria-controls="nav-chart" aria-selected="false" style=`display: ${job.tool == "bloom_filter" ? (job.result ? "block" : "none") : "none"}` onclick=`getChart(${job.created_at})`) Chart
+                    a#nav-chart-tab.nav-item.nav-link(data-toggle="tab" href="#nav-chart" role="tab" aria-controls="nav-chart" aria-selected="false" style=`display: ${job.tool == "bloom_filter" ? (job.result ? "block" : "none") : "none"}` onclick=`getChart()`) Chart
                 .tab-content.p-2.bg-white.border.border-top-0
                     #nav-result.tab-pane(role="tabpanel" aria-labelledby="nav-result-tab").show.active #{job.error || "[PENDING]"}
                     #nav-log.tab-pane(role="tabpanel" aria-labelledby="nav-log-tab")

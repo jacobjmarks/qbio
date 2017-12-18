@@ -36,7 +36,7 @@ function update() {
     })
 }
 
-function deleteJob(id) {
+function deleteJob() {
     showModal({
         title: "Delete Job",
         body: "Are you sure you want to delete this job?",
@@ -47,7 +47,7 @@ function deleteJob(id) {
             $("#modal .btn-primary").attr("disabled", true);
             $.ajax({
                 method: "POST",
-                url: `/deleteJob/${id}`,
+                url: `/deleteJob/${job.created_at}`,
                 success: () => {
                     showModal({
                         title: "Success",
@@ -99,10 +99,10 @@ function getResult() {
     })
 }
 
-function getChart(id) {
+function getChart() {
     $.ajax({
         method: "POST",
-        url: `/getChart/${id}`,
+        url: `/getChart/${deleteJob.created_at}`,
         success: (data, status, req) => {
             let iframe = $("#chart-frame")[0];
             iframe.onload = () => {
