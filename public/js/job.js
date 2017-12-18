@@ -9,8 +9,24 @@ $(document).ready(() => {
         $("#btnDelete").attr("disabled", true);
     }
 
+    if (!job.meta.finished_at) setTimeout(update, 5000);
     getLog();
 })
+
+function update() {
+    $.ajax({
+        method: "POST",
+        url: `/job/${job.meta.created_at}`,
+        success: (data, status, req) => {
+            job = data;
+
+            if (!job.meta.finished_at) setTimeout(update, 5000);
+        },
+        error: (req, status, error) => {
+            console.error(error.message);
+        }
+    })
+}
 
 function deleteJob(id) {
     showModal({
@@ -51,6 +67,8 @@ function getLog() {
         url: `/job/${job.meta.created_at}/log`,
         success: (data, status, req) => {
             $("#nav-log").html(data);
+
+            if (!job.meta.finished_at) setTimeout(getLog, 1000);
         },
         error: (req, status, error) => {
             $("#nav-log").html("Error Loading Log");

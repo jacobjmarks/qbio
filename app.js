@@ -76,6 +76,13 @@ app.get('/job/:id', (req, res) => {
     })
 })
 
+app.post('/job/:id', (req, res) => {
+    jobs.get(req.params.id, (err, job) => {
+        if (err) return res.status(500).send(err.message);
+        res.json(job);
+    })
+})
+
 app.get('/job/:id/log', (req, res) => {
     jobs.getLog(req.params.id, (err, log) => {
         if (err) return res.status(500).send(err.message);
