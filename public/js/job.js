@@ -1,11 +1,8 @@
 $(document).ready(() => {
-    let created_at = $("#created_at");
-    let finished_at = $("#finished_at");
-    created_at.html(new Date(created_at.data('timestamp')).toLocaleString());
-    if (finished_at.data('timestamp')) {
-        finished_at.html(new Date(finished_at.data('timestamp')).toLocaleString());
+    $("#created_at").html(new Date(job.created_at).toLocaleString());
+    if (job.finished_at) {
+        $("#finished_at").html(new Date(job.finished_at).toLocaleString());
     } else {
-        finished_at.html("PENDING");
         $("#btnDelete").attr("disabled", true);
     }
 
@@ -27,6 +24,10 @@ function update() {
             if (!job.finished_at) {
                 setTimeout(update, 5000);
             } else {
+                // Job Complete
+                $("i.fa:first-child").css("color", "green");
+                $("#finished_at").html(new Date(job.finished_at).toLocaleString());
+                $("#btnDelete").prop("disabled", false);
                 getResult();
             }
         },
