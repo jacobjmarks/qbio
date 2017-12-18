@@ -44,7 +44,11 @@ module.exports.getLog = (id, cb) => {
 module.exports.getResult = (id, cb) => {
     fs.readFile(conf.jobDir + id + '/result.txt', (err, result) => {
         if (err) return cb(new Error("Error reading Result file."));
-        cb(null, result.toString().substring(0, 25000) + "\n[DOWNLOAD TO VIEW MORE]");
+        result = result.toString();
+        if (result.length > 25000) {
+            result = result.substring(0, 25000) + "\n[DOWNLOAD TO VIEW MORE]";
+        }
+        cb(null, result);
     })
 }
 
