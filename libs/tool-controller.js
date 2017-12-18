@@ -4,6 +4,8 @@ const fs = require('fs');
 
 const jobs = require('./jobs.js');
 
+const logPipe = (job) => {return `&>> ${conf.jobDir}${job}/log.txt`};
+
 module.exports.process = (file, tool, settings, cb) => {
     if (!file) return cb(new Error("Invalid datafile."));
     if (!tool) return cb(new Error("No tool specified."));
@@ -29,16 +31,17 @@ module.exports.process = (file, tool, settings, cb) => {
 }
 
 module.exports.bigsi = (job, file, settings, cb) => {
+    let log = logPipe(job);
     let cmd = `\
         rm -Rf /data/* && \
-        echo 'PREPARING DATA...' && \
-        mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s temp -1 ${file} /data/temp.ctx 2>&1 && \
-        echo 'CONSTRUCTING BLOOM FILTERS...' && \
-        bigsi init /data/temp.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} 2>&1 && \
-        bigsi bloom --db /data/temp.bigsi -c /data/temp.ctx /data/temp.bloom 2>&1 && \
-        echo 'BUILDING COMBINED GRAPH...' && \
-        bigsi build /data/temp.bigsi /data/temp.bloom 2>&1 && \
-        echo 'QUERYING...' && \
+        echo 'PREPARING DATA...' ${log} && \
+        mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s temp -1 ${file} /data/temp.ctx ${log} && \
+        echo 'CONSTRUCTING BLOOM FILTERS...' ${log} && \
+        bigsi init /data/temp.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} ${log} && \
+        bigsi bloom --db /data/temp.bigsi -c /data/temp.ctx /data/temp.bloom ${log} && \
+        echo 'BUILDING COMBINED GRAPH...' ${log} && \
+        bigsi build /data/temp.bigsi /data/temp.bloom ${log} && \
+        echo 'QUERYING...' ${log} && \
         bigsi search --db /data/temp.bigsi -s ${settings['query-seq']} \
             > ${conf.jobDir}${job}/result.txt && \
         rm -Rf /data/* \
@@ -48,6 +51,7 @@ module.exports.bigsi = (job, file, settings, cb) => {
 }
 
 module.exports.bloom_filter = (job, file, settings, cb) => {
+    let log = logPipe(job);
     let cmd = ` \
         rm -f ${file}*queries* && \
         rm -f ${file}*chart* && \
@@ -58,7 +62,8 @@ module.exports.bloom_filter = (job, file, settings, cb) => {
             --m ${settings['filter-size']} \
             --f ${settings['hash-functions']} \
             --threshold ${settings['kmer-threshold']} \
-            --comparekmers ${settings['compare-kmers'] == 1 ? "true" : "false"} && \
+            --comparekmers ${settings['compare-kmers'] == 1 ? "true" : "false"} \
+            ${log} && \
         mv ${file}*queries* ${conf.jobDir}${job}/result.txt && \
         mv ${file}*chart* ${conf.jobDir}${job}/chart.html \
     `;

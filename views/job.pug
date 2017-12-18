@@ -1,6 +1,8 @@
 extends layout
 
 block scripts
+    script.
+        var job = !{JSON.stringify(job)};
     script(src="/js/job.js")
 
 block content

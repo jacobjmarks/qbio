@@ -76,6 +76,13 @@ app.get('/job/:id', (req, res) => {
     })
 })
 
+app.get('/job/:id/log', (req, res) => {
+    jobs.getLog(req.params.id, (err, log) => {
+        if (err) return res.status(500).send(err.message);
+        res.send(log);
+    })
+})
+
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })

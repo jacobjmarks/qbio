@@ -8,6 +8,8 @@ $(document).ready(() => {
         finished_at.html("PENDING");
         $("#btnDelete").attr("disabled", true);
     }
+
+    getLog();
 })
 
 function deleteJob(id) {
@@ -39,6 +41,19 @@ function deleteJob(id) {
                     $("#modal .btn-primary").attr("disabled", false);
                 }
             })
+        }
+    })
+}
+
+function getLog() {
+    $.ajax({
+        method: "GET",
+        url: `/job/${job.meta.created_at}/log`,
+        success: (data, status, req) => {
+            $("#nav-log").html(data);
+        },
+        error: (req, status, error) => {
+            $("#nav-log").html("Error Loading Log");
         }
     })
 }

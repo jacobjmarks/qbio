@@ -47,6 +47,13 @@ module.exports.get = (id, cb) => {
     })
 }
 
+module.exports.getLog = (id, cb) => {
+    fs.readFile(conf.jobDir + id + '/log.txt', (err, log) => {
+        if (err) return cb(new Error("Error reading Logfile."));
+        cb(null, log);
+    })
+}
+
 module.exports.chart = (id, cb) => {
     fs.readFile(conf.jobDir + id + '/chart.html', (err, data) => {
         cb(err, data);
