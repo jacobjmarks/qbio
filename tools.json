@@ -10,7 +10,7 @@
     },
     {
         "name": "Bloom Filter",
-        "func": "bloom_func",
+        "func": "bloom_filter",
         "caption": "",
         "author": "Benjamin Saljooghi",
         "version": "0.0.0",

@@ -32,12 +32,12 @@ module.exports.bigsi = (job, file, settings, cb) => {
     let cmd = `\
         rm -Rf /data/* && \
         echo 'PREPARING DATA...' && \
-        mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s temp -1 ${file} /data/temp.ctx && \
+        mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s temp -1 ${file} /data/temp.ctx 2>&1 && \
         echo 'CONSTRUCTING BLOOM FILTERS...' && \
-        bigsi init /data/temp.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} && \
-        bigsi bloom --db /data/temp.bigsi -c /data/temp.ctx /data/temp.bloom && \
+        bigsi init /data/temp.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} 2>&1 && \
+        bigsi bloom --db /data/temp.bigsi -c /data/temp.ctx /data/temp.bloom 2>&1 && \
         echo 'BUILDING COMBINED GRAPH...' && \
-        bigsi build /data/temp.bigsi /data/temp.bloom && \
+        bigsi build /data/temp.bigsi /data/temp.bloom 2>&1 && \
         echo 'QUERYING...' && \
         bigsi search --db /data/temp.bigsi -s ${settings['query-seq']} \
             > ${conf.jobDir}${job}/result.txt && \
@@ -67,8 +67,6 @@ module.exports.bloom_filter = (job, file, settings, cb) => {
 
 function docker_exec(container, command, cb) {
     exec(`docker exec ${container} bash -c "${command}"`, (error, stdout, stderr) => {
-        console.log(stdout);
-        console.log(stderr);
         cb(error && error.message, stdout || stderr);
     })
 }
