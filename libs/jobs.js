@@ -30,19 +30,7 @@ module.exports.delete = (id, cb) => {
 module.exports.get = (id, cb) => {
     fs.readFile(conf.jobDir + id + '/meta.json', (err, meta) => {
         if (err) return cb(new Error("Error reading job file.\n" + err));
-        fs.readFile(conf.jobDir + id + '/result.txt', (err, result) => {
-            cb(null, {
-                meta: JSON.parse(meta),
-                result: ((result) => {
-                    if (!result) return;
-                    result = result.toString();
-                    if (result.length > 5000) {
-                        return result.substring(0, 5000) + " [DOWNLOAD TO VIEW MORE]"
-                    }
-                    return result;
-                })(result)
-            });
-        })
+        cb(null, JSON.parse(meta));
     })
 }
 

@@ -10,7 +10,7 @@ $(document).ready(() => {
     }
 
     getLog();
-    if (!job.meta.finished_at) {
+    if (!job.finished_at) {
         setTimeout(update, 5000);
     } else {
         getResult();
@@ -20,11 +20,11 @@ $(document).ready(() => {
 function update() {
     $.ajax({
         method: "POST",
-        url: `/job/${job.meta.created_at}`,
+        url: `/job/${job.created_at}`,
         success: (data, status, req) => {
             job = data;
 
-            if (!job.meta.finished_at) {
+            if (!job.finished_at) {
                 setTimeout(update, 5000);
             } else {
                 getResult();
@@ -72,11 +72,11 @@ function deleteJob(id) {
 function getLog() {
     $.ajax({
         method: "GET",
-        url: `/job/${job.meta.created_at}/log`,
+        url: `/job/${job.created_at}/log`,
         success: (data, status, req) => {
             $("#nav-log").html(data);
 
-            if (!job.meta.finished_at) setTimeout(getLog, 1000);
+            if (!job.finished_at) setTimeout(getLog, 1000);
 
             $("#nav-log")[0].scrollTop = $("#nav-log")[0].scrollHeight;
         },
@@ -89,7 +89,7 @@ function getLog() {
 function getResult() {
     $.ajax({
         method: "GET",
-        url: `/job/${job.meta.created_at}/result`,
+        url: `/job/${job.created_at}/result`,
         success: (data, status, req) => {
             $("#nav-result").html(data);
         },
