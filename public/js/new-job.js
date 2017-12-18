@@ -99,13 +99,14 @@ function runTool(tool_func) {
             "settings": settings
         },
         success: (data, status, req) => {
+            let job_id = data;
             showModal({
-                title: `Job ${data}`,
+                title: `Job ${job_id}`,
                 body: "Your job has been created successfully and is currently processing.",
-                btn_primary: "View Jobs",
+                btn_primary: "View Job",
                 btn_secondary: "Dismiss",
                 confirm: () => {
-                    window.location.href = "/jobs"
+                    window.location.href = `/job/${job_id}`
                 }
             });
         },
