@@ -16,9 +16,9 @@ table.dataTable {
 #job-page .tab-pane {
     white-space: pre-wrap;
     font-family: monospace;
-    overflow-x: auto;
+    overflow: auto;
+    max-height: 550px;
 }
-
 
 .tool-card .fa {
     transition: .3s transform ease-in-out;

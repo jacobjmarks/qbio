@@ -69,6 +69,8 @@ function getLog() {
             $("#nav-log").html(data);
 
             if (!job.meta.finished_at) setTimeout(getLog, 1000);
+
+            $("#nav-log")[0].scrollTop = $("#nav-log")[0].scrollHeight;
         },
         error: (req, status, error) => {
             $("#nav-log").html("Error Loading Log");
