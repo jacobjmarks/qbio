@@ -8,8 +8,7 @@ module.exports.create = (created_at, tool, file, cb) => {
         tool: tool,
         file: file,
         finished_at: null,
-        error: false,
-        log: null
+        error: false
     }
 
     fs.mkdir(conf.jobDir + created_at, (err) => {
@@ -71,7 +70,6 @@ module.exports.stats = (cb) => {
                 if (err) return cb(new Error("Error reading job file.\n" + err));
                 let job = JSON.parse(data);
                 job.error = job.error ? true : false;
-                job.log = null;
                 jobs.push(job);
                 if (jobs.length == files.length) {
                     jobs.sort((a, b) => a.created_at > b.created_at);
@@ -87,7 +85,6 @@ module.exports.update = (id, params) => {
         if (err) return console.log("Error reading job file.\n" + err);
         let job = JSON.parse(data);
         job.finished_at = params.finished_at || job.finished_at;
-        job.log = params.log || job.log;
         job.error = params.error || job.error;
 
         fs.writeFile(conf.jobDir + id + '/meta.json', JSON.stringify(job), (err) => {

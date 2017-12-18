@@ -16,8 +16,7 @@ module.exports.process = (file, tool, settings, cb) => {
         this[tool](job, conf.dataDir + file, settings, (err, log) => {
             jobs.update(job, {
                 finished_at: Date.now(),
-                error: err,
-                log: log
+                error: err
             });
         });
     } catch(err) {
@@ -47,7 +46,7 @@ module.exports.bigsi = (job, file, settings, cb) => {
         rm -Rf /data/* \
     `;
 
-    docker_exec("qbio_bigsi", cmd, (err, log) => cb(err, log));
+    docker_exec("qbio_bigsi", cmd, (err) => cb(err));
 }
 
 module.exports.bloom_filter = (job, file, settings, cb) => {
@@ -68,11 +67,11 @@ module.exports.bloom_filter = (job, file, settings, cb) => {
         mv ${file}*chart* ${conf.jobDir}${job}/chart.html \
     `;
 
-    docker_exec("qbio_bloom-filter", cmd, (err, log) => cb(err, log));
+    docker_exec("qbio_bloom-filter", cmd, (err) => cb(err));
 }
 
 function docker_exec(container, command, cb) {
     exec(`docker exec ${container} bash -c "${command}"`, (error, stdout, stderr) => {
-        cb(error && error.message, stdout || stderr);
+        cb(error && error.message);
     })
 }
