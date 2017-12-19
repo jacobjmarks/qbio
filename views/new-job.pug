@@ -5,12 +5,11 @@ block scripts
 
 block content
     .container
-        .row.mb-3
-            .col
-                h2 New Job
-                p 1. Select your data...
-                include includes/datatable.pug
         .row
+            h2 New Job
+            .col
+                p 1. Select your data...
+                include includes/databrowser.pug
             .col
                 p 2. Select and configure your tool...
                 include tools/bigsi.pug
