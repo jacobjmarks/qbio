@@ -1,17 +1,19 @@
 const fs = require('fs');
+const path = require('path');
 const conf = require('../conf.json');
 
 module.exports.readDirectory = (dir, cb) => {
+    dir = path.normalize(conf.dataDir + dir);
+    console.log(dir);
     fs.readdir(dir, (err, files) => {
         if (err) return cb(new Error("Error reading directory."));
 
         files = files.map((file) => {
             return dir + file;
         }).map((file) => {
-            return !fs.statSync(dir + file).isFile() ? file + '/' : file;
-        });
-
-        console.log(files);
+            if (!fs.existsSync(file)) return;
+            return fs.lstatSync(file) && !fs.statSync(file).isFile() ? file + '/' : file;
+        }).sort((a, b) => a.localeCompare(b));
 
         cb(null, files);
     })
