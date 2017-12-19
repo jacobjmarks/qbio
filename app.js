@@ -27,7 +27,6 @@ app.get('/jobs', (req, res) => {
 
 app.post('/directory/:dir', (req, res) => {
     let dir = req.params.dir;
-    console.log(dir);
     data.readDirectory(dir, (err, files) => {
         res.send(files);
     })

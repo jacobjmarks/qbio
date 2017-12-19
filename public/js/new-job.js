@@ -31,7 +31,13 @@ function dataDirectory(dir) {
         method: "POST",
         url: `/directory/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
-            console.log(data);
+            data.forEach((dir) => {
+                $("#dataBrowser tbody").append(
+                    $("<tr>").append(
+                        $("<td>").text(dir)
+                    )
+                );
+            })
         },
         error: (req, status, error) => {
             console.error(error);

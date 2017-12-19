@@ -8,10 +8,10 @@ module.exports.readDirectory = (dir, cb) => {
         files = files.map((file) => {
             return dir + file;
         }).map((file) => {
-            if (!fs.statSync(dir + file).isFile()) {
-                return file + '/';
-            }
+            return !fs.statSync(dir + file).isFile() ? file + '/' : file;
         });
+
+        console.log(files);
 
         cb(null, files);
     })
