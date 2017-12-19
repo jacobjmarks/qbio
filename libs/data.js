@@ -1,6 +1,13 @@
 const fs = require('fs');
 const conf = require('../conf.json');
 
+module.exports.readDirectory = (dir, cb) => {
+    fs.readdir(dir, (err, files) => {
+        if (err) return cb(new Error("Error reading directory."));
+        cb(null, files);
+    })
+}
+
 module.exports.upload = (file, cb) => {   
     if (!file) return cb(new Error("No file selected.")); 
 

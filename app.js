@@ -6,7 +6,7 @@ const app = express();
 const PORT = 3000;
 
 const jobs = require('./libs/jobs.js');
-const datafile = require('./libs/datafile.js');
+const data = require('./libs/data.js');
 const tool_controller = require('./libs/tool-controller.js');
 const tools = require('./tools.json');
 
@@ -25,15 +25,23 @@ app.get('/jobs', (req, res) => {
     res.render('jobs.pug');
 })
 
+app.post('/directory/:dir', (req, res) => {
+    let dir = req.params.dir;
+    console.log(dir);
+    data.readDirectory(dir, (err, files) => {
+        res.send(files);
+    })
+})
+
 app.post('/uploadfile', (req, res) => {
-    datafile.upload(req.files && req.files.file, (err) => {
+    data.upload(req.files && req.files.file, (err) => {
         if (err) return res.status(500).send(err.message);
         res.end();
     })
 })
 
 app.post('/getAvailableData', (req, res) => {
-    datafile.getList((err, list) => {
+    data.getList((err, list) => {
         if (err) return res.status(500).send(err.message);
         res.send(list);
     })

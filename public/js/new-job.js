@@ -22,6 +22,23 @@
 //     return false;
 // })
 
+$(document).ready(() => {
+    dataDirectory('/');
+})
+
+function dataDirectory(dir) {
+    $.ajax({
+        method: "POST",
+        url: `/directory/${encodeURIComponent(dir)}`,
+        success: (data, status, req) => {
+            console.log(data);
+        },
+        error: (req, status, error) => {
+            console.error(error);
+        }
+    })
+}
+
 function runTool(tool_func) {
     if (!selectedDataFile) {
         return alert("No datafile selected.");
