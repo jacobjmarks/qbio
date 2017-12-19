@@ -4,6 +4,15 @@ const conf = require('../conf.json');
 module.exports.readDirectory = (dir, cb) => {
     fs.readdir(dir, (err, files) => {
         if (err) return cb(new Error("Error reading directory."));
+
+        files = files.map((file) => {
+            return dir + file;
+        }).map((file) => {
+            if (!fs.statSync(dir + file).isFile()) {
+                return file + '/';
+            }
+        });
+
         cb(null, files);
     })
 }
