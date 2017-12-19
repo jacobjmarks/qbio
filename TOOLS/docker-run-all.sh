@@ -7,8 +7,8 @@ cd $SCRIPTPATH
 # Volume binding for local development
 # Otherwise set by qbio/launch.sh
 if [ ! $DATADIR ] || [ ! $JOBDIR ]; then
-    DATADIR='datavol'
-    JOBDIR='jobvol'
+    DATADIR='qbio_datavol'
+    JOBDIR='qbio_jobvol'
 fi
 
 for dir in */ ; do

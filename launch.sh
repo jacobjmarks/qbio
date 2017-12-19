@@ -6,8 +6,8 @@ cd $SCRIPTPATH
 
 # CONFIGURATION ------------------------------------
 # Volume binding. Full paths required.
-DATADIR='datavol'
-JOBDIR='jobvol'
+DATADIR='qbio_datavol'
+JOBDIR='qbio_jobvol'
 # --------------------------------------------------
 
 docker container stop qbio
