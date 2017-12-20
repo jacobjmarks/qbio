@@ -105,22 +105,26 @@ function updateSelectedData() {
     }
 
     selectedData.forEach((file) => {
-        let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
-        let filename = $("<td class='col'>").text(file.name);
-        let deselect = $("<td>").append(
-            $("<i class='fa fa-times'>")
-                .click(() => {
-                    selectedData.splice(selectedData.indexOf(file), 1);
-                    updateSelectedData();
-                })
+        $("#selectedData table tbody").append(
+            $("<tr>")
+                .append(
+                    // File/Folder Icon
+                    $("<td>").html("<i class='fa fa-fw fa-file-text'>")
+                )
+                .append(
+                    // Filename
+                    $("<td class='col'>").text(file.name)
+                )
+                .append(
+                    // Delete button
+                    $("<td>").append(
+                        $("<i class='fa fa-times'>").click(() => {
+                            selectedData.splice(selectedData.indexOf(file), 1);
+                            updateSelectedData();
+                        })
+                    )
+                )
         )
-    
-        let row = $("<tr>");
-        row.append(icon);
-        row.append(filename);
-        row.append(deselect);
-    
-        $("#selectedData table tbody").append(row);
     })
         
     updateToolData();
@@ -130,20 +134,24 @@ function updateToolData() {
     $("#tools .dataSelection tbody").empty();
 
     selectedData.forEach((file) => {
-        let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
-        let filename = $("<td class='col'>")
-            .text(file.name)
-        let checkbox = $("<td>").append(
-            $("<input type='checkbox' checked>")
+        $("#tools .dataSelection tbody").append(
+            $("<tr>")
+                .append(
+                    // File Icon
+                    $("<td>").html("<i class='fa fa-fw fa-file-text'>")
+                )
+                .append(
+                    // Filename
+                    $("<td class='col'>").text(file.name)
+                )
+                .append(
+                    // Checkbox
+                    $("<td>").append(
+                        $("<input type='checkbox' checked>")
+                    )
+                )
+                .data("path", file.route)
         )
-    
-        let row = $("<tr>")
-            .data("path", file.route);;
-        row.append(icon);
-        row.append(filename);
-        row.append(checkbox);
-    
-        $("#tools .dataSelection tbody").append(row);
     })
 }
 
