@@ -52,7 +52,15 @@ function addToBrowser(route, text) {
     let dir = $("<td>")
         .text(text)
         .click(() => {
-            dataDirectory(route);
+            if (route.slice(-1) == '/') {
+                dataDirectory(route);
+            } else {
+                selectedData.push({
+                    name: text,
+                    route: route
+                });
+                updateSelectedData();
+            }
         })
 
     let row = $("<tr>");
@@ -82,6 +90,30 @@ function dataDirectory(dir) {
         error: (req, status, error) => {
             console.error(error);
         }
+    })
+}
+
+let selectedData = [];
+
+function updateSelectedData() {
+    $("#selectedData table tbody").empty();
+    selectedData.forEach((file) => {
+        let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
+        let filename = $("<td>").text(file.name);
+        let deselect = $("<td>").append(
+            $("<i class='fa fa-times'>")
+                .click(() => {
+                    selectedData.splice(selectedData.indexOf(file), 1);
+                    updateSelectedData();
+                })
+        )
+    
+        let row = $("<tr>");
+        row.append(icon);
+        row.append(filename);
+        row.append(deselect);
+    
+        $("#selectedData table tbody").append(row);
     })
 }
 
