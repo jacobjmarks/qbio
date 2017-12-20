@@ -30,3 +30,19 @@ table.dataTable {
 #dataBrowser tbody td:first-child {
     width: 50px;
 }
+#dataBrowser crumb {
+    padding: 0px 10px;
+}
+#dataBrowser crumb:not(:last-child) {
+    color: #1967D2;
+}
+#dataBrowser crumb:not(:last-child):hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+#dataBrowser crumb:last-child {
+    color: black;
+}
+#dataBrowser crumb:last-child {
+    color: black;
+}

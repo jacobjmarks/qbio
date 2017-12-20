@@ -26,14 +26,31 @@ $(document).ready(() => {
     dataDirectory('/');
 })
 
-let currDir = '';
+let breadcrumbs = [];
+
+function updateBreadcrumbs() {
+    $("#dataBrowser #breadcrumbs").empty();
+    breadcrumbs.forEach((crumb, index) => {
+        $("#dataBrowser #breadcrumbs").append(
+            $("<crumb>")
+                .text(crumb == '/' ? "root" : crumb.match(/([^\/]*)\/$/).pop())
+                .click(() => {
+                    if (breadcrumbs[breadcrumbs.length -1] != crumb) {
+                        dataDirectory(crumb);
+                    }
+                })
+        );
+        $("#dataBrowser #breadcrumbs").append('/');
+    })
+}
 
 function addToBrowser(route, text) {
     let icon = $("<td>").html(
         `<i class="fa fa-fw fa-${route.slice(-1) == '/' ? 'folder' : 'file-text'}">`
     )
 
-    let dir = $("<td>").text(text)
+    let dir = $("<td>")
+        .text(text)
         .click(() => {
             dataDirectory(route);
         })
@@ -50,8 +67,16 @@ function dataDirectory(dir) {
         method: "POST",
         url: `/directory/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
+            if (breadcrumbs.indexOf(dir) == -1) {
+                breadcrumbs.push(dir);
+            } else {
+                while(breadcrumbs[breadcrumbs.length -1] != dir) {
+                    breadcrumbs.pop();
+                }
+            }
+            updateBreadcrumbs();
+            
             $("#dataBrowser tbody").empty();
-            addToBrowser('/', '/');
             data.forEach((file) => addToBrowser(dir + file, file));
         },
         error: (req, status, error) => {
