@@ -8,9 +8,9 @@ block settings
         .row
             .form-group.col
                 label Files to search...
-                table.table.table-sm.table-responsive.dataSelection(data-name="files")
+                table.table.table-sm.table-responsive.dataSelection
                     .noDataNotif.text-center No Data Selected
-                    tbody
+                    tbody(data-name="files")
         .row
             .form-group.col-sm-6
                 label(for="kmer-size") Kmer Size

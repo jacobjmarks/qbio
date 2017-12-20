@@ -133,12 +133,12 @@ function updateToolData() {
         let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
         let filename = $("<td class='col'>")
             .text(file.name)
-            .data("path", file.route);
         let checkbox = $("<td>").append(
             $("<input type='checkbox' checked>")
         )
     
-        let row = $("<tr>");
+        let row = $("<tr>")
+            .data("path", file.route);;
         row.append(icon);
         row.append(filename);
         row.append(checkbox);
@@ -148,9 +148,18 @@ function updateToolData() {
 }
 
 function runTool(tool_func) {
-    if (!selectedDataFile) {
-        return alert("No datafile selected.");
+    if (selectedData.length == 0) {
+        return $(`${tool_func} .noDataNotif`).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
     }
+
+    let files = {};
+    $(`#${tool_func} .dataSelection tbody`).toArray().forEach((table) => {
+        let these_files = [];
+        $(table).children("tr").toArray().forEach((row) => {
+            these_files.push($(row).data("path"));
+        })
+        files[`${$(table).data("name")}`] = these_files;
+    })
 
     let valid = true;
 
@@ -176,7 +185,7 @@ function runTool(tool_func) {
         url: "/run",
         data: {
             "tool": tool_func,
-            "file": selectedDataFile,
+            "files": files,
             "settings": settings
         },
         success: (data, status, req) => {
