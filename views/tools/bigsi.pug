@@ -6,6 +6,12 @@ block variables
 block settings
     form
         .row
+            .form-group.col
+                label Files to search...
+                table.table.table-sm.table-responsive.dataSelection(data-name="files")
+                    .noDataNotif.text-center No Data Selected
+                    tbody
+        .row
             .form-group.col-sm-6
                 label(for="kmer-size") Kmer Size
                 input.form-control(name="kmer-size" type="number" placeholder=3 data-default=3)

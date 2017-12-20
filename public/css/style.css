@@ -30,7 +30,7 @@ table.dataTable {
 #selectedData {
     min-height: 100px;
 }
-#selectedData #noDataNotif {
+#selectedData .noDataNotif {
     position: absolute;
     top: 50%;
     left: 50%;

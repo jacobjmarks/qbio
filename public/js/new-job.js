@@ -99,9 +99,9 @@ function updateSelectedData() {
     $("#selectedData table tbody").empty();
 
     if (selectedData.length == 0) {
-        $("#selectedData #noDataNotif").show();
+        $(".noDataNotif").show();
     } else {
-        $("#selectedData #noDataNotif").hide();
+        $(".noDataNotif").hide();
     }
 
     selectedData.forEach((file) => {
@@ -121,6 +121,29 @@ function updateSelectedData() {
         row.append(deselect);
     
         $("#selectedData table tbody").append(row);
+    })
+        
+    updateToolData();
+}
+
+function updateToolData() {
+    $("#tools .dataSelection tbody").empty();
+
+    selectedData.forEach((file) => {
+        let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
+        let filename = $("<td class='col'>")
+            .text(file.name)
+            .data("path", file.route);
+        let checkbox = $("<td>").append(
+            $("<input type='checkbox' checked>")
+        )
+    
+        let row = $("<tr>");
+        row.append(icon);
+        row.append(filename);
+        row.append(checkbox);
+    
+        $("#tools .dataSelection tbody").append(row);
     })
 }
 
