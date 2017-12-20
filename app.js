@@ -47,7 +47,7 @@ app.post('/getAvailableData', (req, res) => {
 })
 
 app.get('/run', (req, res) => {
-    tool_controller.process(req.query.file, req.query.tool, req.query.settings, (err, job_id) => {
+    tool_controller.process(req.query.tool, req.query.files, req.query.settings, (err, job_id) => {
         if (err) return res.status(500).send(err.message);
         res.send(job_id.toString());
     })
