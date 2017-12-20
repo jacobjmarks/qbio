@@ -6,7 +6,19 @@ $(document).ready(() => {
             {title: "#"},
             {title: "Created At"},
             {title: "Tool"},
-            {title: "Datafile"},
+            {title: "Datafile/s", render: {
+                "_": (files) => {
+                    files = JSON.parse(files);
+                    let squashed = [];
+                    for (let file_group in files) {
+                        console.log(files[file_group])
+                        files[file_group].forEach((file) => {
+                            squashed.push(file);
+                        })
+                    }
+                    return squashed.join(', ');
+                }
+            }},
             {title: "Finshed At", render: {
                 "_": (data) => {
                     return data ? data : "<div style='text-align:center'><i class='fa fa-spinner fa-spin'></i></div>";
@@ -39,7 +51,7 @@ function updateJobs() {
                     index+1,
                     new Date(job.created_at).toLocaleString(),
                     job.tool,
-                    job.file,
+                    job.files,
                     job.finished_at && new Date(job.finished_at).toLocaleString(),
                     job.finished_at && { error: job.error, created_at: job.created_at }
                 ]).draw(false);

@@ -19,7 +19,7 @@ block content
                             span#finished_at PENDING &nbsp;
                                 i.fa.fa-spinner.fa-spin
                         p.mb-0 Tool: #{job.tool}
-                        p Datafile: #{job.file}
+                        p Datafile/s: #{job.files}
                 
                 nav.nav.nav-tabs(role="tablist")
                     a#nav-result-tab.nav-item.nav-link(data-toggle="tab" href="#nav-result" role="tab" aria-controls="nav-result" aria-selected="true" class=job.finished_at && "active") #{job.error ? "Error" : "Result"}

@@ -11,15 +11,15 @@ module.exports.process = (tool, files, settings, cb) => {
     if (!files) return cb(new Error("Invalid datafile."));
     if (!tool) return cb(new Error("No tool specified."));
 
-    // Prepend all files with root data directory
+    let files_absolute = {};
     for (let file_group in files) {
-        files[file_group] = files[file_group].map((file) => path.normalize(conf.dataDir + file));
+        files_absolute[file_group] = files[file_group].map((file) => path.normalize(conf.dataDir + file));
     }
 
     let job = Date.now();
 
     try {
-        this[tool](job, files, settings, (err, log) => {
+        this[tool](job, files_absolute, settings, (err, log) => {
             jobs.update(job, {
                 finished_at: Date.now(),
                 error: err
@@ -29,7 +29,7 @@ module.exports.process = (tool, files, settings, cb) => {
         return cb(new Error("Error creating child process.\n" + err));
     }
 
-    jobs.create(job, tool, null, (err) => {
+    jobs.create(job, tool, JSON.stringify(files), (err) => {
         if (err) return cb(new Error("Error creating job.\n" + err));
         cb(null, job);
     });

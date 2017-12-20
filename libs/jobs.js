@@ -2,11 +2,11 @@ const fs = require('fs');
 const conf = require('../conf.json');
 const rimraf = require('rimraf');
 
-module.exports.create = (created_at, tool, file, cb) => {
+module.exports.create = (created_at, tool, files, cb) => {
     let job = {
         created_at: created_at,
         tool: tool,
-        file: file,
+        files: files,
         finished_at: null,
         error: false
     }
