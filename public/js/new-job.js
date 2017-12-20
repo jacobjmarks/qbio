@@ -49,7 +49,7 @@ function addToBrowser(route, text) {
         `<i class="fa fa-fw fa-${route.slice(-1) == '/' ? 'folder' : 'file-text'}">`
     )
 
-    let dir = $("<td>")
+    let dir = $("<td class='col'>")
         .text(text)
         .click(() => {
             if (route.slice(-1) == '/') {
@@ -99,7 +99,7 @@ function updateSelectedData() {
     $("#selectedData table tbody").empty();
     selectedData.forEach((file) => {
         let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
-        let filename = $("<td>").text(file.name);
+        let filename = $("<td class='col'>").text(file.name);
         let deselect = $("<td>").append(
             $("<i class='fa fa-times'>")
                 .click(() => {

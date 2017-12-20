@@ -27,8 +27,12 @@ table.dataTable {
     transform: rotate(-90deg);
 }
 
-#dataBrowser tbody td:first-child {
-    width: 50px;
+#selectedData td:last-child i:hover {
+    cursor: pointer;
+}
+
+#dataBrowser tbody tr:hover {
+    cursor: pointer;
 }
 #dataBrowser crumb {
     padding: 0px 10px;
