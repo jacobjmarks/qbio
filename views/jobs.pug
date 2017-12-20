@@ -8,6 +8,14 @@ block content
         h2 Jobs
         .card
             .card-body
-                .row
-                    .col
-                        table#jobTable.table.table-sm.table-hover
+                #noJobsNotif.text-center There are currently no past or present Jobs.
+                table#jobTable.table.table-sm.table-hover.mb-0
+                    thead.font-weight-bold
+                        tr
+                            td #
+                            td Created At
+                            td Tool
+                            td Datafiles/s
+                            td Finished At
+                            td Result
+                    tbody

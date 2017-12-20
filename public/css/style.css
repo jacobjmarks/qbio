@@ -6,12 +6,12 @@ button:hover {
     clear: left !important;
 }
 
-table.dataTable {
-    border-collapse: collapse !important;
+#jobTable {
+    display: none;
 }
-    table.dataTable tbody tr:hover {
-        cursor: pointer;
-    }
+#jobTable tbody tr:hover {
+    cursor: pointer;
+}
 
 #job-page .tab-pane {
     white-space: pre-wrap;
