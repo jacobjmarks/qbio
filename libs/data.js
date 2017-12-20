@@ -10,12 +10,12 @@ module.exports.readDirectory = (dir, cb) => {
         let folders = [];
 
         files = files.map((file) => {
-            if (fs.lstatSync(dir + file) && fs.statSync(dir + file).isFile()) {
-                return file;
-            } else {
+            if (fs.lstatSync(dir + file).isSymbolicLink()) return false;
+            if (!fs.statSync(dir + file).isFile()) {
                 folders.push(file + '/');
                 return false;
             }
+            return file;
         }).filter((f) => f != false);
 
         folders = folders.sort((a, b) => a.localeCompare(b));
