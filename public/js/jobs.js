@@ -8,15 +8,7 @@ $(document).ready(() => {
             {title: "Tool"},
             {title: "Datafile/s", render: {
                 "_": (files) => {
-                    files = JSON.parse(files);
-                    let squashed = [];
-                    for (let file_group in files) {
-                        console.log(files[file_group])
-                        files[file_group].forEach((file) => {
-                            squashed.push(file);
-                        })
-                    }
-                    return squashed.join(', ');
+                    return null;
                 }
             }},
             {title: "Finshed At", render: {
