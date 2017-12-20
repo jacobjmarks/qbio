@@ -36,43 +36,42 @@ module.exports.process = (tool, files, settings, cb) => {
 }
 
 module.exports.bigsi = (job, files, settings, cb) => {
-    let dir = conf.jobDir + job + '/temp';
+    let tempDir = conf.jobDir + job + '/temp';
     let log = logPipe(job);
     let cmd = `\
-        echo 'PREPARING DATA...' ${log} && \
+        echo 'QBIO: PREPARING DATA...' ${log} && \
         ${(() => {
             let mccortex_builds = [];
             files['files'].forEach((file, index) => {
                 let filename = path.parse(file).name;
-                mccortex_builds.push(`mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s ${filename} -1 ${file} ${dir}/${filename}.ctx ${log}`);
+                mccortex_builds.push(`mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s ${filename} -1 ${file} ${tempDir}/${filename}.ctx ${log}`);
             })
             return mccortex_builds.join(' && ');
         })()} && \
-        echo 'CONSTRUCTING BLOOM FILTERS...' ${log} && \
-        bigsi init ${dir}/temp.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} ${log} && \
+        echo 'QBIO: CONSTRUCTING BLOOM FILTERS...' ${log} && \
+        bigsi init ${tempDir}/database.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} ${log} && \
         ${(() => {
             let bigsi_blooms = [];
             files['files'].forEach((file, index) => {
                 let filename = path.parse(file).name;
-                bigsi_blooms.push(`bigsi bloom --db ${dir}/temp.bigsi -c ${dir}/${filename}.ctx ${dir}/${filename}.bloom ${log}`);
+                bigsi_blooms.push(`bigsi bloom --db ${tempDir}/database.bigsi -c ${tempDir}/${filename}.ctx ${tempDir}/${filename}.bloom ${log}`);
             })
             return bigsi_blooms.join(' && ');
         })()} && \ 
-        echo 'BUILDING COMBINED GRAPH...' ${log} && \
-        bigsi build ${dir}/temp.bigsi \
+        echo 'QBIO: BUILDING COMBINED GRAPH...' ${log} && \
+        bigsi build ${tempDir}/database.bigsi \
             ${(() => {
                 let bloom_files = [];
                 files['files'].forEach((file, index) => {
                     let filename = path.parse(file).name;
-                    bloom_files.push(`${dir}/${filename}.bloom`)
+                    bloom_files.push(`${tempDir}/${filename}.bloom`)
                 })
                 return bloom_files.join(' ');
             })()} ${log} && \
-        echo 'QUERYING...' ${log} && \
-        bigsi search --db ${dir}/temp.bigsi -s ${settings['query-seq']} \
+        echo 'QBIO: QUERYING...' ${log} && \
+        bigsi search --db ${tempDir}/database.bigsi -s ${settings['query-seq']} \
             > ${conf.jobDir}${job}/result.txt && \
-        ls -al ${dir} && \
-        rm -Rf ${dir}/* \
+        rm -Rf ${tempDir} \
     `;
 
     docker_exec("qbio_bigsi", cmd, (err) => cb(err));
