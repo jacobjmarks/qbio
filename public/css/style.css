@@ -26,3 +26,40 @@ table.dataTable {
 .tool-card .collapsed .fa {
     transform: rotate(-90deg);
 }
+
+#selectedData {
+    min-height: 100px;
+}
+#selectedData .noDataNotif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#selectedData td:last-child i:hover {
+    cursor: pointer;
+}
+
+#dataBrowser tbody tr:hover {
+    cursor: pointer;
+}
+#dataBrowser crumb {
+    padding: 0px 10px;
+}
+#dataBrowser crumb:first-child {
+    padding-left: 0px;
+}
+#dataBrowser crumb:not(:last-child) {
+    color: #1967D2;
+}
+#dataBrowser crumb:not(:last-child):hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+#dataBrowser crumb:last-child {
+    color: black;
+}
+#dataBrowser crumb:last-child {
+    color: black;
+}

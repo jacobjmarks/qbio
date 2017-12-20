@@ -6,6 +6,12 @@ block variables
 block settings
     form
         .row
+            .form-group.col
+                label Compare sequences in...
+                table.table.table-sm.table-responsive.dataSelection
+                    .noDataNotif.text-center No Data Selected
+                    tbody(data-name="file")
+        .row
             .form-group.col-sm-6
                 label(for="kmer-size") Kmer Size
                 input.form-control(name="kmer-size" type="number" placeholder=6 data-default=6)

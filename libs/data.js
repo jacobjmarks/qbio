@@ -1,5 +1,29 @@
 const fs = require('fs');
+const path = require('path');
 const conf = require('../conf.json');
+
+module.exports.readDirectory = (dir, cb) => {
+    dir = path.normalize(conf.dataDir + dir);
+    fs.readdir(dir, (err, files) => {
+        if (err) return cb(new Error("Error reading directory."));
+
+        let folders = [];
+
+        files = files.map((file) => {
+            if (fs.lstatSync(dir + file).isSymbolicLink()) return false;
+            if (!fs.statSync(dir + file).isFile()) {
+                folders.push(file + '/');
+                return false;
+            }
+            return file;
+        }).filter((f) => f != false);
+
+        folders = folders.sort((a, b) => a.localeCompare(b));
+        files = files.sort((a, b) => a.localeCompare(b));
+
+        cb(null, folders.concat(files));
+    })
+}
 
 module.exports.upload = (file, cb) => {   
     if (!file) return cb(new Error("No file selected.")); 

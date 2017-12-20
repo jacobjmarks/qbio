@@ -1,75 +1,165 @@
+// const fileInput = $("#uploadform :input")[0];
+
+// $("#uploadform").submit((e) => {
+//     e.preventDefault();
+//     $.ajax({
+//         method: "POST",
+//         url: "/uploadfile",
+//         contentType: false,
+//         processData: false,
+//         data: (() => {
+//             let formdata = new FormData();
+//             formdata.append("file", fileInput.files[0]);
+//             return formdata;
+//         })(),
+//         success: (data, status, req) => {
+//             populateDataTable();
+//         },
+//         error: (req, status, error) => {
+//             alert(req.responseText);
+//         }
+//     })
+//     return false;
+// })
+
 $(document).ready(() => {
-    dataTable = $("#dataTable").DataTable({
-        columns: [
-            {title: "#"}, {title: "Filename"}, {title: "Size (mb)"}
-        ]
-    })
-
-    selectedDataFile = null;
-
-    $("#dataTable tbody").on("click", "tr", (e) => {
-        if ($(e.target).hasClass("dataTables_empty")) return;
-        let row = e.target.parentElement;
-        let data = dataTable.row(row).data();
-
-        if ($(row).hasClass("table-primary")) {
-            $(row).removeClass("table-primary");
-            selectedDataFile = null;
-        } else {
-            dataTable.$("tr.table-primary").removeClass("table-primary");
-            $(row).addClass("table-primary");
-            selectedDataFile = data[1];
-        }
-    })
-
-    populateDataTable();
+    dataDirectory('/');
 })
 
-const fileInput = $("#uploadform :input")[0];
+let breadcrumbs = [];
 
-$("#uploadform").submit((e) => {
-    e.preventDefault();
-    $.ajax({
-        method: "POST",
-        url: "/uploadfile",
-        contentType: false,
-        processData: false,
-        data: (() => {
-            let formdata = new FormData();
-            formdata.append("file", fileInput.files[0]);
-            return formdata;
-        })(),
-        success: (data, status, req) => {
-            populateDataTable();
-        },
-        error: (req, status, error) => {
-            alert(req.responseText);
-        }
+function updateBreadcrumbs() {
+    $("#dataBrowser #breadcrumbs").empty();
+    breadcrumbs.forEach((crumb, index) => {
+        $("#dataBrowser #breadcrumbs").append(
+            $("<crumb>")
+                .text(crumb == '/' ? "root" : crumb.match(/([^\/]*)\/$/).pop())
+                .click(() => {
+                    if (breadcrumbs[breadcrumbs.length -1] != crumb) {
+                        dataDirectory(crumb);
+                    }
+                })
+        );
+        $("#dataBrowser #breadcrumbs").append('/');
     })
-    return false;
-})
+}
 
-function populateDataTable() {
+function addToBrowser(route, text) {
+    let icon = $("<td>").html(
+        `<i class="fa fa-fw fa-${route.slice(-1) == '/' ? 'folder' : 'file-text'}">`
+    )
+
+    let dir = $("<td class='col'>")
+        .text(text)
+        .click(() => {
+            if (route.slice(-1) == '/') {
+                dataDirectory(route);
+            } else {
+                selectedData.push({
+                    name: text,
+                    route: route
+                });
+                updateSelectedData();
+            }
+        })
+
+    let row = $("<tr>");
+    row.append(icon);
+    row.append(dir);
+
+    $("#dataBrowser tbody").append(row);
+}
+
+function dataDirectory(dir) {
     $.ajax({
         method: "POST",
-        url: "/getAvailableData",
+        url: `/directory/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
-            dataTable.clear();
-            if (!data) return;
-            data.forEach((datafile, index) => {
-                dataTable.row.add([index+1, datafile.filename, datafile.size]).draw(false);
-            })
+            if (breadcrumbs.indexOf(dir) == -1) {
+                breadcrumbs.push(dir);
+            } else {
+                while(breadcrumbs[breadcrumbs.length -1] != dir) {
+                    breadcrumbs.pop();
+                }
+            }
+            updateBreadcrumbs();
+            
+            $("#dataBrowser tbody").empty();
+            data.forEach((file) => addToBrowser(dir + file, file));
         },
         error: (req, status, error) => {
-            alert(req.responseText);
+            console.error(error);
         }
     })
 }
 
-function runTool(tool_func) {
-    if (!selectedDataFile) {
-        return alert("No datafile selected.");
+let selectedData = [];
+
+function updateSelectedData() {
+    $("#selectedData table tbody").empty();
+
+    if (selectedData.length == 0) {
+        $(".noDataNotif").show();
+    } else {
+        $(".noDataNotif").hide();
     }
+
+    selectedData.forEach((file) => {
+        let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
+        let filename = $("<td class='col'>").text(file.name);
+        let deselect = $("<td>").append(
+            $("<i class='fa fa-times'>")
+                .click(() => {
+                    selectedData.splice(selectedData.indexOf(file), 1);
+                    updateSelectedData();
+                })
+        )
+    
+        let row = $("<tr>");
+        row.append(icon);
+        row.append(filename);
+        row.append(deselect);
+    
+        $("#selectedData table tbody").append(row);
+    })
+        
+    updateToolData();
+}
+
+function updateToolData() {
+    $("#tools .dataSelection tbody").empty();
+
+    selectedData.forEach((file) => {
+        let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
+        let filename = $("<td class='col'>")
+            .text(file.name)
+        let checkbox = $("<td>").append(
+            $("<input type='checkbox' checked>")
+        )
+    
+        let row = $("<tr>")
+            .data("path", file.route);;
+        row.append(icon);
+        row.append(filename);
+        row.append(checkbox);
+    
+        $("#tools .dataSelection tbody").append(row);
+    })
+}
+
+function runTool(tool_func) {
+    if (selectedData.length == 0) {
+        return $(`${tool_func} .noDataNotif`).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+    }
+
+    let files = {};
+    $(`#${tool_func} .dataSelection tbody`).toArray().forEach((table) => {
+        let these_files = [];
+        $(table).children("tr").toArray().forEach((row) => {
+            these_files.push($(row).data("path"));
+        })
+        files[`${$(table).data("name")}`] = these_files;
+    })
 
     let valid = true;
 
@@ -95,7 +185,7 @@ function runTool(tool_func) {
         url: "/run",
         data: {
             "tool": tool_func,
-            "file": selectedDataFile,
+            "files": files,
             "settings": settings
         },
         success: (data, status, req) => {
