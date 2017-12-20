@@ -1,1 +1,1 @@
-FROM benjennen/bf
+FROM benjennen/bloom-filter

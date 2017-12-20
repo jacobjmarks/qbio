@@ -81,20 +81,16 @@ module.exports.bloom_filter = (job, files, settings, cb) => {
     let file = files['file'][0];
 
     let log = logPipe(job);
-    let cmd = ` \
-        rm -f ${file}*queries* && \
-        rm -f ${file}*chart* && \
-        fsharpi executor.fsx \
-            --seqfile ${file} \
-            --blocksize ${settings['block-size']} \
-            --k ${settings['kmer-size']} \
-            --m ${settings['filter-size']} \
-            --f ${settings['hash-functions']} \
-            --threshold ${settings['kmer-threshold']} \
-            --comparekmers true \
-            ${log} && \
-        mv ${file}*queries* ${conf.jobDir}${job}/result.txt && \
-        mv ${file}*chart* ${conf.jobDir}${job}/chart.html \
+    let cmd = `\
+        fsharpi executor.fsx ${file} ${conf.jobDir}${job}/result.txt \
+            -chart ${conf.jobDir}${job}/chart.html \
+            -block ${settings['block-size']} \
+            -k ${settings['kmer-size']} \
+            -m ${settings['filter-size']} \
+            -f ${settings['hash-functions']} \
+            -threshold ${settings['kmer-threshold']} \
+            -comparekmers true \
+            ${log} \
     `;
 
     docker_exec("qbio_bloom-filter", cmd, (err) => cb(err));
