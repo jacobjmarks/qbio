@@ -26,18 +26,33 @@ $(document).ready(() => {
     dataDirectory('/');
 })
 
+let currDir = '';
+
+function addToBrowser(route, text) {
+    let icon = $("<td>").html(
+        `<i class="fa fa-fw fa-${route.slice(-1) == '/' ? 'folder' : 'file-text'}">`
+    )
+
+    let dir = $("<td>").text(text)
+        .click(() => {
+            dataDirectory(route);
+        })
+
+    let row = $("<tr>");
+    row.append(icon);
+    row.append(dir);
+
+    $("#dataBrowser tbody").append(row);
+}
+
 function dataDirectory(dir) {
     $.ajax({
         method: "POST",
         url: `/directory/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
-            data.forEach((dir) => {
-                $("#dataBrowser tbody").append(
-                    $("<tr>").append(
-                        $("<td>").text(dir)
-                    )
-                );
-            })
+            $("#dataBrowser tbody").empty();
+            addToBrowser('/', '/');
+            data.forEach((file) => addToBrowser(dir + file, file));
         },
         error: (req, status, error) => {
             console.error(error);

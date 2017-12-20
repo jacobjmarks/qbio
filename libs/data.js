@@ -3,16 +3,12 @@ const path = require('path');
 const conf = require('../conf.json');
 
 module.exports.readDirectory = (dir, cb) => {
-    dir = path.normalize(conf.dataDir + dir);
-    console.log(dir);
-    fs.readdir(dir, (err, files) => {
+    let dir_abs = path.normalize(conf.dataDir + dir);
+    fs.readdir(dir_abs, (err, files) => {
         if (err) return cb(new Error("Error reading directory."));
 
         files = files.map((file) => {
-            return dir + file;
-        }).map((file) => {
-            if (!fs.existsSync(file)) return;
-            return fs.lstatSync(file) && !fs.statSync(file).isFile() ? file + '/' : file;
+            return fs.lstatSync(dir_abs + file) && !fs.statSync(dir_abs + file).isFile() ? file + '/' : file;
         }).sort((a, b) => a.localeCompare(b));
 
         cb(null, files);
