@@ -27,6 +27,16 @@ table.dataTable {
     transform: rotate(-90deg);
 }
 
+#selectedData {
+    min-height: 100px;
+}
+#selectedData #noDataNotif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 #selectedData td:last-child i:hover {
     cursor: pointer;
 }
@@ -36,6 +46,9 @@ table.dataTable {
 }
 #dataBrowser crumb {
     padding: 0px 10px;
+}
+#dataBrowser crumb:first-child {
+    padding-left: 0px;
 }
 #dataBrowser crumb:not(:last-child) {
     color: #1967D2;

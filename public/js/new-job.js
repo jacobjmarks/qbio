@@ -97,6 +97,13 @@ let selectedData = [];
 
 function updateSelectedData() {
     $("#selectedData table tbody").empty();
+
+    if (selectedData.length == 0) {
+        $("#selectedData #noDataNotif").show();
+    } else {
+        $("#selectedData #noDataNotif").hide();
+    }
+
     selectedData.forEach((file) => {
         let icon = $("<td>").html("<i class='fa fa-fw fa-file-text'>");
         let filename = $("<td class='col'>").text(file.name);
