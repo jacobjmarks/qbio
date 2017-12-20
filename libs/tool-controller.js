@@ -43,7 +43,8 @@ module.exports.bigsi = (job, files, settings, cb) => {
         ${(() => {
             let mccortex_builds = [];
             files['files'].forEach((file, index) => {
-                mccortex_builds.push(`mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s ${index} -1 ${file} /data/${index}.ctx ${log}`);
+                let filename = path.parse(file).name;
+                mccortex_builds.push(`mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s ${filename} -1 ${file} /data/${filename}.ctx ${log}`);
             })
             return mccortex_builds.join(' && ');
         })()} && \
@@ -52,7 +53,8 @@ module.exports.bigsi = (job, files, settings, cb) => {
         ${(() => {
             let bigsi_blooms = [];
             files['files'].forEach((file, index) => {
-                bigsi_blooms.push(`bigsi bloom --db /data/temp.bigsi -c /data/${index}.ctx /data/${index}.bloom ${log}`);
+                let filename = path.parse(file).name;
+                bigsi_blooms.push(`bigsi bloom --db /data/temp.bigsi -c /data/${filename}.ctx /data/${filename}.bloom ${log}`);
             })
             return bigsi_blooms.join(' && ');
         })()} && \ 
@@ -61,14 +63,14 @@ module.exports.bigsi = (job, files, settings, cb) => {
             ${(() => {
                 let bloom_files = [];
                 files['files'].forEach((file, index) => {
-                    bloom_files.push(`/data/${index}.bloom`)
+                    let filename = path.parse(file).name;
+                    bloom_files.push(`/data/${filename}.bloom`)
                 })
                 return bloom_files.join(' ');
             })()} ${log} && \
         echo 'QUERYING...' ${log} && \
         bigsi search --db /data/temp.bigsi -s ${settings['query-seq']} \
             > ${conf.jobDir}${job}/result.txt && \
-        ls -al /data/ ${log} && \
         rm -Rf /data/* \
     `;
 
