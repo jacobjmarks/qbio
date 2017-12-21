@@ -110,9 +110,12 @@ module.exports.mmseqs2 = (job, files, settings, cb) => {
     let cmd =`\
         cd ${conf.jobDir}${job} && \
         mkdir temp && cd temp && mkdir temp && \
+        echo 'QBIO: CONVERTING TO MMSEQS DB FORMAT...' ${log} && \
         mmseqs createdb ${queryDB} queryDB ${log} && \
         mmseqs createdb ${targetDB} targetDB ${log} && \
+        echo 'QBIO: SEARCHING...' ${log} && \
         mmseqs search queryDB targetDB resultDB temp ${log} && \
+        echo 'QBIO: CREATING RESULT TSV...' ${log} && \
         mmseqs convertalis queryDB targetDB resultDB resultDB.m8 ${log} && \
         cd ../ && mv temp/resultDB.m8 result.txt && rm -r temp/ \
     `;
