@@ -23,6 +23,7 @@
 // })
 
 $(document).ready(() => {
+    $(".dataSelection").hide();
     dataDirectory('/');
 })
 
@@ -100,8 +101,10 @@ function updateSelectedData() {
 
     if (selectedData.length == 0) {
         $(".noDataNotif").show();
+        $(".dataSelection").hide();
     } else {
         $(".noDataNotif").hide();
+        $(".dataSelection").show();
     }
 
     selectedData.forEach((file) => {
@@ -131,42 +134,69 @@ function updateSelectedData() {
 }
 
 function updateToolData() {
-    $("#tools .dataSelection tbody").empty();
-
-    selectedData.forEach((file) => {
-        $("#tools .dataSelection tbody").append(
-            $("<tr>")
-                .append(
-                    // File Icon
-                    $("<td>").html("<i class='fa fa-fw fa-file-text'>")
+    $(".dataSelection").toArray().forEach((input) => {
+        if ($(input).find("table")) {
+            $(input).find("tbody").empty();
+            selectedData.forEach((file) => {
+                $(input).find("tbody").append(
+                    $("<tr>")
+                        .append(
+                            // File Icon
+                            $("<td>").html("<i class='fa fa-fw fa-file-text'>")
+                        )
+                        .append(
+                            // Filename
+                            $("<td class='col'>").text(file.name)
+                        )
+                        .append(
+                            // Checkbox
+                            $("<td>").append(
+                                $("<input type='checkbox' checked>")
+                            )
+                        )
+                        .data("path", file.route)
                 )
-                .append(
-                    // Filename
-                    $("<td class='col'>").text(file.name)
-                )
-                .append(
-                    // Checkbox
-                    $("<td>").append(
-                        $("<input type='checkbox' checked>")
+            })
+        }
+        
+        if ($(input).find("select")) {
+            $(input).find("select").empty();
+            selectedData.forEach((file) => {
+                $(input).find("select")
+                    .append(
+                        $("<option>")
+                            .text(file.name)
+                            .attr("value", file.route)
                     )
-                )
-                .data("path", file.route)
-        )
+            })
+        }
     })
 }
 
 function runTool(tool_func) {
     if (selectedData.length == 0) {
-        return $(`${tool_func} .noDataNotif`).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+        return $(`#${tool_func} .noDataNotif`).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
     }
 
     let files = {};
-    $(`#${tool_func} .dataSelection tbody`).toArray().forEach((table) => {
+    $(`#${tool_func} .dataSelection`).toArray().forEach((input) => {
         let these_files = [];
-        $(table).children("tr").toArray().forEach((row) => {
-            these_files.push($(row).data("path"));
-        })
-        files[`${$(table).data("name")}`] = these_files;
+
+        if ($(input).find("table")) {
+            $(input).find("tbody").children("tr").toArray().forEach((row) => {
+                if ($(row).find("input").attr("checked")) {
+                    these_files.push($(row).data("path"));
+                }
+            })
+        }
+
+        if ($(input).find("select")) {
+            these_files.push($(input).find("select").val());
+        }
+
+        console.log(these_files);
+
+        files[`${$(input).data("name")}`] = these_files;
     })
 
     let valid = true;

@@ -3,8 +3,6 @@ $(document).ready(() => {
 })
 
 function updateJobs() {
-    const td = (content) => $("<td>").text(content);
-
     $.ajax({
         method: "POST",
         url: "/jobStatus",

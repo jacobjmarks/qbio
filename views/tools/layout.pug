@@ -2,6 +2,17 @@ block variables
 
 - var tool = tools.find((t) => t.name == this_tool);
 
+//- Data Selection Mixin
+mixin dataSelection(type)
+    .noDataNotif.text-center No Data Selected
+    .dataSelection(data-name!=attributes.name)
+        if (type == "table")
+            table.table.table-sm.table-responsive.table-hover
+                tbody
+        else if (type == "select")
+            select.form-control
+
+//- Card Layout
 .card.tool-card.mb-3
     button.btn.card-header.text-left.bg-white.collapsed(data-toggle='collapse' href=`#${tool.func}`)
         h4.mb-0 #{tool.name} &nbsp;
