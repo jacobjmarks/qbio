@@ -116,8 +116,11 @@ module.exports.mmseqs2 = (job, files, settings, cb) => {
         echo 'QBIO: SEARCHING...' ${log} && \
         mmseqs search queryDB targetDB resultDB temp ${log} && \
         echo 'QBIO: CREATING RESULT TSV...' ${log} && \
-        mmseqs convertalis queryDB targetDB resultDB resultDB.m8 ${log} && \
-        cd ../ && mv temp/resultDB.m8 result.txt && rm -r temp/ \
+        mmseqs convertalis queryDB targetDB resultDB result.m8 ${log} && \
+        cd ../ && \
+        echo 'format: qId, tId, seqIdentity, alnLen, mismatchCnt, gapOpenCnt, qStart, qEnd, tStart, tEnd, eVal, bitScore' > result.txt && \
+        cat temp/result.m8 >> result.txt && \
+        rm -r temp \
     `;
 
     docker_exec("qbio_mmseqs2", cmd, (err) => cb(err));
