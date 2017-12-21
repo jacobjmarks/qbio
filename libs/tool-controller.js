@@ -101,3 +101,21 @@ function docker_exec(container, command, cb) {
         cb(error && error.message);
     })
 }
+
+module.exports.mmseqs2 = (job, files, settings, cb) => {
+    let queryDB = files['query'][0];
+    let targetDB = files['target'][0];
+
+    let log = logPipe(job);
+    let cmd =`\
+        cd ${conf.jobDir}${job} && \
+        mkdir temp && cd temp && mkdir temp && \
+        mmseqs createdb ${queryDB} queryDB ${log} && \
+        mmseqs createdb ${targetDB} targetDB ${log} && \
+        mmseqs search queryDB targetDB resultDB temp ${log} && \
+        mmseqs convertalis queryDB targetDB resultDB resultDB.m8 ${log} && \
+        cd ../ && mv temp/resultDB.m8 result.txt && rm -r temp/ \
+    `;
+
+    docker_exec("qbio_mmseqs2", cmd, (err) => cb(err));
+}

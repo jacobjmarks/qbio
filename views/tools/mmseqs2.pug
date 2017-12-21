@@ -1,0 +1,15 @@
+extends layout
+
+block variables
+    - var this_tool = "MMseqs2"
+
+block settings
+    form
+        .row
+            .form-group.col
+                label Query DB
+                +dataSelection("select")(name="query")
+        .row
+            .form-group.col
+                label Target DB
+                +dataSelection("select")(name="target")

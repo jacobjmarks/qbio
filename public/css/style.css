@@ -14,7 +14,7 @@ button:hover {
 }
 
 #job-page .tab-pane {
-    white-space: pre-wrap;
+    white-space: pre;
     font-family: monospace;
     overflow: auto;
     max-height: 550px;

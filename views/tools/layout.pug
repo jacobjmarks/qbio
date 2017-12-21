@@ -16,8 +16,8 @@ mixin dataSelection(type)
 .card.tool-card.mb-3
     button.btn.card-header.text-left.bg-white.collapsed(data-toggle='collapse' href=`#${tool.func}`)
         h4.mb-0 #{tool.name} &nbsp;
-            .d-inline.small.text-muted v#{tool.version}
             .float-right.fa.fa-chevron-down
+            .d-inline.small.text-muted.float-right #{tool.version} &nbsp;
     .collapse(id=tool.func)
         .card-body
             block settings
