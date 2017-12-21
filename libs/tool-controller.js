@@ -69,7 +69,7 @@ module.exports.bigsi = (job, files, settings, cb) => {
                 return bloom_files.join(' ');
             })()} ${log} && \
         echo 'QBIO: QUERYING...' ${log} && \
-        bigsi search --db ${tempDir}/database.bigsi -s ${settings['query-seq']} \
+        bigsi search --db ${tempDir}/database.bigsi -s ${settings['query-seq']} -o ${settings['output']} \
             > ${conf.jobDir}${job}/result.txt && \
         rm -Rf ${tempDir} \
     `;
@@ -122,7 +122,7 @@ module.exports.mmseqs2 = (job, files, settings, cb) => {
             ${settings['pairwise'] ? '--format-mode 1' : ''} \
             ${log} && \
         cd ../ && \
-        echo 'format: qId, tId, seqIdentity, alnLen, mismatchCnt, gapOpenCnt, qStart, qEnd, tStart, tEnd, eVal, bitScore\n' > result.txt && \
+        echo 'qId\ttId\tseqIdentity\talnLen\tmismatchCnt\tgapOpenCnt\tqStart\tqEnd\ttStart\ttEnd\teVal\tbitScore\n' > result.txt && \
         cat temp/result.m8 >> result.txt && \
         rm -r temp \
     `;

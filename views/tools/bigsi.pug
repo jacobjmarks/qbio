@@ -19,3 +19,5 @@ block settings
         .row
             .col-sm-6
                 +input("h")(name="h" type="number" placeholder=1 default=1)
+            .col-sm-6
+                +select("Output")(name="output" options=["json", "tsv"] default="json")
