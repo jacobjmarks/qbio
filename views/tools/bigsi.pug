@@ -10,17 +10,13 @@ block settings
                 label Target/s
                 +dataSelection("table")(name="files")
         .row
-            .form-group.col
-                label(for="query-seq") Query
-                input.setting.form-control(name="query-seq" type="text" placeholder="Sequence..." data-default='' required)
+            .col
+                +input("Query")(name="query-seq" type="text" placeholder="Sequence..." required=true)
         .row
-            .form-group.col-sm-6
-                label(for="kmer-size") Kmer Size
-                input.setting.form-control(name="kmer-size" type="number" placeholder=3 data-default=3)
-            .form-group.col-sm-6
-                label(for="m") m
-                input.setting.form-control(name="m" type="number" placeholder=1000 data-default=1000)
+            .col-sm-6
+                +input("Kmer Size")(name="kmer-size" type="number" placeholder=6 default=6)
+            .col-sm-6
+                +input("m")(name="m" type="number" placeholder=1000 default=1000)
         .row
-            .form-group.col-sm-6
-                label(for="h") h
-                input.setting.form-control(name="h" type="number" placeholder=1 data-default=1)
+            .col-sm-6
+                +input("h")(name="h" type="number" placeholder=1 default=1)

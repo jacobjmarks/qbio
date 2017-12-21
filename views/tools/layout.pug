@@ -13,6 +13,17 @@ mixin dataSelection(type)
             select.form-control
     hr.mb-0
 
+mixin input(label)
+    .form-group
+        label= label
+        input.setting.form-control(
+            name!=attributes.name
+            type!=attributes.type
+            placeholder!=attributes.placeholder
+            data-default!=attributes.default
+            required!=attributes.required
+        )
+
 mixin checkbox(label)
     label &nbsp;
     label.custom-form-check-label.form-control

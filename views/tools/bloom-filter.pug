@@ -10,25 +10,21 @@ block settings
                 label Compare
                 +dataSelection("select")(name="file")
         .row
-            .form-group.col-sm-6
-                label(for="kmer-size") Kmer Size
-                input.setting.form-control(name="kmer-size" type="number" placeholder=6 data-default=6)
-            .form-group.col-sm-6
-                label(for="block-size") Kmers per Block
-                input.setting.form-control(name="block-size" type="number" placeholder=50 data-default=50)
+            .col-sm-6
+                +input("Kmer Size")(name="kmer-size" type="number" placeholder=6 default=6)
+            .col-sm-6
+                +input("Kmers per Block")(name="block-size" type="number" placeholder=50 default=50)
         .row
-            .form-group.col-sm-6
-                label(for="filter-size") Bloom Filter Size (bits)
-                input.setting.form-control(name="filter-size" type="number" placeholder=50000 data-default=50000)
-            .form-group.col-sm-6
+            .col-sm-6
+                +input("Bloom Filter Size (bits)")(name="filter-size" type="number" placeholder=50000 default=50000)
+            .col-sm-6
                 label(for="hash-functions") Bloom Filter Hash Functions
-                select.setting.form-control(name="hash-functions" data-default=5)
+                select.setting.form-control(name="hash-functions" default=5)
                     option 1
                     option 2
                     option 3
                     option 4
                     option(selected) 5
         .row
-            .form-group.col-sm-6
-                label(for="kmer_threshold") Hamming Bit Threshold
-                input.setting.form-control(name="kmer-threshold" placeholder=50 data-default=50)
+            .col-sm-6
+                +input("Hamming Bit Threshold")(name="kmer-threshold" placeholder=50 default=50)
