@@ -20,6 +20,8 @@ block content
                                 i.fa.fa-spinner.fa-spin
                         p.mb-0 Tool: #{job.tool}
                         p Datafile/s: #{job.files}
+                    a(href=`${job.created_at}/result/download` download=`${job.created_at}_result.txt`)
+                        button#btn-download.btn.btn-primary.mb-3(disabled=(!job.finished_at || job.error)) Download Result
                 
                 nav.nav.nav-tabs(role="tablist")
                     a#nav-result-tab.nav-item.nav-link(data-toggle="tab" href="#nav-result" role="tab" aria-controls="nav-result" aria-selected="true" class=job.finished_at && "active") #{job.error ? "Error" : "Result"}

@@ -104,6 +104,13 @@ app.get('/job/:id/result', (req, res) => {
     })
 })
 
+app.get('/job/:id/result/download', (req, res) => {
+    jobs.downloadResult(req.params.id, (err, result) => {
+        if (err) return res.status(500).send(err.message);
+        res.send(result);
+    })
+})
+
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })

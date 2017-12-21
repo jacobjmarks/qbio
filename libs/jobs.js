@@ -52,6 +52,13 @@ module.exports.getResult = (id, cb) => {
     })
 }
 
+module.exports.downloadResult = (id, cb) => {
+    fs.readFile(conf.jobDir + id + '/result.txt', (err, result) => {
+        if (err) return cb(new Error("Error reading Result file."));
+        cb(null, result);
+    })
+}
+
 module.exports.chart = (id, cb) => {
     fs.readFile(conf.jobDir + id + '/chart.html', (err, data) => {
         cb(err, data);

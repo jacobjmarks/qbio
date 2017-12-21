@@ -34,6 +34,7 @@ function update() {
                     $("#nav-result-tab").html("Error");
                     $("#nav-result").html(job.error);
                 } else {
+                    $("#btn-download").attr("disabled", false);
                     if (job.name == "Bloom Filter") $("#nav-chart-tab").css("display", "block");
                     getResult();
                 }
