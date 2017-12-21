@@ -17,13 +17,7 @@ block settings
             .col-sm-6
                 +input("Bloom Filter Size (bits)")(name="filter-size" type="number" placeholder=50000 default=50000)
             .col-sm-6
-                label(for="hash-functions") Bloom Filter Hash Functions
-                select.setting.form-control(name="hash-functions" default=5)
-                    option 1
-                    option 2
-                    option 3
-                    option 4
-                    option(selected) 5
+                +select("Bloom Filter Hash Functions")(name="hash-functions" options=[1,2,3,4,5] default=5)
         .row
             .col-sm-6
                 +input("Hamming Bit Threshold")(name="kmer-threshold" placeholder=50 default=50)

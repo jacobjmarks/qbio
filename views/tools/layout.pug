@@ -26,6 +26,13 @@ mixin input(label)
             required!=attributes.required
         )
 
+mixin select(label)
+    .form-group
+        label= label
+        select.setting.form-control(name!=attributes.name)
+            each option in attributes.options
+                option(selected=(option == attributes.default))= option
+
 mixin checkbox(label)
     .form-group
         label &nbsp;
