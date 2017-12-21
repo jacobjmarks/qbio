@@ -7,8 +7,12 @@ block settings
     form
         .row
             .form-group.col
-                label Files to search...
+                label Target/s
                 +dataSelection("table")(name="files")
+        .row
+            .form-group.col
+                label(for="query-seq") Query
+                input.setting.form-control(name="query-seq" type="text" placeholder="Sequence..." data-default='' required)
         .row
             .form-group.col-sm-6
                 label(for="kmer-size") Kmer Size
@@ -20,6 +24,3 @@ block settings
             .form-group.col-sm-6
                 label(for="h") h
                 input.setting.form-control(name="h" type="number" placeholder=1 data-default=1)
-            .form-group.col-sm-6
-                label(for="query-seq") Query Sequence
-                input.setting.form-control(name="query-seq" type="text" placeholder="Required" data-default='' required)
