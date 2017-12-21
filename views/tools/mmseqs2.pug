@@ -13,3 +13,6 @@ block settings
             .form-group.col
                 label Target DB
                 +dataSelection("select")(name="target")
+        .row
+            .form-group.col-md-6
+                +checkbox("Pairwise Alignments")(name="pairwise")

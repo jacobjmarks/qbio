@@ -12,17 +12,17 @@ block settings
         .row
             .form-group.col-sm-6
                 label(for="kmer-size") Kmer Size
-                input.form-control(name="kmer-size" type="number" placeholder=6 data-default=6)
+                input.setting.form-control(name="kmer-size" type="number" placeholder=6 data-default=6)
             .form-group.col-sm-6
                 label(for="block-size") Kmers per Block
-                input.form-control(name="block-size" type="number" placeholder=50 data-default=50)
+                input.setting.form-control(name="block-size" type="number" placeholder=50 data-default=50)
         .row
             .form-group.col-sm-6
                 label(for="filter-size") Bloom Filter Size (bits)
-                input.form-control(name="filter-size" type="number" placeholder=50000 data-default=50000)
+                input.setting.form-control(name="filter-size" type="number" placeholder=50000 data-default=50000)
             .form-group.col-sm-6
                 label(for="hash-functions") Bloom Filter Hash Functions
-                select.form-control(name="hash-functions" data-default=5)
+                select.setting.form-control(name="hash-functions" data-default=5)
                     option 1
                     option 2
                     option 3
@@ -30,5 +30,5 @@ block settings
                     option(selected) 5
         .row
             .form-group.col-sm-6
-                label(for="kmer_threshold") Kmer Threshold
-                input.form-control(name="kmer-threshold" placeholder=50 data-default=50)
+                label(for="kmer_threshold") Hamming Bit Threshold
+                input.setting.form-control(name="kmer-threshold" placeholder=50 data-default=50)

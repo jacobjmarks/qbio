@@ -2,7 +2,7 @@ block variables
 
 - var tool = tools.find((t) => t.name == this_tool);
 
-//- Data Selection Mixin
+//- Form Mixins
 mixin dataSelection(type)
     .noDataNotif.text-center No Data Selected
     .dataSelection(data-name!=attributes.name)
@@ -11,6 +11,13 @@ mixin dataSelection(type)
                 tbody
         else if (type == "select")
             select.form-control
+    hr
+
+mixin checkbox(label)
+    label &nbsp;
+    label.custom-form-check-label.form-control
+        input.setting.custom-form-check-input(type="checkbox" name!=attributes.name)
+        | #{label}
 
 //- Card Layout
 .card.tool-card.mb-3

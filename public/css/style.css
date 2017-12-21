@@ -9,6 +9,16 @@ button[disabled]:hover {
     clear: left !important;
 }
 
+.custom-form-check-label {
+    cursor: pointer;
+}
+.custom-form-check-input {
+    cursor: pointer;
+    float:right;
+    width: 1.5em;
+    height: 1.5em;
+}
+
 #jobTable {
     display: none;
 }

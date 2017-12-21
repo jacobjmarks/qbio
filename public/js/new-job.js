@@ -194,8 +194,6 @@ function runTool(tool_func) {
             these_files.push($(input).find("select").val());
         }
 
-        console.log(these_files);
-
         files[`${$(input).data("name")}`] = these_files;
     })
 
@@ -204,11 +202,11 @@ function runTool(tool_func) {
     let form_data = $(`#${tool_func} form`).serializeArray();
     let settings = {};
     form_data.forEach((param) => {
-        let control = $(`#${tool_func} .form-control[name^='${param.name}']`);
+        let setting = $(`#${tool_func} .setting[name^='${param.name}']`);
 
-        let val = param.value || control.data('default');
-        if (!val && control.attr("required")) {
-            control.effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+        let val = param.value || setting.data('default');
+        if (!val && setting.attr("required")) {
+            setting.effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
             return valid = false;
         }
 
