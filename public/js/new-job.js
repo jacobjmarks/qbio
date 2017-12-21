@@ -222,7 +222,7 @@ function runTool(tool_func) {
         data: {
             "tool": tool_func,
             "files": files,
-            "settings": settings
+            "settings": JSON.stringify(settings)
         },
         success: (data, status, req) => {
             let job_id = data;

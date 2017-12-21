@@ -114,11 +114,15 @@ module.exports.mmseqs2 = (job, files, settings, cb) => {
         mmseqs createdb ${queryDB} queryDB ${log} && \
         mmseqs createdb ${targetDB} targetDB ${log} && \
         echo 'QBIO: SEARCHING...' ${log} && \
-        mmseqs search queryDB targetDB resultDB temp ${log} && \
+        mmseqs search queryDB targetDB resultDB temp \
+            ${settings['pairwise'] ? '-a' : ''} \
+            ${log} && \
         echo 'QBIO: CREATING RESULT TSV...' ${log} && \
-        mmseqs convertalis queryDB targetDB resultDB result.m8 ${log} && \
+        mmseqs convertalis queryDB targetDB resultDB result.m8 \
+            ${settings['pairwise'] ? '--format-mode 1' : ''} \
+            ${log} && \
         cd ../ && \
-        echo 'format: qId, tId, seqIdentity, alnLen, mismatchCnt, gapOpenCnt, qStart, qEnd, tStart, tEnd, eVal, bitScore' > result.txt && \
+        echo 'format: qId, tId, seqIdentity, alnLen, mismatchCnt, gapOpenCnt, qStart, qEnd, tStart, tEnd, eVal, bitScore\n' > result.txt && \
         cat temp/result.m8 >> result.txt && \
         rm -r temp \
     `;
