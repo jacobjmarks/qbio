@@ -6,9 +6,8 @@ block variables
 block settings
     form
         .row
-            .form-group.col
-                label Compare
-                +dataSelection("select")(name="file")
+            .col
+                +dataSelection("Compare")(name="file" type="select")
         .row
             .col-sm-6
                 +input("Kmer Size")(name="kmer-size" type="number" placeholder=6 default=6)

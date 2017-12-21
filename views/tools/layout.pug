@@ -3,15 +3,17 @@ block variables
 - var tool = tools.find((t) => t.name == this_tool);
 
 //- Form Mixins
-mixin dataSelection(type)
-    .noDataNotif.text-center No Data Selected
-    .dataSelection(data-name!=attributes.name)
-        if (type == "table")
-            table.table.table-sm.table-responsive.table-hover.mb-0
-                tbody
-        else if (type == "select")
-            select.form-control
-    hr.mb-0
+mixin dataSelection(label)
+    .form-group
+        label= label
+        .noDataNotif.text-center No Data Selected
+        .dataSelection(data-name!=attributes.name)
+            if (attributes.type == "table")
+                table.table.table-sm.table-responsive.table-hover.mb-0
+                    tbody
+            else if (attributes.type == "select")
+                select.form-control
+        hr.mb-0
 
 mixin input(label)
     .form-group
@@ -25,10 +27,11 @@ mixin input(label)
         )
 
 mixin checkbox(label)
-    label &nbsp;
-    label.custom-form-check-label.form-control
-        input.setting.custom-form-check-input(type="checkbox" name!=attributes.name)
-        | #{label}
+    .form-group
+        label &nbsp;
+        label.custom-form-check-label.form-control
+            input.setting.custom-form-check-input(type="checkbox" name!=attributes.name)
+            | #{label}
 
 //- Card Layout
 .card.tool-card.mb-3

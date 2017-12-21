@@ -6,9 +6,8 @@ block variables
 block settings
     form
         .row
-            .form-group.col
-                label Target/s
-                +dataSelection("table")(name="files")
+            .col
+                +dataSelection("Target/s")(name="files" type="table")
         .row
             .col
                 +input("Query")(name="query-seq" type="text" placeholder="Sequence..." required=true)

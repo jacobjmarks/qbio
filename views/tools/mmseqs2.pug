@@ -6,13 +6,11 @@ block variables
 block settings
     form
         .row
-            .form-group.col
-                label Query
-                +dataSelection("select")(name="query")
+            .col
+                +dataSelection("Query")(name="query" type="select")
         .row
-            .form-group.col
-                label Target
-                +dataSelection("select")(name="target")
+            .col
+                +dataSelection("Target")(name="target" type="select")
         .row
-            .form-group.col-sd-6
+            .col-sm-6
                 +checkbox("Pairwise Alignments")(name="pairwise")
