@@ -10,6 +10,7 @@ function updateJobs() {
             let jobs = data;
             $("#jobTable tbody").empty();
 
+            $("#loader").hide();
             if (jobs.length == 0) {
                 $("#noJobsNotif").show();
                 $("#jobTable").hide();
@@ -36,7 +37,16 @@ function updateJobs() {
                         )
                         .append(
                             // Datafile/s
-                            $("<td>").text(job.files)
+                            $("<td>").text((() => {
+                                job.files = JSON.parse(job.files);
+                                let files = [];
+                                for (let file_group in job.files) {
+                                    job.files[file_group].forEach((file) => {
+                                        files.push(file);
+                                    })
+                                }
+                                return files.join(', ');
+                            })())
                         )
                         .append(
                             // Finished At

@@ -8,7 +8,9 @@ block content
         h2 Jobs
         .card
             .card-body
-                #noJobsNotif.text-center There are currently no past or present Jobs.
+                #loader.text-center
+                    i.fa.fa-2x.fa-spinner.fa-spin
+                #noJobsNotif.text-center(style="margin:5px 0;display:none;") There are currently no past or present Jobs.
                 table#jobTable.table.table-sm.table-hover.mb-0
                     thead.font-weight-bold
                         tr
