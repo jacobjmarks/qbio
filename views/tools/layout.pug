@@ -25,6 +25,8 @@ mixin input(label)
             data-default!=attributes.default
             required!=attributes.required
         )
+        if (attributes.caption)
+            small.form-text.text-muted!= attributes.caption
 
 mixin select(label)
     .form-group

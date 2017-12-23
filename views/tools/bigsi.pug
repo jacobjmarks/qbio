@@ -10,7 +10,7 @@ block settings
                 +dataSelection("Target/s")(name="files" type="table")
         .row
             .col
-                +input("Query")(name="query-seq" type="text" placeholder="Sequence..." required=true)
+                +input("Query")(name="query-seq" type="text" placeholder="Sequence..." required=true caption=">= Kmer Size")
         .row
             .col-sm-6
                 +select("Kmer Size")(name="kmer-size" options=[3,5,7,9,11,13,15,17,19,21,23,25,27,29,31] default=31)
