@@ -2,6 +2,8 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const app = express();
+const session = require('express-session');
+const bodyParser = require('body-parser');
 
 const PORT = 3000;
 
@@ -10,8 +12,33 @@ const data = require('./libs/data.js');
 const tool_controller = require('./libs/tool-controller.js');
 const tools = require('./tools.json');
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(fileUpload());
+
+app.use(session({
+    secret: 'qbio',
+    resave: true,
+    saveUninitialized: true
+}))
+
+let auth = (req, res, next) => {
+    if (!req.session.authorized) {
+        return res.render("login.pug", { unauthorized: true });
+    }
+    return next();
+}
+
+app.post('/login', (req, res) => {
+    if (req.body.user == "woundreads" && req.body.pass == "bigsi") {
+        req.session.authorized = true;
+        return res.end();
+    }
+    return res.status(401).end();
+})
+
+app.use(auth);
 
 app.get('/', (req, res) => {
     res.render('index.pug', {tools:tools});
@@ -26,8 +53,7 @@ app.get('/jobs', (req, res) => {
 })
 
 app.post('/directory/:dir', (req, res) => {
-    let dir = req.params.dir;
-    data.readDirectory(dir, (err, files) => {
+    data.readDirectory(req.params.dir, (err, files) => {
         res.send(files);
     })
 })
@@ -54,9 +80,7 @@ app.get('/run', (req, res) => {
 })
 
 app.post('/getChart/:id', (req, res) => {
-    let id = req.params.id;
-
-    jobs.chart(id, (err, chart) => {
+    jobs.chart(req.params.id, (err, chart) => {
         if (err) return res.status(500).send(err.message);
         res.send(chart);
     })

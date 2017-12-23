@@ -1,0 +1,17 @@
+extends layout
+
+block scripts
+    script(src="./js/login.js")
+
+block content
+    .container-fluid
+        .row.justify-content-center
+            .col
+                .mt-3.mx-auto(style="max-width:250px")
+                    .card
+                        .card-body.text-center
+                            h1 Qbio
+                            form(onsubmit="login();return false;")
+                                input.form-control.form-group(type="text" name="user" placeholder="Username")
+                                input.form-control.form-group(type="password" name="pass" placeholder="Password")
+                                input.btn.btn-primary(type="submit" value="Login")

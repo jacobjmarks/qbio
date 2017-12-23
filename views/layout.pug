@@ -15,8 +15,9 @@ html
 
         title Qbio
     body.bg-light
-        include includes/navbar.pug
-        hr.mt-0
+        if (!unauthorized)
+            include includes/navbar.pug
+            hr.mt-0
         block content
         .mt-3
         include includes/modal.pug
