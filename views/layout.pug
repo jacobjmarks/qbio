@@ -1,8 +1,8 @@
 doctype html
 html
     head
-        meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
 
+        meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
         link(rel="icon" type="image/png" href="/img/cog.png")
 
         //- Bootstrap
@@ -13,7 +13,8 @@ html
         
         link(rel='stylesheet' href='/css/style.css')
 
-        title Qbio
+        block variables
+        title= title || "Qbio"
     body.bg-light
         if (!unauthorized)
             include includes/navbar.pug

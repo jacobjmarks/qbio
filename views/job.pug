@@ -1,5 +1,8 @@
 extends layout
 
+block variables
+    - var title = `Qbio | Job ${job.created_at}`
+
 block scripts
     script.
         var job = !{JSON.stringify(job)};
