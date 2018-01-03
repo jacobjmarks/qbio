@@ -149,6 +149,20 @@ app.get('/job/:id/result/download', (req, res) => {
     })
 })
 
+app.post('/updateSessionData', (req, res) => {
+    let objects = req.body;
+    for (let key in objects) {
+        req.session[key] = objects[key];
+    }
+    res.end();
+})
+
+app.post('/getSessionData/:object', (req, res) => {
+    let object = req.params.object;
+    if (!req.session[object]) return res.sendStatus(400);
+    res.send(req.session[object]);
+})
+
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
 })

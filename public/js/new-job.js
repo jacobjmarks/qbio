@@ -25,6 +25,15 @@
 $(document).ready(() => {
     $(".dataSelection").hide();
     dataDirectory();
+
+    $.ajax({
+        method: "POST",
+        url: "/getSessionData/selectedData",
+        success: (data, status, req) => {
+            selectedData = data;
+            updateSelectedData();
+        }
+    })
 })
 
 function updateBreadcrumbs(breadcrumbs) {
@@ -58,7 +67,7 @@ function addToBrowser(route, text) {
                     name: text,
                     route: route
                 });
-                updateSelectedData();
+                updateSelectedData(true);
             }
         })
 
@@ -86,7 +95,18 @@ function dataDirectory(dir) {
 
 let selectedData = [];
 
-function updateSelectedData() {
+function updateSelectedData(updateSession) {
+    if (updateSession) {
+        $.ajax({
+            method: "POST",
+            url:"/updateSessionData",
+            contentType: "application/json",
+            data: JSON.stringify({
+                selectedData: selectedData
+            })
+        })
+    }
+
     $("#selectedData table tbody").empty();
 
     if (selectedData.length == 0) {
@@ -113,7 +133,7 @@ function updateSelectedData() {
                     $("<td>").append(
                         $("<i class='fa fa-times'>").click(() => {
                             selectedData.splice(selectedData.indexOf(file), 1);
-                            updateSelectedData();
+                            updateSelectedData(true);
                         })
                     )
                 )
