@@ -38,7 +38,7 @@ app.post('/login', (req, res) => {
     return res.status(401).end();
 })
 
-app.use(auth);
+// app.use(auth);
 
 app.get('/', (req, res) => {
     res.render('index.pug', {tools:tools});
@@ -53,8 +53,22 @@ app.get('/jobs', (req, res) => {
 })
 
 app.post('/directory/:dir', (req, res) => {
-    data.readDirectory(req.params.dir, (err, files) => {
-        res.send(files);
+    req.session.dataBrowser = req.session.dataBrowser || {};
+    let dir = (() => {
+        if (req.params.dir == "undefined") {
+            return req.session.dataBrowser.currentDir || '/';
+        }
+        return req.params.dir;
+    })()
+
+    data.readDirectory(dir, (err, files, breadcrumbs) => {
+        req.session.dataBrowser.breadcrumbs = breadcrumbs;
+        req.session.dataBrowser.currentDir = dir;
+        res.send({
+            dir: dir,
+            files: files,
+            breadcrumbs: breadcrumbs
+        });
     })
 })
 

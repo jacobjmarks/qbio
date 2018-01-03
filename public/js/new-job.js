@@ -24,12 +24,10 @@
 
 $(document).ready(() => {
     $(".dataSelection").hide();
-    dataDirectory('/');
+    dataDirectory();
 })
 
-let breadcrumbs = [];
-
-function updateBreadcrumbs() {
+function updateBreadcrumbs(breadcrumbs) {
     $("#dataBrowser #breadcrumbs").empty();
     breadcrumbs.forEach((crumb, index) => {
         $("#dataBrowser #breadcrumbs").append(
@@ -76,17 +74,9 @@ function dataDirectory(dir) {
         method: "POST",
         url: `/directory/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
-            if (breadcrumbs.indexOf(dir) == -1) {
-                breadcrumbs.push(dir);
-            } else {
-                while(breadcrumbs[breadcrumbs.length -1] != dir) {
-                    breadcrumbs.pop();
-                }
-            }
-            updateBreadcrumbs();
-            
+            updateBreadcrumbs(data.breadcrumbs);            
             $("#dataBrowser tbody").empty();
-            data.forEach((file) => addToBrowser(dir + file, file));
+            data.files.forEach((file) => addToBrowser(data.dir + file, file));
         },
         error: (req, status, error) => {
             console.error(error);

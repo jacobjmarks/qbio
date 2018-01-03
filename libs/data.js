@@ -3,7 +3,25 @@ const path = require('path');
 const conf = require('../conf.json');
 
 module.exports.readDirectory = (dir, cb) => {
+    let breadcrumbs = (() => {
+        let crumbs = ['/'];        
+        if (dir == '/') return crumbs;
+        let dirs = dir.split('/');
+        dirs = dirs.filter((d) => d != '');
+
+        dirs.forEach((dir, index) => {
+            let path = "/";
+            for (let i = 0; i <= index; i++) {
+                path += dirs[i] + '/';
+            }
+            crumbs.push(path);
+        })
+
+        return crumbs;
+    })()
+
     dir = path.normalize(conf.dataDir + dir);
+
     fs.readdir(dir, (err, files) => {
         if (err) return cb(new Error("Error reading directory."));
 
@@ -21,7 +39,7 @@ module.exports.readDirectory = (dir, cb) => {
         folders = folders.sort((a, b) => a.localeCompare(b));
         files = files.sort((a, b) => a.localeCompare(b));
 
-        cb(null, folders.concat(files));
+        cb(null, folders.concat(files), breadcrumbs);
     })
 }
 
