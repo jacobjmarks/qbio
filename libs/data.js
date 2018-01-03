@@ -20,7 +20,7 @@ module.exports.readDirectory = (dir, cb) => {
         return crumbs;
     })()
 
-    dir = path.normalize(conf.dataDir + dir);
+    dir = path.join(conf.dataDir, dir);
 
     fs.readdir(dir, (err, files) => {
         if (err) return cb(new Error("Error reading directory."));

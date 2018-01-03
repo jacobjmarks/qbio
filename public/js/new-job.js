@@ -61,7 +61,7 @@ function addToBrowser(route, text) {
         .text(text)
         .click(() => {
             if (route.slice(-1) == '/') {
-                dataDirectory(route);
+                dataDirectory(route, row);
             } else {
                 selectedData.push({
                     name: text,
@@ -78,17 +78,17 @@ function addToBrowser(route, text) {
     $("#dataBrowser tbody").append(row);
 }
 
-function dataDirectory(dir) {
+function dataDirectory(dir, e) {
     $.ajax({
         method: "POST",
         url: `/directory/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
-            updateBreadcrumbs(data.breadcrumbs);            
+            updateBreadcrumbs(data.breadcrumbs);
             $("#dataBrowser tbody").empty();
             data.files.forEach((file) => addToBrowser(data.dir + file, file));
         },
         error: (req, status, error) => {
-            console.error(error);
+            $(e).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
         }
     })
 }

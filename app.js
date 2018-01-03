@@ -62,6 +62,7 @@ app.post('/directory/:dir', (req, res) => {
     })()
 
     data.readDirectory(dir, (err, files, breadcrumbs) => {
+        if (err) return res.status(500).send(err.message);
         req.session.dataBrowser.breadcrumbs = breadcrumbs;
         req.session.dataBrowser.currentDir = dir;
         res.send({
