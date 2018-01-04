@@ -4,14 +4,14 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 # --------------------------------------------------
 
-# Volume binding for local development
+# Volume binding for standalone execution,
 # Otherwise set by qbio/launch.sh
-if [ ! $DATADIR ] || [ ! $JOBDIR ]; then
-    DATADIR='qbio_datavol'
-    JOBDIR='qbio_jobvol'
+if [ ! $VOLUME ] || [ ! $DATADIR ]; then
+    VOLUME='qbio'
+    DATADIR='/'
 fi
 
 for dir in */ ; do
     container=qbio_${dir%*/}
-    docker run -itd --name "$container" -v "$DATADIR":/qbio_data/ -v "$JOBDIR":/qbio_jobs/ "$container" bash
+    docker run -itd --name "$container" -v "$VOLUME":/qbio/ -v "$DATADIR":/qbio/data/ "$container" bash
 done

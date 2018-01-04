@@ -7,8 +7,8 @@ cd $SCRIPTPATH
 # CONFIGURATION ------------------------------------
 # Volume binding. Full paths required.
 SERVERPORT=80
+VOLUME='qbio'
 DATADIR='qbio_datavol'
-JOBDIR='qbio_jobvol'
 # --------------------------------------------------
 
 docker container stop qbio
@@ -18,8 +18,8 @@ docker build -t qbio .
 docker run -it --rm --name qbio \
     -p $SERVERPORT:3000 \
     -v /var/run/:/var/run/ \
-    -v "$DATADIR":/qbio_data/ \
-    -v "$JOBDIR":/qbio_jobs/ \
+    -v "$VOLUME":/qbio/ \
+    -v "$DATADIR":/qbio/data/ \
+    -e VOLUME="$VOLUME" \
     -e DATADIR="$DATADIR" \
-    -e JOBDIR="$JOBDIR" \
     qbio
