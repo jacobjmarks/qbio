@@ -43,40 +43,39 @@ module.exports.readDirectory = (dir, cb) => {
     })
 }
 
-module.exports.upload = (file, cb) => {   
-    if (!file) return cb(new Error("No file selected.")); 
+module.exports.upload = (file, cb) => {
+    if (!file) return cb(new Error("No file to upload."));
 
-    file.mv(conf.dataDir + file.name, (err) => {
-        if (err) return cb(new Error("Error storing file."));
-        cb();
+    fs.exists(conf.uploadDir, (exists) => {
+        if (!exists) fs.mkdirSync(conf.uploadDir);
+        file.mv(conf.uploadDir + file.name, (err) => {
+            if (err) return cb(new Error("Error storing file."));
+            cb();
+        })
     })
 }
 
-module.exports.getList = (cb) => {
-    fs.exists(conf.dataDir, (exists) => {
+module.exports.getUploaded = (cb) => {
+    fs.exists(conf.uploadDir, (exists) => {
         if (!exists) {
             return cb();
         }
 
-        fs.readdir(conf.dataDir, (err, files) => {
-            if (err) return cb(new Error("Error retrieving available datafiles."));
+        fs.readdir(conf.uploadDir, (err, files) => {
+            if (err) return cb(new Error("Error retrieving uploaded datafiles."));
     
             let list = [];
-            files.forEach((filename, _) => {
-                fs.stat(conf.dataDir + filename, (err, stats) => {
-                    if (err) {
-                        list.push({
-                            filename: filename,
-                            size: "error"
-                        })
-                    } else {
-                        list.push({
-                            filename: filename,
-                            size: stats.size / 1000000.0
-                        })
-                    }
+            files.forEach((file, _) => {
+                fs.stat(conf.uploadDir + file, (err, stats) => {
+                    list.push({
+                        name: file,
+                        size: !err ? stats.size / 1000000.0 : "error"
+                    })
                     if (list.length == files.length) {
-                        cb(null, list);
+                        cb(null, {
+                            dir: conf.uploadDir,
+                            files: list
+                        });
                     }
                 })
             })

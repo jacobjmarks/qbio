@@ -80,8 +80,8 @@ app.post('/uploadfile', (req, res) => {
     })
 })
 
-app.post('/getAvailableData', (req, res) => {
-    data.getList((err, list) => {
+app.post('/getUploadedData', (req, res) => {
+    data.getUploaded((err, list) => {
         if (err) return res.status(500).send(err.message);
         res.send(list);
     })
@@ -160,7 +160,7 @@ app.post('/updateSessionData', (req, res) => {
 
 app.post('/getSessionData/:object', (req, res) => {
     let object = req.params.object;
-    if (!req.session[object]) return res.sendStatus(400);
+    if (!req.session[object]) return res.status(400).send("Session data not found.");
     res.send(req.session[object]);
 })
 

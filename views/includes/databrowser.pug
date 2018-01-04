@@ -4,10 +4,26 @@
             .noDataNotif No Data Selected
             tbody
 
-h5 Browse Server
+h5 Browse
 
-.card#dataBrowser
-    .card-header#breadcrumbs.bg-white.small
-    .card-body.p-0
-        table.table.table-sm.table-hover.table-responsive.mb-0
-            tbody
+nav.nav.nav-tabs(role="tablist")
+    a#nav-server-tab.nav-item.nav-link.active(data-toggle="tab" href="#nav-server" role="tab" aria-controls="nav-server" aria-selected="true")
+        | Server
+    a#nav-uploaded-tab.nav-item.nav-link(data-toggle="tab" href="#nav-uploaded" role="tab" aria-controls="nav-uploaded" aria-selected="false")
+        | Uploaded
+.tab-content.p-2.bg-white.border.border-top-0
+    #nav-server.tab-pane.show.active(role="tabpanel" aria-labelledby="nav-server-tab")
+        #dataBrowser.card.border-0
+            .card-header#breadcrumbs.bg-white.small
+            .card-body.p-0
+                table.table.table-sm.table-hover.table-responsive.mb-0
+                    tbody
+    #nav-uploaded.tab-pane(role="tabpanel" aria-labelledby="nav-uploaded-tab")
+        #uploadedData.card.border-0
+            .card-header.bg-white.align-middle
+                form#uploadform
+                    input.float-left(name="uploadfile" type="file")
+                    input.btn.btn-primary.float-right(type="submit" value="Upload")
+            .card-body.p-0
+                table.table.table-sm.table-hover.table-responsive.mb-0
+                    tbody

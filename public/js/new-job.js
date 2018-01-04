@@ -1,30 +1,33 @@
-// const fileInput = $("#uploadform :input")[0];
+const fileInput = $("#uploadform :input")[0];
 
-// $("#uploadform").submit((e) => {
-//     e.preventDefault();
-//     $.ajax({
-//         method: "POST",
-//         url: "/uploadfile",
-//         contentType: false,
-//         processData: false,
-//         data: (() => {
-//             let formdata = new FormData();
-//             formdata.append("file", fileInput.files[0]);
-//             return formdata;
-//         })(),
-//         success: (data, status, req) => {
-//             populateDataTable();
-//         },
-//         error: (req, status, error) => {
-//             alert(req.responseText);
-//         }
-//     })
-//     return false;
-// })
+$("#uploadform").submit((e) => {
+    e.preventDefault();
+
+    if (fileInput.files.length == 0) return false;
+
+    $.ajax({
+        method: "POST",
+        url: "/uploadfile",
+        contentType: false,
+        processData: false,
+        data: (() => {
+            let formdata = new FormData();
+            formdata.append("file", fileInput.files[0]);
+            return formdata;
+        })(),
+        success: (data, status, req) => {
+            getUploadedData();
+        },
+        error: (req, status, error) => {
+            console.error(req.responseText);
+        }
+    })
+    return false;
+})
 
 $(document).ready(() => {
-    $(".dataSelection").hide();
     dataDirectory();
+    getUploadedData();
 
     $.ajax({
         method: "POST",
@@ -52,32 +55,6 @@ function updateBreadcrumbs(breadcrumbs) {
     })
 }
 
-function addToBrowser(route, text) {
-    let icon = $("<td>").html(
-        `<i class="fa fa-fw fa-${route.slice(-1) == '/' ? 'folder' : 'file-text'}">`
-    )
-
-    let dir = $("<td class='col'>")
-        .text(text)
-        .click(() => {
-            if (route.slice(-1) == '/') {
-                dataDirectory(route, row);
-            } else {
-                selectedData.push({
-                    name: text,
-                    route: route
-                });
-                updateSelectedData(true);
-            }
-        })
-
-    let row = $("<tr>");
-    row.append(icon);
-    row.append(dir);
-
-    $("#dataBrowser tbody").append(row);
-}
-
 function dataDirectory(dir, e) {
     $.ajax({
         method: "POST",
@@ -85,10 +62,69 @@ function dataDirectory(dir, e) {
         success: (data, status, req) => {
             updateBreadcrumbs(data.breadcrumbs);
             $("#dataBrowser tbody").empty();
-            data.files.forEach((file) => addToBrowser(data.dir + file, file));
+            data.files.forEach((file) => {
+                let path = data.dir + file;
+                $("#dataBrowser tbody").append(
+                    row = $("<tr>")
+                        .append(
+                            $("<td>")
+                                .html(`<i class="fa fa-fw fa-${path.slice(-1) == '/' ? 'folder' : 'file-text'}">`)
+                        )
+                        .append(
+                            $("<td class='col'>")
+                                .text(file)
+                                .click(() => {
+                                    if (path.slice(-1) == '/') {
+                                        dataDirectory(path, row);
+                                    } else {
+                                        selectedData.push({
+                                            name: file,
+                                            path: path
+                                        });
+                                        updateSelectedData(true);
+                                    }
+                                })
+                        )
+                )
+            });
         },
         error: (req, status, error) => {
             $(e).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+        }
+    })
+}
+
+function getUploadedData() {
+    $.ajax({
+        method: "POST",
+        url: "/getUploadedData",
+        success: (data, status, req) => {
+            if (!data) return;
+            $("#uploadedData tbody").empty();
+            data.files.forEach((file) => {
+                let path = data.dir + file.name;
+                $("#uploadedData tbody").append(
+                    $("<tr>")
+                        .append(
+                            $("<td>")
+                                .html("<i class='fa fa-fw fa-file-text'>")
+                        )
+                        .append(
+                            $("<td class='col'>")
+                                .text(file.name)
+                                .click(() => {
+                                    selectedData.push({
+                                        name: file.name,
+                                        path: path
+                                    });
+                                    updateSelectedData(true);
+                                })
+                        )
+                )
+            });
+        },
+        error: (req, status, error) => {
+            console.error(req.responseText);
         }
     })
 }
@@ -164,7 +200,7 @@ function updateToolData() {
                                 $("<input type='checkbox' checked>")
                             )
                         )
-                        .data("path", file.route)
+                        .data("path", file.path)
                 )
             })
         }
@@ -176,7 +212,7 @@ function updateToolData() {
                     .append(
                         $("<option>")
                             .text(file.name)
-                            .attr("value", file.route)
+                            .attr("value", file.path)
                     )
             })
         }

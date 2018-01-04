@@ -8,7 +8,7 @@ cd $SCRIPTPATH
 # Volume binding. Full paths required.
 SERVERPORT=80
 VOLUME='qbio'
-DATADIR='qbio_datavol'
+DATADIR='/'
 # --------------------------------------------------
 
 docker container stop qbio
