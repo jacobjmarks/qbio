@@ -64,8 +64,9 @@ function dataDirectory(dir, e) {
             $("#dataBrowser tbody").empty();
             data.files.forEach((file) => {
                 let path = data.dir + file;
-                $("#dataBrowser tbody").append(
-                    row = $("<tr>")
+                
+                let row =
+                    $("<tr>")
                         .append(
                             $("<td>")
                                 .html(`<i class="fa fa-fw fa-${path.slice(-1) == '/' ? 'folder' : 'file-text'}">`)
@@ -73,19 +74,20 @@ function dataDirectory(dir, e) {
                         .append(
                             $("<td class='col'>")
                                 .text(file)
-                                .click(() => {
-                                    if (path.slice(-1) == '/') {
-                                        dataDirectory(path, row);
-                                    } else {
-                                        selectedData.push({
-                                            name: file,
-                                            path: path
-                                        });
-                                        updateSelectedData(true);
-                                    }
-                                })
                         )
-                )
+                        .click(() => {
+                            if (path.slice(-1) == '/') {
+                                dataDirectory(path, row);
+                            } else {
+                                selectedData.push({
+                                    name: file,
+                                    path: path
+                                });
+                                updateSelectedData(true);
+                            }
+                        })
+
+                $("#dataBrowser tbody").append(row)
             });
         },
         error: (req, status, error) => {
@@ -101,8 +103,7 @@ function getUploadedData() {
         success: (data, status, req) => {
             if (!data) return;
             $("#uploadedData tbody").empty();
-            data.files.forEach((file) => {
-                let path = data.dir + file.name;
+            data.forEach((file) => {
                 $("#uploadedData tbody").append(
                     $("<tr>")
                         .append(
@@ -112,14 +113,15 @@ function getUploadedData() {
                         .append(
                             $("<td class='col'>")
                                 .text(file.name)
-                                .click(() => {
-                                    selectedData.push({
-                                        name: file.name,
-                                        path: path
-                                    });
-                                    updateSelectedData(true);
-                                })
                         )
+                        .click(() => {
+                            selectedData.push({
+                                name: file.name,
+                                path: file.name,
+                                uploaded: true
+                            });
+                            updateSelectedData(true);
+                        })
                 )
             });
         },
@@ -201,6 +203,7 @@ function updateToolData() {
                             )
                         )
                         .data("path", file.path)
+                        .data("uploaded", file.uploaded ? true : false)
                 )
             })
         }
@@ -213,6 +216,7 @@ function updateToolData() {
                         $("<option>")
                             .text(file.name)
                             .attr("value", file.path)
+                            .data("uploaded", file.uploaded ? true : false)
                     )
             })
         }
@@ -231,13 +235,19 @@ function runTool(tool_func) {
         if ($(input).find("table")) {
             $(input).find("tbody").children("tr").toArray().forEach((row) => {
                 if ($(row).find("input").attr("checked")) {
-                    these_files.push($(row).data("path"));
+                    these_files.push({
+                        path: $(row).data("path"),
+                        uploaded: $(row).data("uploaded")
+                    });
                 }
             })
         }
 
         if ($(input).find("select")) {
-            these_files.push($(input).find("select").val());
+            these_files.push({
+                path: $(input).find(":selected").val(),
+                uploaded: $(input).find(":selected").data("uploaded")
+            });
         }
 
         files[`${$(input).data("name")}`] = these_files;

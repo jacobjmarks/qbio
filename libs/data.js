@@ -66,16 +66,13 @@ module.exports.getUploaded = (cb) => {
     
             let list = [];
             files.forEach((file, _) => {
-                fs.stat(conf.uploadDir + file, (err, stats) => {
+                fs.stat(path.join(conf.uploadDir, file), (err, stats) => {
                     list.push({
                         name: file,
                         size: !err ? stats.size / 1000000.0 : "error"
                     })
                     if (list.length == files.length) {
-                        cb(null, {
-                            dir: conf.uploadDir,
-                            files: list
-                        });
+                        cb(null, list);
                     }
                 })
             })

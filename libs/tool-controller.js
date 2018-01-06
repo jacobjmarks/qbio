@@ -13,7 +13,9 @@ module.exports.process = (tool, files, settings, cb) => {
 
     let files_absolute = {};
     for (let file_group in files) {
-        files_absolute[file_group] = files[file_group].map((file) => path.normalize(conf.dataDir + file));
+        files_absolute[file_group] = files[file_group].map((file) => {
+            return file.uploaded == "true" ? path.join(conf.uploadDir, file.path) : path.join(conf.dataDir, file.path)
+        });
     }
 
     let job = Date.now();
