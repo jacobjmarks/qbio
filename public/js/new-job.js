@@ -1,30 +1,3 @@
-$("#uploadform").submit((e) => {
-    e.preventDefault();
-
-    let fileInput = $("#uploadform :input")[0];
-
-    if (fileInput.files.length == 0) return false;
-
-    $.ajax({
-        method: "POST",
-        url: "/uploadfile",
-        contentType: false,
-        processData: false,
-        data: (() => {
-            let formdata = new FormData();
-            formdata.append("file", fileInput.files[0]);
-            return formdata;
-        })(),
-        success: (data, status, req) => {
-            getUploadedData();
-        },
-        error: (req, status, error) => {
-            console.error(req.responseText);
-        }
-    })
-    return false;
-})
-
 $(document).ready(() => {
     dataDirectory();
     getUploadedData();
@@ -36,6 +9,41 @@ $(document).ready(() => {
             selectedData = data;
             updateSelectedData();
         }
+    })
+    
+    $("#uploadform").submit((e) => {
+        e.preventDefault();
+    
+        let fileInput = $("#uploadform :input")[0];
+    
+        if (fileInput.files.length == 0) return false;
+    
+        let maxFilesize = 1.5e+9;
+        if (fileInput.files[0].size > maxFilesize) return $("#filesizeNotif").effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+    
+        $("#uploadform button").attr("disabled", true);
+    
+        $.ajax({
+            method: "POST",
+            url: "/uploadfile",
+            contentType: false,
+            processData: false,
+            data: (() => {
+                let formdata = new FormData();
+                formdata.append("file", fileInput.files[0]);
+                return formdata;
+            })(),
+            success: (data, status, req) => {
+                getUploadedData();
+            },
+            error: (req, status, error) => {
+                console.error(req.responseText);
+            },
+            complete: () => {
+                $("#uploadform button").attr("disabled", false);
+            }
+        })
+        return false;
     })
 })
 

@@ -20,10 +20,12 @@ nav.nav.nav-tabs(role="tablist")
                     tbody
     #nav-uploaded.tab-pane(role="tabpanel" aria-labelledby="nav-uploaded-tab")
         #uploadedData.card.border-0
-            .card-header.bg-white.align-middle
-                form#uploadform
-                    input.float-left(name="uploadfile" type="file")
-                    input.btn.btn-primary.float-right(type="submit" value="Upload")
+            .card-header.bg-white
+                form#uploadform.row.align-items-center
+                    .col.px-0
+                        input.w-100(name="uploadfile" type="file")
+                    #filesizeNotif.small.mr-1 < 1.5 GB
+                    button.btn.btn-primary(type="submit") Upload
             .card-body.p-0
                 table.table.table-sm.table-hover.table-responsive.mb-0
                     tbody

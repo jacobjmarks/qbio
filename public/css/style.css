@@ -49,18 +49,10 @@ button[disabled]:hover {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
 #selectedData td:last-child i:hover {
     cursor: pointer;
 }
 
-.filesize {
-    white-space: nowrap;
-    text-align: right;
-    font-size: 80%;
-    font-weight: 400;
-    vertical-align: middle !important;
-}
 #serverData crumb {
     padding: 0px 10px;
 }
@@ -82,4 +74,12 @@ button[disabled]:hover {
 }
 #serverData tbody tr:hover {
     cursor: pointer;
+}
+
+.filesize {
+    white-space: nowrap;
+    text-align: right;
+    font-size: 80%;
+    font-weight: 400;
+    vertical-align: middle !important;
 }
