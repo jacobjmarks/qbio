@@ -1,6 +1,6 @@
 FROM docker:latest AS server
 RUN apk update && \
-    apk add --update nodejs nodejs-npm
+    apk add --update nodejs nodejs-npm bash
 
 FROM server AS node_modules
 COPY ./package.json /src/package.json
@@ -9,6 +9,5 @@ RUN npm install
 
 FROM node_modules AS application
 COPY . /src/
-CMD sh ./TOOLS/docker-build-all.sh && \
-    sh ./TOOLS/docker-run-all.sh && \
+CMD if [ "$RUN_TOOLS" = "true" ]; then bash qbio launch tools; fi; \
     npm start

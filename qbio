@@ -1,0 +1,120 @@
+# Move to script directory to use relative filepaths
+SCRIPT=$(readlink -f "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+cd $SCRIPTPATH
+# --------------------------------------------------
+
+# DEFAULT CONFIGURATION ----------------------------
+PORT=80
+RUN_TOOLS=true
+# --------------------------------------------------
+
+# ARGUMENT PARSING ---------------------------------
+usage_general="
+USAGE: qbio [COMMAND]
+
+Command must be one of:
+    launch      Launch the Qbio platform.
+    clean       Docker-level cleanup of the Qbio platform.
+"
+usage_launch="
+USAGE: qbio launch [OPTIONS]...
+
+Required:
+    -d          Absolute path to local data directory to expose to Qbio.
+
+Optional:
+    -p          Server port to expose the Qbio web interface. DEFAULT: 80
+    --no-tools  Launch Qbio without building and running tools.
+"
+usage_clean="
+USAGE: qbio clean [OPTION]
+
+Option must be one of:
+    all         Stop and remove all Qbio containers and images.
+    tools       Stop and remove all tool containers and images.
+"
+
+launch()
+{
+    if [ ! $DATADIR ]; then
+        echo "$usage_launch"
+        exit 1
+    fi
+
+    if [ $1 ] && [ "$1" = "tools" ]; then
+        clean tools
+        cd ./TOOLS/
+        for dir in */ ; do
+            docker build -t "qbio_${dir%*/}" $dir
+            container=qbio_${dir%*/}
+            docker run -itd --name "$container" -v qbio:/qbio/ -v "$DATADIR":/qbio/data/ "$container" bash
+        done
+        exit 0
+    fi
+
+    docker container stop qbio
+    docker container prune -f
+    docker build -t qbio .
+
+    docker run -it --rm --name qbio \
+        -p $PORT:3000 \
+        -v /var/run/:/var/run/ \
+        -v qbio:/qbio/ \
+        -v "$DATADIR":/qbio/data/ \
+        -e DATADIR="$DATADIR" \
+        -e RUN_TOOLS="$RUN_TOOLS" \
+        qbio
+}
+
+clean()
+{
+    case $1 in
+        "all")
+            docker container stop qbio &>/dev/null
+            docker image remove qbio &>/dev/null
+            ;&
+        "tools")
+            docker container stop $(docker ps -q -f NAME=qbio_) &>/dev/null
+            docker container prune -f &>/dev/null
+            docker image remove $(docker images | grep -o 'qbio_[^ ]*') &>/dev/null
+            ;;
+        *)
+            echo "$usage_clean"
+            exit 1
+    esac
+}
+
+case $1 in
+    "launch")
+        i=2
+        while [ $i -le $# ]; do
+            case ${!i} in
+                "-d")
+                    shift; DATADIR="${!i}"
+                    ;;
+                "-p")
+                    shift; PORT="${!i}"
+                    ;;
+                "--no-tools")
+                    RUN_TOOLS=false
+                    ;;
+                "tools")
+                    launch tools
+                    ;;
+                *)
+                    echo "$usage_launch"
+                    exit 1
+            esac
+            ((i+=1))
+        done
+        launch
+        ;;
+    "clean")
+        clean $2
+        ;;
+    *)
+        echo "$usage_general"
+        exit 1
+esac
+exit 0
