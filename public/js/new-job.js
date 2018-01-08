@@ -1,7 +1,7 @@
-const fileInput = $("#uploadform :input")[0];
-
 $("#uploadform").submit((e) => {
     e.preventDefault();
+
+    let fileInput = $("#uploadform :input")[0];
 
     if (fileInput.files.length == 0) return false;
 
@@ -40,9 +40,9 @@ $(document).ready(() => {
 })
 
 function updateBreadcrumbs(breadcrumbs) {
-    $("#dataBrowser #breadcrumbs").empty();
+    $("#serverData #breadcrumbs").empty();
     breadcrumbs.forEach((crumb, index) => {
-        $("#dataBrowser #breadcrumbs").append(
+        $("#serverData #breadcrumbs").append(
             $("<crumb>")
                 .text(crumb == '/' ? "root" : crumb.match(/([^\/]*)\/$/).pop())
                 .click(() => {
@@ -51,7 +51,7 @@ function updateBreadcrumbs(breadcrumbs) {
                     }
                 })
         );
-        $("#dataBrowser #breadcrumbs").append('/');
+        $("#serverData #breadcrumbs").append('/');
     })
 }
 
@@ -61,33 +61,38 @@ function dataDirectory(dir, e) {
         url: `/directory/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
             updateBreadcrumbs(data.breadcrumbs);
-            $("#dataBrowser tbody").empty();
+            $("#serverData tbody").empty();
             data.files.forEach((file) => {
-                let path = data.dir + file;
+                let path = data.dir + file.name;
                 
                 let row =
                     $("<tr>")
                         .append(
-                            $("<td>")
-                                .html(`<i class="fa fa-fw fa-${path.slice(-1) == '/' ? 'folder' : 'file-text'}">`)
+                            // File/Folder Icon
+                            $("<td>").html(`<i class="fa fa-fw fa-${path.slice(-1) == '/' ? 'folder' : 'file-text'}">`)
                         )
                         .append(
-                            $("<td class='col'>")
-                                .text(file)
+                            // Filename
+                            $("<td class='col'>").text(file.name)
+                        )
+                        .append(
+                            // Filesize
+                            $("<td class='filesize'>").text(file.size)
                         )
                         .click(() => {
                             if (path.slice(-1) == '/') {
                                 dataDirectory(path, row);
                             } else {
                                 selectedData.push({
-                                    name: file,
+                                    name: file.name,
+                                    size: file.size,
                                     path: path
                                 });
                                 updateSelectedData(true);
                             }
                         })
 
-                $("#dataBrowser tbody").append(row)
+                $("#serverData tbody").append(row)
             });
         },
         error: (req, status, error) => {
@@ -107,12 +112,16 @@ function getUploadedData() {
                 $("#uploadedData tbody").append(
                     $("<tr>")
                         .append(
-                            $("<td>")
-                                .html("<i class='fa fa-fw fa-file-text'>")
+                            // File Icon
+                            $("<td>").html("<i class='fa fa-fw fa-file-text'>")
                         )
                         .append(
-                            $("<td class='col'>")
-                                .text(file.name)
+                            // Filename
+                            $("<td class='col'>").text(file.name)
+                        )
+                        .append(
+                            // Filesize
+                            $("<td class='filesize'>").text(file.size)
                         )
                         .click(() => {
                             selectedData.push({
@@ -167,6 +176,10 @@ function updateSelectedData(updateSession) {
                     $("<td class='col'>").text(file.name)
                 )
                 .append(
+                    // Filesize
+                    $("<td class='filesize'>").text(file.size)
+                )
+                .append(
                     // Delete button
                     $("<td>").append(
                         $("<i class='fa fa-times'>").click(() => {
@@ -197,10 +210,12 @@ function updateToolData() {
                             $("<td class='col'>").text(file.name)
                         )
                         .append(
+                            // Filesize
+                            $("<td class='filesize'>").text(file.size)
+                        )
+                        .append(
                             // Checkbox
-                            $("<td>").append(
-                                $("<input type='checkbox' checked>")
-                            )
+                            $("<td>").html("<input type='checkbox' checked>")
                         )
                         .data("path", file.path)
                         .data("uploaded", file.uploaded ? true : false)
@@ -214,7 +229,7 @@ function updateToolData() {
                 $(input).find("select")
                     .append(
                         $("<option>")
-                            .text(file.name)
+                            .text(`${file.name} (${file.size})`)
                             .attr("value", file.path)
                             .data("uploaded", file.uploaded ? true : false)
                     )

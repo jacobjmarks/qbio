@@ -36,10 +36,22 @@ module.exports.readDirectory = (dir, cb) => {
             return file;
         }).filter((f) => f != false);
 
-        folders = folders.sort((a, b) => a.localeCompare(b));
+        folders = folders.sort((a, b) => a.localeCompare(b)).map((folder) => { return {name: folder, size: null} });
         files = files.sort((a, b) => a.localeCompare(b));
+        
+        if (files.length == 0) return cb(null, folders.concat(files), breadcrumbs);
 
-        cb(null, folders.concat(files), breadcrumbs);
+        files.forEach((file, index) => {
+            fs.stat(path.join(dir, file), (err, stats) => {
+                files[index] = {
+                    name: file,
+                    size: (!err ? Number.parseFloat(stats.size / 1000000.0).toFixed(3) : "-") + " MB"
+                }
+                if (files.map((f) => f.name).reduce((a, b) => a && b)) {
+                    cb(null, folders.concat(files), breadcrumbs);
+                }
+            })
+        });
     })
 }
 
@@ -65,11 +77,11 @@ module.exports.getUploaded = (cb) => {
             if (err) return cb(new Error("Error retrieving uploaded datafiles."));
     
             let list = [];
-            files.forEach((file, _) => {
+            files.forEach((file) => {
                 fs.stat(path.join(conf.uploadDir, file), (err, stats) => {
                     list.push({
                         name: file,
-                        size: !err ? stats.size / 1000000.0 : "error"
+                        size: (!err ? Number.parseFloat(stats.size / 1000000.0).toFixed(3) : "-") + " MB"
                     })
                     if (list.length == files.length) {
                         cb(null, list);

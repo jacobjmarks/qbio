@@ -54,25 +54,32 @@ button[disabled]:hover {
     cursor: pointer;
 }
 
-#dataBrowser tbody tr:hover {
-    cursor: pointer;
+.filesize {
+    white-space: nowrap;
+    text-align: right;
+    font-size: 80%;
+    font-weight: 400;
+    vertical-align: middle !important;
 }
-#dataBrowser crumb {
+#serverData crumb {
     padding: 0px 10px;
 }
-#dataBrowser crumb:first-child {
+#serverData crumb:first-child {
     padding-left: 0px;
 }
-#dataBrowser crumb:not(:last-child) {
+#serverData crumb:not(:last-child) {
     color: #1967D2;
 }
-#dataBrowser crumb:not(:last-child):hover {
+#serverData crumb:not(:last-child):hover {
     text-decoration: underline;
     cursor: pointer;
 }
-#dataBrowser crumb:last-child {
+#serverData crumb:last-child {
     color: black;
 }
-#dataBrowser crumb:last-child {
+#serverData crumb:last-child {
     color: black;
+}
+#serverData tbody tr:hover {
+    cursor: pointer;
 }

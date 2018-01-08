@@ -1,4 +1,4 @@
-.card#selectedData.mb-3
+#selectedData.card.mb-3
     .card-body.p-0
         table.table.table-sm.table-responsive.mb-0
             .noDataNotif No Data Selected
@@ -11,9 +11,9 @@ nav.nav.nav-tabs(role="tablist")
         | Server
     a#nav-uploaded-tab.nav-item.nav-link(data-toggle="tab" href="#nav-uploaded" role="tab" aria-controls="nav-uploaded" aria-selected="false")
         | Uploaded
-.tab-content.p-2.bg-white.border.border-top-0
+#dataBrowser.tab-content.p-2.bg-white.border.border-top-0
     #nav-server.tab-pane.show.active(role="tabpanel" aria-labelledby="nav-server-tab")
-        #dataBrowser.card.border-0
+        #serverData.card.border-0
             .card-header#breadcrumbs.bg-white.small
             .card-body.p-0
                 table.table.table-sm.table-hover.table-responsive.mb-0
