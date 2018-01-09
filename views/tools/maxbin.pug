@@ -1,0 +1,13 @@
+extends layout
+
+block variables
+    - var this_tool = "MaxBin"
+
+block settings
+    form
+        .row
+            .col
+                +dataSelection("Contig")(name="contig" type="select")
+        .row
+            .col
+                +dataSelection("Read/s")(name="reads" type="table")

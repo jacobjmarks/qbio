@@ -7,6 +7,12 @@ const jobs = require('./jobs.js');
 
 const logPipe = (job) => {return `&>> ${conf.jobDir}${job}/log.txt`};
 
+function docker_exec(container, command, cb) {
+    exec(`docker exec ${container} bash -c "${command}"`, (error, stdout, stderr) => {
+        cb(error && error.message);
+    })
+}
+
 module.exports.process = (tool, files, settings, cb) => {
     if (!files) return cb(new Error("Invalid datafile."));
     if (!tool) return cb(new Error("No tool specified."));
@@ -98,10 +104,18 @@ module.exports.bloom_filter = (job, files, settings, cb) => {
     docker_exec("qbio_bloom-filter", cmd, (err) => cb(err));
 }
 
-function docker_exec(container, command, cb) {
-    exec(`docker exec ${container} bash -c "${command}"`, (error, stdout, stderr) => {
-        cb(error && error.message);
-    })
+module.exports.maxbin = (job, files, settings, cb) => {
+    let contig = files['contig'][0];
+    let reads = files['reads'];
+
+    let log = logPipe(job);
+    let cmd = `\
+        cd ${conf.jobDir}${job} && \
+        echo ${reads.join('\n')} >> readslist.txt && \
+        perl /MaxBin-2.2.4/run_MaxBin.pl -contig ${contig} -reads_list readslist.txt -out result ${log} \
+    `;
+
+    docker_exec("qbio_maxbin", cmd, (err) => cb(err));
 }
 
 module.exports.metabat = (job, files, settings, cb) => {
