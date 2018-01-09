@@ -11,7 +11,7 @@ router.get('/new', (req, res) => {
     res.render('new-job.pug', {tools:tools});
 })
 
-router.post('/status', (req, res) => {
+router.get('/status', (req, res) => {
     jobs.stats((err, jobs) => {
         if (err) return res.status(500).send(err.message);
         res.json(jobs);

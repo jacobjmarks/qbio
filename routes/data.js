@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const data = require('../libs/data.js');
 
-router.post('/server/:dir', (req, res) => {
+router.get('/server/:dir', (req, res) => {
     req.session.dataBrowser = req.session.dataBrowser || {};
     let dir = (() => {
         if (req.params.dir == "undefined") {
@@ -23,7 +23,7 @@ router.post('/server/:dir', (req, res) => {
     })
 })
 
-router.post('/uploaded', (req, res) => {
+router.get('/uploaded', (req, res) => {
     data.getUploaded((err, list) => {
         if (err) return res.status(500).send(err.message);
         res.send(list);

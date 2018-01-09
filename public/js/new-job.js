@@ -64,7 +64,7 @@ function updateBreadcrumbs(breadcrumbs) {
 
 function dataDirectory(dir, e) {
     $.ajax({
-        method: "POST",
+        method: "GET",
         url: `/data/server/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
             updateBreadcrumbs(data.breadcrumbs);
@@ -110,7 +110,7 @@ function dataDirectory(dir, e) {
 
 function getUploadedData() {
     $.ajax({
-        method: "POST",
+        method: "GET",
         url: "/data/uploaded",
         success: (data, status, req) => {
             if (!data) return;

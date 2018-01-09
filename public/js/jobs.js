@@ -4,7 +4,7 @@ $(document).ready(() => {
 
 function updateJobs() {
     $.ajax({
-        method: "POST",
+        method: "GET",
         url: "/jobs/status",
         success: (data, status, req) => {
             let jobs = data;
