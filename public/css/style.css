@@ -83,3 +83,10 @@ button[disabled]:hover {
     font-weight: 400;
     vertical-align: middle !important;
 }
+
+.filename {
+    max-width: 0px !important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

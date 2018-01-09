@@ -80,7 +80,7 @@ function dataDirectory(dir, e) {
                         )
                         .append(
                             // Filename
-                            $("<td class='col'>").text(file.name)
+                            $("<td class='col filename'>").text(file.name)
                         )
                         .append(
                             // Filesize
@@ -124,7 +124,7 @@ function getUploadedData() {
                         )
                         .append(
                             // Filename
-                            $("<td class='col'>").text(file.name)
+                            $("<td class='col filename'>").text(file.name)
                         )
                         .append(
                             // Filesize
@@ -181,7 +181,7 @@ function updateSelectedData(updateSession) {
                 )
                 .append(
                     // Filename
-                    $("<td class='col'>").text(file.name)
+                    $("<td class='col filename'>").text(file.name)
                 )
                 .append(
                     // Filesize
@@ -215,7 +215,7 @@ function updateToolData() {
                         )
                         .append(
                             // Filename
-                            $("<td class='col'>").text(file.name)
+                            $("<td class='col filename'>").text(file.name)
                         )
                         .append(
                             // Filesize
