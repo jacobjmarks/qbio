@@ -90,3 +90,16 @@ button[disabled]:hover {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+#errorheader {
+    display: inline-block;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+@media(max-width:768px) {
+    #errorheader {
+        font-size: 7vw;
+    }
+}
