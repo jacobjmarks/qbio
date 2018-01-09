@@ -5,7 +5,7 @@ $(document).ready(() => {
 function updateJobs() {
     $.ajax({
         method: "POST",
-        url: "/jobStatus",
+        url: "/jobs/status",
         success: (data, status, req) => {
             let jobs = data;
             $("#jobTable tbody").empty();

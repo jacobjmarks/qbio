@@ -56,8 +56,8 @@ function deleteJob() {
             $("#btnDelete").attr("disabled", true);
             $("#modal .btn-primary").attr("disabled", true);
             $.ajax({
-                method: "POST",
-                url: `/deleteJob/${job.created_at}`,
+                method: "DELETE",
+                url: `/job/${job.created_at}`,
                 success: () => {
                     showModal({
                         title: "Success",
