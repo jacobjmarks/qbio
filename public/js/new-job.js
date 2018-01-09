@@ -326,7 +326,10 @@ function runTool(tool_func) {
             });
         },
         error: (req, status, error) => {
-            alert(req.responseText);
+            showModal({
+                title: "Error Creating Job",
+                body: "An internal error occurrred."
+            })
         },
         complete: () => {
             $(`#${tool_func} button:last-child`).attr("disabled", false);

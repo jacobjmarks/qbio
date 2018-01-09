@@ -76,7 +76,7 @@ function updateJobs() {
             })
         },
         error: (req, status, error) => {
-            alert(req.responseText);
+            console.error(req.responseText);
         }
     })
 }
