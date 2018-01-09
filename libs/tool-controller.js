@@ -111,7 +111,9 @@ module.exports.metabat = (job, files, settings, cb) => {
     let log = logPipe(job);
     let cmd = `\
         cd ${conf.jobDir}${job} && \
-        runMetaBat.sh -o result.txt ${assembly} ${bams.join(' ')} ${log} \
+        jgi_summarize_bam_contig_depths --outputDepth depth.txt ${bams.join(' ')} ${log} && \
+        cat depth.txt ${log} && \
+        metabat2 -i ${assembly} -a depth.txt -o ./bins ${log} \
     `;
 
     docker_exec("qbio_metabat", cmd, (err) => cb(err));
