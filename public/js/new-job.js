@@ -133,6 +133,7 @@ function getUploadedData() {
                         .click(() => {
                             selectedData.push({
                                 name: file.name,
+                                size: file.size,
                                 path: file.name,
                                 uploaded: true
                             });
