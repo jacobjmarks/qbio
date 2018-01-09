@@ -1,0 +1,13 @@
+extends layout
+
+block variables
+    - var this_tool = "MetaBAT"
+
+block settings
+    form
+        .row
+            .col
+                +dataSelection("Assembly")(name="assembly" type="select")
+        .row
+            .col
+                +dataSelection("BAM Files")(name="bams" type="table")

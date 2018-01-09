@@ -16,7 +16,7 @@ $(document).ready(() => {
     
         let fileInput = $("#uploadform :input")[0];
     
-        if (fileInput.files.length == 0) return false;
+        if (fileInput.files.length == 0) return $(fileInput).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);;
     
         let maxFilesize = 1.5e+9;
         if (fileInput.files[0].size > maxFilesize) return $("#filesizeNotif").effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
@@ -43,7 +43,6 @@ $(document).ready(() => {
                 $("#uploadform button").attr("disabled", false);
             }
         })
-        return false;
     })
 })
 

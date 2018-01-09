@@ -104,6 +104,19 @@ function docker_exec(container, command, cb) {
     })
 }
 
+module.exports.metabat = (job, files, settings, cb) => {
+    let assembly = files['assembly'][0];
+    let bams = files['bams'];
+
+    let log = logPipe(job);
+    let cmd = `\
+        cd ${conf.jobDir}${job} && \
+        runMetaBat.sh -o result.txt ${assembly} ${bams.join(' ')} ${log} \
+    `;
+
+    docker_exec("qbio_metabat", cmd, (err) => cb(err));
+}
+
 module.exports.mmseqs2 = (job, files, settings, cb) => {
     let queryDB = files['query'][0];
     let targetDB = files['target'][0];
