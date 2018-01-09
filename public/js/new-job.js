@@ -3,9 +3,10 @@ $(document).ready(() => {
     getUploadedData();
 
     $.ajax({
-        method: "POST",
-        url: "/getSessionData/selectedData",
+        method: "GET",
+        url: "/session/selectedData",
         success: (data, status, req) => {
+            if (!data) return;
             selectedData = data;
             updateSelectedData();
         }
@@ -153,12 +154,10 @@ let selectedData = [];
 function updateSelectedData(updateSession) {
     if (updateSession) {
         $.ajax({
-            method: "POST",
-            url:"/updateSessionData",
+            method: "PATCH",
+            url:"/session/selectedData",
             contentType: "application/json",
-            data: JSON.stringify({
-                selectedData: selectedData
-            })
+            data: JSON.stringify(selectedData)
         })
     }
 

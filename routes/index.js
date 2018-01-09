@@ -1,23 +1,7 @@
 const router = require("express").Router();
 
-const tools = require('../tools.json');
-
 router.get('/', (req, res) => {
-    res.render('index.pug', {tools:tools});
-})
-
-router.post('/updateSessionData', (req, res) => {
-    let objects = req.body;
-    for (let key in objects) {
-        req.session[key] = objects[key];
-    }
-    res.end();
-})
-
-router.post('/getSessionData/:object', (req, res) => {
-    let object = req.params.object;
-    if (!req.session[object]) return res.status(400).send("Session data not found.");
-    res.send(req.session[object]);
+    res.render('index.pug', { tools: require('../tools.json') });
 })
 
 module.exports = router;

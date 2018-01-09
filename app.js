@@ -36,6 +36,7 @@ app.use("/jobs", require("./routes/jobs"));
 app.use("/job", require("./routes/job"));
 app.use("/data", require("./routes/data"));
 app.use("/tools", require("./routes/tools"));
+app.use("/session", require("./routes/session"));
 
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
