@@ -69,13 +69,12 @@ module.exports.process = (tool, files, settings, cb) => {
 
             cmd = `\
                 fsharpi executor.fsx ${file} ${conf.jobDir}${job}/result.txt \
-                    -chart ${conf.jobDir}${job}/chart.html \
                     -block ${settings['block-size']} \
                     -k ${settings['kmer-size']} \
                     -m ${settings['filter-size']} \
                     -f ${settings['hash-functions']} \
                     -threshold ${settings['kmer-threshold']} \
-                    -comparekmers true \
+                    -comparekmers false \
                     ${log} \
             `;
             break;

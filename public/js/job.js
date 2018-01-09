@@ -109,29 +109,3 @@ function getResult() {
         }
     })
 }
-
-function getChart() {
-    if (requestedChart) return;
-    requestedChart = true;
-
-    $.ajax({
-        method: "POST",
-        url: `/getChart/${job.created_at}`,
-        success: (data, status, req) => {
-            let iframe = $("#chart-frame")[0];
-            iframe.onload = () => {
-                $("#nav-chart").find(".fa-spinner").hide();
-            };
-            let doc = iframe.document;
-            doc = iframe.contentDocument || doc;
-            doc = iframe.contentWindow && iframe.contentWindow.document || doc;
-            
-            doc.open();
-            doc.write(data);
-            doc.close();
-        },
-        error: (req, status, error) => {
-            $("#nav-chart").html("Error Loading Chart");
-        }
-    })
-}
