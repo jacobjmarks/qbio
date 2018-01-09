@@ -19,7 +19,7 @@ app.use(session({
 }))
 
 app.post('/login', (req, res) => {
-    if (req.body.user == "woundreads" && req.body.pass == "bigsi") {
+    if (req.body.pass == "woundreads") {
         req.session.authorized = true;
         return res.end();
     }

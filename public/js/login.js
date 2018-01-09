@@ -1,24 +1,21 @@
-function login() {
-    let valid = true;
-    
-    $("form").serializeArray().forEach((input) => {
-        if (!input.value) return valid = false;
-    })
+$(document).ready((e) => {
+    $("form").submit((e) => {
+        e.preventDefault();
 
-    if (!valid) return unauthorized();
-
-    $.ajax({
-        method: "POST",
-        url: "/login",
-        data: $("form").serialize(),
-        success: () => {
-            window.location.reload();
-        },
-        error: () => {
-            unauthorized();
-        }
+        $.ajax({
+            method: "POST",
+            url: "/login",
+            contentType: "application/x-www-form-urlencoded",
+            data: $("form").serialize(),
+            success: (data, status, req) => {
+                window.location.reload();
+            },
+            error: () => {
+                unauthorized();
+            }
+        })
     })
-}
+})
 
 function unauthorized() {
     $("form input[type!='submit']").val('');

@@ -4,7 +4,7 @@ block variables
     - var title = "Qbio | Login"
 
 block scripts
-    script(src="./js/login.js")
+    script(src="/js/login.js")
 
 block content
     .container-fluid
@@ -14,7 +14,6 @@ block content
                     .card
                         .card-body.text-center
                             h1 Qbio
-                            form(onsubmit="login();return false;")
-                                input.form-control.form-group(type="text" name="user" placeholder="Username")
+                            form
                                 input.form-control.form-group(type="password" name="pass" placeholder="Password")
                                 input.btn.btn-primary(type="submit" value="Login")
