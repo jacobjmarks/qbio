@@ -1,47 +1,11 @@
 const router = require("express").Router();
 
 const jobs = require('../libs/jobs.js');
-const data = require('../libs/data.js');
 const tool_controller = require('../libs/tool-controller.js');
 const tools = require('../tools.json');
 
 router.get('/', (req, res) => {
     res.render('index.pug', {tools:tools});
-})
-
-router.post('/directory/:dir', (req, res) => {
-    req.session.dataBrowser = req.session.dataBrowser || {};
-    let dir = (() => {
-        if (req.params.dir == "undefined") {
-            return req.session.dataBrowser.currentDir || '/';
-        }
-        return req.params.dir;
-    })()
-
-    data.readDirectory(dir, (err, files, breadcrumbs) => {
-        if (err) return res.status(500).send(err.message);
-        req.session.dataBrowser.breadcrumbs = breadcrumbs;
-        req.session.dataBrowser.currentDir = dir;
-        res.send({
-            dir: dir,
-            files: files,
-            breadcrumbs: breadcrumbs
-        });
-    })
-})
-
-router.post('/uploadfile', (req, res) => {
-    data.upload(req.files && req.files.file, (err) => {
-        if (err) return res.status(500).send(err.message);
-        res.end();
-    })
-})
-
-router.post('/getUploadedData', (req, res) => {
-    data.getUploaded((err, list) => {
-        if (err) return res.status(500).send(err.message);
-        res.send(list);
-    })
 })
 
 router.get('/run', (req, res) => {

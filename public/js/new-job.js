@@ -25,7 +25,7 @@ $(document).ready(() => {
     
         $.ajax({
             method: "POST",
-            url: "/uploadfile",
+            url: "/data/upload",
             contentType: false,
             processData: false,
             data: (() => {
@@ -65,7 +65,7 @@ function updateBreadcrumbs(breadcrumbs) {
 function dataDirectory(dir, e) {
     $.ajax({
         method: "POST",
-        url: `/directory/${encodeURIComponent(dir)}`,
+        url: `/data/server/${encodeURIComponent(dir)}`,
         success: (data, status, req) => {
             updateBreadcrumbs(data.breadcrumbs);
             $("#serverData tbody").empty();
@@ -111,7 +111,7 @@ function dataDirectory(dir, e) {
 function getUploadedData() {
     $.ajax({
         method: "POST",
-        url: "/getUploadedData",
+        url: "/data/uploaded",
         success: (data, status, req) => {
             if (!data) return;
             $("#uploadedData tbody").empty();
