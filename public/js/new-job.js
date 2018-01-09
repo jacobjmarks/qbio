@@ -307,7 +307,7 @@ function runTool(tool_func) {
     $(`#${tool_func} button:last-child`).attr("disabled", true);
     $.ajax({
         method: "GET",
-        url: "/run",
+        url: "/tools/run",
         data: {
             "tool": tool_func,
             "files": files,
