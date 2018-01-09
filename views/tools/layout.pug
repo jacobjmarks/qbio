@@ -7,7 +7,7 @@ mixin dataSelection(label)
     .form-group
         label= label
         .noDataNotif.text-center No Data Selected
-        .dataSelection(data-name!=attributes.name style="display:none")
+        .dataSelection(data-name!=attributes.name data-type!=attributes.type style="display:none;")
             if (attributes.type == "table")
                 table.table.table-sm.table-responsive.table-hover.mb-0
                     tbody

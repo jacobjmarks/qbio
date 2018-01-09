@@ -250,33 +250,42 @@ function runTool(tool_func) {
         return $(`#${tool_func} .noDataNotif`).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
     }
 
+    let valid = true;
+
+    // Check file selection
     let files = {};
     $(`#${tool_func} .dataSelection`).toArray().forEach((input) => {
         let these_files = [];
 
-        if ($(input).find("table")) {
-            $(input).find("tbody").children("tr").toArray().forEach((row) => {
-                if ($(row).find("input").attr("checked")) {
-                    these_files.push({
-                        path: $(row).data("path"),
-                        uploaded: $(row).data("uploaded")
-                    });
+        switch ($(input).data("type")) {
+            case "table":
+                $(input).find("tbody").children("tr").toArray().forEach((row) => {
+                    if ($(row).find("input[type='checkbox']").is(":checked")) {
+                        these_files.push({
+                            path: $(row).data("path"),
+                            uploaded: $(row).data("uploaded")
+                        });
+                    }
+                })
+                if (these_files.length == 0) {
+                    // No files checked
+                    $(input).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+                    return valid = false;
                 }
-            })
+                break;
+            case "select":
+                these_files.push({
+                    path: $(input).find(":selected").val(),
+                    uploaded: $(input).find(":selected").data("uploaded")
+                });
+                break;
         }
-
-        if ($(input).find("select")) {
-            these_files.push({
-                path: $(input).find(":selected").val(),
-                uploaded: $(input).find(":selected").data("uploaded")
-            });
-        }
-
         files[`${$(input).data("name")}`] = these_files;
     })
 
-    let valid = true;
+    if (!valid) return;
 
+    // Check form parameter data
     let form_data = $(`#${tool_func} form`).serializeArray();
     let settings = {};
     form_data.forEach((param) => {
@@ -293,6 +302,7 @@ function runTool(tool_func) {
 
     if (!valid) return;
 
+    // Run tool
     $(`#${tool_func} button:last-child`).attr("disabled", true);
     $.ajax({
         method: "GET",
