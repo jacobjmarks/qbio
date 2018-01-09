@@ -7,11 +7,6 @@ const bodyParser = require('body-parser');
 
 const PORT = 3000;
 
-const jobs = require('./libs/jobs.js');
-const data = require('./libs/data.js');
-const tool_controller = require('./libs/tool-controller.js');
-const tools = require('./tools.json');
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -23,13 +18,6 @@ app.use(session({
     saveUninitialized: true
 }))
 
-let auth = (req, res, next) => {
-    if (!req.session.authorized) {
-        return res.render("login.pug", { unauthorized: true });
-    }
-    return next();
-}
-
 app.post('/login', (req, res) => {
     if (req.body.user == "woundreads" && req.body.pass == "bigsi") {
         req.session.authorized = true;
@@ -38,131 +26,12 @@ app.post('/login', (req, res) => {
     return res.status(401).end();
 })
 
-// app.use(auth);
+app.use((req, res, next) => {
+    if (!req.session.authorized) return res.render("login.pug", { unauthorized: true });
+    return next();
+});
 
-app.get('/', (req, res) => {
-    res.render('index.pug', {tools:tools});
-})
-
-app.get('/newjob', (req, res) => {
-    res.render('new-job.pug', {tools:tools});
-})
-
-app.get('/jobs', (req, res) => {
-    res.render('jobs.pug');
-})
-
-app.post('/directory/:dir', (req, res) => {
-    req.session.dataBrowser = req.session.dataBrowser || {};
-    let dir = (() => {
-        if (req.params.dir == "undefined") {
-            return req.session.dataBrowser.currentDir || '/';
-        }
-        return req.params.dir;
-    })()
-
-    data.readDirectory(dir, (err, files, breadcrumbs) => {
-        if (err) return res.status(500).send(err.message);
-        req.session.dataBrowser.breadcrumbs = breadcrumbs;
-        req.session.dataBrowser.currentDir = dir;
-        res.send({
-            dir: dir,
-            files: files,
-            breadcrumbs: breadcrumbs
-        });
-    })
-})
-
-app.post('/uploadfile', (req, res) => {
-    data.upload(req.files && req.files.file, (err) => {
-        if (err) return res.status(500).send(err.message);
-        res.end();
-    })
-})
-
-app.post('/getUploadedData', (req, res) => {
-    data.getUploaded((err, list) => {
-        if (err) return res.status(500).send(err.message);
-        res.send(list);
-    })
-})
-
-app.get('/run', (req, res) => {
-    tool_controller.process(req.query.tool, req.query.files, JSON.parse(req.query.settings), (err, job_id) => {
-        if (err) return res.status(500).send(err.message);
-        res.send(job_id.toString());
-    })
-})
-
-app.post('/getChart/:id', (req, res) => {
-    jobs.chart(req.params.id, (err, chart) => {
-        if (err) return res.status(500).send(err.message);
-        res.send(chart);
-    })
-})
-
-app.post('/jobStatus', (req, res) => {
-    jobs.stats((err, jobs) => {
-        if (err) return res.status(500).send(err.message);
-        res.json(jobs);
-    })
-})
-
-app.post('/deleteJob/:id', (req, res) => {
-    jobs.delete(req.params.id, (err) => {
-        if (err) res.status(500).end();
-        res.end();
-    })
-})
-
-app.get('/job/:id', (req, res) => {
-    jobs.get(req.params.id, (err, job) => {
-        if (err) return res.status(500).send(err.message);
-        res.render('job.pug', {job: job});
-    })
-})
-
-app.post('/job/:id', (req, res) => {
-    jobs.get(req.params.id, (err, job) => {
-        if (err) return res.status(500).send(err.message);
-        res.json(job);
-    })
-})
-
-app.get('/job/:id/log', (req, res) => {
-    jobs.getLog(req.params.id, (err, log) => {
-        if (err) return res.status(500).send(err.message);
-        res.send(log);
-    })
-})
-
-app.get('/job/:id/result', (req, res) => {
-    jobs.getResult(req.params.id, (err, result) => {
-        if (err) return res.status(500).send(err.message);
-        res.send(result);
-    })
-})
-
-app.get('/job/:id/result/download', (req, res) => {
-    jobs.downloadResult(req.params.id, (err, result) => {
-        if (err) return res.status(500).send(err.message);
-        res.send(result);
-    })
-})
-
-app.post('/updateSessionData', (req, res) => {
-    let objects = req.body;
-    for (let key in objects) {
-        req.session[key] = objects[key];
-    }
-    res.end();
-})
-
-app.post('/getSessionData/:object', (req, res) => {
-    let object = req.params.object;
-    if (!req.session[object]) return res.status(400).send("Session data not found.");
-    res.send(req.session[object]);
-})
+app.use(require("./routes/all"));
 
 app.listen(PORT, () => {
     console.log("Server listening on port " + PORT);
