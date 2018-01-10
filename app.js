@@ -5,6 +5,8 @@ const app = express();
 const session = require('express-session');
 const bodyParser = require('body-parser');
 
+const args = process.argv.slice(2);
+
 const PORT = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -18,18 +20,20 @@ app.use(session({
     saveUninitialized: true
 }))
 
-app.post('/login', (req, res) => {
-    if (req.body.pass == "woundreads") {
-        req.session.authorized = true;
-        return res.end();
-    }
-    return res.status(401).end();
-})
+if (!args.find((arg) => arg == "--no-auth")) {
+    app.post('/login', (req, res) => {
+        if (req.body.pass == "woundreads") {
+            req.session.authorized = true;
+            return res.end();
+        }
+        return res.status(401).end();
+    })
 
-app.use((req, res, next) => {
-    if (!req.session.authorized) return res.render("login.pug", { unauthorized: true });
-    return next();
-});
+    app.use((req, res, next) => {
+        if (!req.session.authorized) return res.render("login.pug", { unauthorized: true });
+        return next();
+    });
+}
 
 app.use("/", require("./routes/index"));
 app.use("/jobs", require("./routes/jobs"));

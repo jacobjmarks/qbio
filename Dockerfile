@@ -10,4 +10,8 @@ RUN npm install
 FROM node_modules AS application
 COPY . /src/
 CMD if [ "$RUN_TOOLS" = "true" ]; then bash qbio launch tools; fi; \
-    npm start
+    if [ "$AUTH_ENABLED" = "false" ]; then \
+        npm start -- --no-auth; \
+    else \
+        npm start; \
+    fi;

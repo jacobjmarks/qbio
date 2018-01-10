@@ -7,6 +7,7 @@ cd $SCRIPTPATH
 # DEFAULT CONFIGURATION ----------------------------
 PORT=80
 RUN_TOOLS=true
+AUTH_ENABLED=true
 # --------------------------------------------------
 
 # ARGUMENT PARSING ---------------------------------
@@ -26,6 +27,7 @@ Required:
 Optional:
     -p          Server port to expose the Qbio web interface. DEFAULT: 80
     --no-tools  Launch Qbio without building and running tools.
+    --no-auth   Disable Qbio's front-end usage authentication.
 "
 usage_clean="
 USAGE: qbio clean [OPTION]
@@ -64,6 +66,7 @@ launch()
         -v "$DATADIR":/qbio/data/ \
         -e DATADIR="$DATADIR" \
         -e RUN_TOOLS="$RUN_TOOLS" \
+        -e AUTH_ENABLED="$AUTH_ENABLED" \
         qbio
 }
 
@@ -98,6 +101,9 @@ case $1 in
                     ;;
                 "--no-tools")
                     RUN_TOOLS=false
+                    ;;
+                "--no-auth")
+                    AUTH_ENABLED=false
                     ;;
                 "tools")
                     launch tools
