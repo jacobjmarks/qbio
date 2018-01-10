@@ -1,0 +1,12 @@
+extends layout
+
+block scripts
+    script(src="https://cdn.plot.ly/plotly-latest.min.js")
+    script(src="/js/visualize.js")
+
+block content
+    .container-fluid
+        .row
+            #jobs.col-sm-3
+            #vis.col
+                div

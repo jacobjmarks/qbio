@@ -37,6 +37,7 @@ app.use("/job", require("./routes/job"));
 app.use("/data", require("./routes/data"));
 app.use("/tools", require("./routes/tools"));
 app.use("/session", require("./routes/session"));
+app.use("/visualize", require("./routes/visualize"));
 
 app.use((req, res) => {
     res.render("error.pug", { message: "404 Not Found" });
