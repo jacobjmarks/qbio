@@ -1,6 +1,12 @@
 $(document).ready(() => {
+    visdiv = $("#vis > div")[0];
     populateJobs();
+    
+    $(window).resize(() => {
+        if ($(visdiv).hasClass("js-plotly-plot")) Plotly.Plots.resize(visdiv);
+    });
 })
+
 
 function populateJobs() {
     $.ajax({
@@ -9,7 +15,7 @@ function populateJobs() {
         success: (data, status, req) => {
             data.forEach((job) => {
                 $("#jobs").append(
-                    $("<div class='card mb-3 w-100 text-center'>")
+                    $("<button class='card mb-3 w-100 align-items-center'>")
                         .append(
                             $("<div class='card-body'>")
                                 .html(job.created_at + '<br>' + job.tool)
@@ -30,9 +36,7 @@ function visualize(job) {
         success: (data, status, req) => {
             let result = data;
 
-            let div = $("#vis div")[0];
-
-            Plotly.purge(div);
+            Plotly.purge(visdiv);
             
             switch (job.tool) {
                 case "bloom_filter": (() => {
@@ -47,7 +51,7 @@ function visualize(job) {
                         plotvals.y.push(datum['BFBits']);
                     })
 
-                    Plotly.plot(div, [{
+                    Plotly.plot(visdiv, [{
                         y: plotvals.y,
                         mode: 'markers',
                         type: 'scatter'
@@ -70,7 +74,7 @@ function visualize(job) {
                         plotvals.y.push(datum['bitScore']);
                     })
 
-                    Plotly.plot(div, [{
+                    Plotly.plot(visdiv, [{
                         y: plotvals.y,
                         mode: 'markers',
                         type: 'scatter'
