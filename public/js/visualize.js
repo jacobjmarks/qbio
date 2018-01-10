@@ -48,8 +48,15 @@ function visualize(job) {
                     })
 
                     Plotly.plot(div, [{
-                        y: plotvals.y
-                    }], { margin: { t: 0 } })
+                        y: plotvals.y,
+                        mode: 'markers',
+                        type: 'scatter'
+                    }], {
+                        yaxis: {
+                            type: "log",
+                            autorange: true
+                        }
+                    })
                 })(); break;
                 case "mmseqs2": (() => {
                     let tsv = Plotly.d3.tsv.parse(result);
@@ -64,8 +71,15 @@ function visualize(job) {
                     })
 
                     Plotly.plot(div, [{
-                        y: plotvals.y
-                    }], { margin: { t: 0 } })
+                        y: plotvals.y,
+                        mode: 'markers',
+                        type: 'scatter'
+                    }], {
+                        yaxis: {
+                            type: "log",
+                            autorange: true
+                        }
+                    })
                 })(); break;
             }
         }
