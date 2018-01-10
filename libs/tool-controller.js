@@ -85,8 +85,17 @@ module.exports.process = (tool, files, settings, cb) => {
         
             cmd = `\
                 cd ${conf.jobDir}${job} && \
-                echo ${reads.join('\n')} >> readslist.txt && \
-                perl /MaxBin-2.2.4/run_MaxBin.pl -contig ${contig} -reads_list readslist.txt -out result ${log} \
+                perl /MaxBin-2.2.4/run_MaxBin.pl \
+                    -contig ${contig} \
+                    ${(() => {
+                        let read_strings = [];
+                        reads.forEach((read, index) => {
+                            read_strings.push(`-reads${index == 0 ? '' : index+1} ${read}`);
+                        })
+                        console.log(read_strings.join(' '))
+                        return read_strings.join(' ');
+                    })()} \
+                    -out result ${log} \
             `;
             break;
         // ------------------------------------------------------------------------------------------------------------------------------------------
