@@ -77,7 +77,7 @@ function dataDirectory(dir, e) {
                     $("<tr>")
                         .append(
                             // File/Folder Icon
-                            $("<td>").html(`<i class="fa fa-fw fa-${path.slice(-1) == '/' ? 'folder' : 'file-text'}">`)
+                            $("<td>").html(`<i class="fa fa-fw fa-${path.slice(-1) == '/' ? 'folder' : 'file-alt'}">`)
                         )
                         .append(
                             // Filename
@@ -121,7 +121,7 @@ function getUploadedData() {
                     $("<tr>")
                         .append(
                             // File Icon
-                            $("<td>").html("<i class='fa fa-fw fa-file-text'>")
+                            $("<td>").html("<i class='fa fa-fw fa-file-alt'>")
                         )
                         .append(
                             // Filename
@@ -176,7 +176,7 @@ function updateSelectedData(updateSession) {
             $("<tr>")
                 .append(
                     // File/Folder Icon
-                    $("<td>").html("<i class='fa fa-fw fa-file-text'>")
+                    $("<td>").html("<i class='fa fa-fw fa-file-alt'>")
                 )
                 .append(
                     // Filename
@@ -189,10 +189,12 @@ function updateSelectedData(updateSession) {
                 .append(
                     // Delete button
                     $("<td>").append(
-                        $("<i class='fa fa-times'>").click(() => {
-                            selectedData.splice(selectedData.indexOf(file), 1);
-                            updateSelectedData(true);
-                        })
+                        $("<div style='cursor:pointer'>")
+                            .append($("<i class='fa fa-times'>"))
+                            .click(() => {
+                                selectedData.splice(selectedData.indexOf(file), 1);
+                                updateSelectedData(true);
+                            })
                     )
                 )
         )
@@ -210,7 +212,7 @@ function updateToolData() {
                     $("<tr>")
                         .append(
                             // File Icon
-                            $("<td>").html("<i class='fa fa-fw fa-file-text'>")
+                            $("<td>").html("<i class='fa fa-fw fa-file-alt'>")
                         )
                         .append(
                             // Filename

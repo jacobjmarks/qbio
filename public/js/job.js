@@ -27,7 +27,7 @@ function update() {
                 setTimeout(update, 5000);
             } else {
                 // Job Complete
-                $("i.fa:first-child").css("color", job.error ? "red" : "green");
+                $("#status-icon-div").css("color", job.error ? "red" : "green");
                 $("#finished_at").html(new Date(job.finished_at).toLocaleString());
                 $("#btnDelete").prop("disabled", false);
                 if (job.error) {

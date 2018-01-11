@@ -33,10 +33,10 @@ button[disabled]:hover {
     max-height: 550px;
 }
 
-.tool-card .fa {
+.tool-card .chevron-div {
     transition: .3s transform ease-in-out;
 }
-.tool-card .collapsed .fa {
+.tool-card .collapsed .chevron-div {
     transform: rotate(-90deg);
 }
 

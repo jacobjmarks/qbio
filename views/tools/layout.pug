@@ -46,7 +46,8 @@ mixin checkbox(label)
 .card.tool-card.mb-3
     button.btn.card-header.text-left.bg-white.collapsed(data-toggle='collapse' href=`#${tool.func}`)
         h4.mb-0 #{tool.name} &nbsp;
-            .float-right.fa.fa-chevron-down
+            .chevron-div.float-right
+                .fa.fa-chevron-down
             .d-inline.small.text-muted.float-right #{tool.version} &nbsp;
     .collapse(id=tool.func)
         .card-body
