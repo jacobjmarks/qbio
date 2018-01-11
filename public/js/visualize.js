@@ -15,28 +15,42 @@ function populateJobs() {
         success: (data, status, req) => {
             data.forEach((job) => {
                 $("#jobs").append(
-                    $("<button class='card mb-3 w-100 align-items-center'>")
+                    $("<div class='card mb-3 w-100'>")
                         .append(
                             $("<div class='card-body'>")
-                                .html(job.created_at + '<br>' + job.tool)
+                                .append(
+                                    $("<div class='float-left'>")
+                                        .html(job.created_at + '<br>' + job.tool)
+                                    )
+                                .append(
+                                    $("<button class='btn btn-link float-right'>")
+                                        .append($("<i class='fa fa-plus'>"))
+                                        .click(() => {
+                                            visualize(job, true);
+                                        })
+                                )
+                                .append(
+                                    $("<button class='btn btn-light float-right'>")
+                                        .append($("<i class='fa fa-eye'>"))
+                                        .click(() => {
+                                            visualize(job);
+                                        })
+                                )
                         )
-                        .click(() => {
-                            visualize(job);
-                        })
                 )
             })
         }
     })
 }
 
-function visualize(job) {
+function visualize(job, append) {
     $.ajax({
         method: "GET",
         url: `job/${job.created_at}/result/download`,
         success: (data, status, req) => {
             let result = data;
 
-            Plotly.purge(visdiv);
+            if (!append) Plotly.purge(visdiv);
             
             switch (job.tool) {
                 case "bloom_filter": (() => {
