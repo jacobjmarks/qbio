@@ -1,0 +1,3 @@
+[submodule "TOOLS/sigclust/src"]
+	path = TOOLS/sigclust/src
+	url = https://github.com/tchappell/SigClust

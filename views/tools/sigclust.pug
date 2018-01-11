@@ -1,0 +1,23 @@
+extends layout
+
+block variables
+    - var this_tool = "SigClust"
+
+block settings
+    form
+        .row
+            .col
+                +dataSelection("Fasta Input")(name="fasta-input" type="select")
+        .row
+            .col-sm-6
+                +input("Signature Width")(name="signature-width" type="number" placeholder=256 default=256)
+            .col-sm-6
+                +input("Kmer Length")(name="kmer-length" type="number" placeholder=5 default=5)
+        .row
+            .col-sm-6
+                +input("Signature Density")(name="signature-density" type="number" placeholder=0.047619048 default=0.047619048)
+            .col-sm-6
+                +input("Cluster Count")(name="cluster-count" type="number" placeholder=1000 default=1000)
+        .row
+            .col-sm-6
+                +input("K-means Iterations")(name="k-means-iterations" type="number" placeholder=4 default=4)

@@ -43,5 +43,14 @@
         "version": "593212e",
         "source": "https://github.com/soedinglab/MMseqs2",
         "description": "MMseqs2 is a software suite to search and cluster huge protein sequence sets.<br>Steinegger M and Soeding J. MMseqs2 enables sensitive protein sequence searching for the analysis of massive data sets. Nature Biotechnology, doi: 10.1038/nbt.3988 (2017)"
+    },
+    {
+        "name": "SigClust",
+        "func": "sigclust",
+        "caption": "",
+        "author": "Timothy Chappell",
+        "version": "21a1136",
+        "source": "https://github.com/tchappell/SigClust",
+        "description": "k-means clustering for biological sequences using topological signatures"
     }
 ]

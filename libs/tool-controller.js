@@ -136,6 +136,19 @@ module.exports.process = (tool, files, settings, cb) => {
             `;
             break;
         // ------------------------------------------------------------------------------------------------------------------------------------------
+        case "sigclust":
+            cmd = `\
+                ./SigClust \
+                    -sw ${settings['signature-width']} \
+                    -k ${settings['kmer-length']} \
+                    -d ${settings['signature-density']} \
+                    -c ${settings['cluster-count']} \
+                    -i ${settings['k-means-iterations']} \
+                    ${files['fasta-input']} \
+                    1> ${conf.jobDir + job}/result.txt \
+                    2> ${conf.jobDir + job}/log.txt \
+            `;
+            break;
     }
 
     try {
