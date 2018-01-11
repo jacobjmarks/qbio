@@ -19,7 +19,6 @@ module.exports.process = (tool, files, settings, cb) => {
     files = files_absolute;
 
     let job = Date.now();
-    let log = `&>> ${conf.jobDir}${job}/log.txt`;
     let cmd = "";
 
     switch (tool) {
@@ -28,17 +27,17 @@ module.exports.process = (tool, files, settings, cb) => {
             let tempDir = conf.jobDir + job + '/temp';
 
             cmd = `\
-                echo 'QBIO: PREPARING DATA...' ${log} && \
+                echo 'QBIO: PREPARING DATA...' && \
                 ${(() => {
                     let mccortex_builds = [];
                     files['files'].forEach((file, index) => {
                         let filename = path.parse(file).name;
-                        mccortex_builds.push(`mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s ${filename} -1 ${file} ${tempDir}/${filename}.ctx ${log}`);
+                        mccortex_builds.push(`mccortex/bin/mccortex31 build -k ${settings['kmer-size']} -s ${filename} -1 ${file} ${tempDir}/${filename}.ctx`);
                     })
                     return mccortex_builds.join(' && ');
                 })()} && \
-                echo 'QBIO: CONSTRUCTING BLOOM FILTERS...' ${log} && \
-                bigsi init ${tempDir}/database.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} ${log} && \
+                echo 'QBIO: CONSTRUCTING BLOOM FILTERS...' && \
+                bigsi init ${tempDir}/database.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} && \
                 ${(() => {
                     let bigsi_blooms = [];
                     files['files'].forEach((file, index) => {
@@ -47,7 +46,7 @@ module.exports.process = (tool, files, settings, cb) => {
                     })
                     return bigsi_blooms.join(' && ');
                 })()} && \ 
-                echo 'QBIO: BUILDING COMBINED GRAPH...' ${log} && \
+                echo 'QBIO: BUILDING COMBINED GRAPH...' && \
                 bigsi build ${tempDir}/database.bigsi \
                     ${(() => {
                         let bloom_files = [];
@@ -56,10 +55,9 @@ module.exports.process = (tool, files, settings, cb) => {
                             bloom_files.push(`${tempDir}/${filename}.bloom`)
                         })
                         return bloom_files.join(' ');
-                    })()} ${log} && \
-                echo 'QBIO: QUERYING...' ${log} && \
-                bigsi search --db ${tempDir}/database.bigsi -s ${settings['query-seq']} -o ${settings['output']} \
-                    > ${conf.jobDir}${job}/result.txt && \
+                    })()} && \
+                echo 'QBIO: QUERYING...' && \
+                bigsi search --db ${tempDir}/database.bigsi -s ${settings['query-seq']} -o ${settings['output']} > ${conf.jobDir}${job}/result.txt && \
                 rm -Rf ${tempDir} \
             `;
             break;
@@ -75,7 +73,6 @@ module.exports.process = (tool, files, settings, cb) => {
                     -f ${settings['hash-functions']} \
                     -threshold ${settings['kmer-threshold']} \
                     -comparekmers false \
-                    ${log} \
             `;
             break;
         // ------------------------------------------------------------------------------------------------------------------------------------------
@@ -95,7 +92,7 @@ module.exports.process = (tool, files, settings, cb) => {
                         console.log(read_strings.join(' '))
                         return read_strings.join(' ');
                     })()} \
-                    -out result ${log} \
+                    -out result \
             `;
             break;
         // ------------------------------------------------------------------------------------------------------------------------------------------
@@ -105,9 +102,9 @@ module.exports.process = (tool, files, settings, cb) => {
         
             cmd = `\
                 cd ${conf.jobDir}${job} && \
-                jgi_summarize_bam_contig_depths --outputDepth depth.txt ${bams.join(' ')} ${log} && \
-                cat depth.txt ${log} && \
-                metabat2 -i ${assembly} -a depth.txt -o ./bins ${log} \
+                jgi_summarize_bam_contig_depths --outputDepth depth.txt ${bams.join(' ')} && \
+                cat depth.txt && \
+                metabat2 -i ${assembly} -a depth.txt -o ./bins \
             `;
             break;
         // ------------------------------------------------------------------------------------------------------------------------------------------
@@ -118,19 +115,15 @@ module.exports.process = (tool, files, settings, cb) => {
             cmd =`\
                 cd ${conf.jobDir}${job} && \
                 mkdir temp && cd temp && mkdir temp && \
-                echo 'QBIO: CONVERTING TO MMSEQS DB FORMAT...' ${log} && \
-                mmseqs createdb ${queryDB} queryDB ${log} && \
-                mmseqs createdb ${targetDB} targetDB ${log} && \
-                echo 'QBIO: SEARCHING...' ${log} && \
-                mmseqs search queryDB targetDB resultDB temp \
-                    ${settings['pairwise'] ? '-a' : ''} \
-                    ${log} && \
-                echo 'QBIO: CREATING RESULT TSV...' ${log} && \
-                mmseqs convertalis queryDB targetDB resultDB result.m8 \
-                    ${settings['pairwise'] ? '--format-mode 1' : ''} \
-                    ${log} && \
+                echo 'QBIO: CONVERTING TO MMSEQS DB FORMAT...' && \
+                mmseqs createdb ${queryDB} queryDB && \
+                mmseqs createdb ${targetDB} targetDB && \
+                echo 'QBIO: SEARCHING...' && \
+                mmseqs search queryDB targetDB resultDB temp ${settings['pairwise'] ? '-a' : ''} && \
+                echo 'QBIO: CREATING RESULT TSV...' && \
+                mmseqs convertalis queryDB targetDB resultDB result.m8 ${settings['pairwise'] ? '--format-mode 1' : ''} && \
                 cd ../ && \
-                echo 'qId\ttId\tseqIdentity\talnLen\tmismatchCnt\tgapOpenCnt\tqStart\tqEnd\ttStart\ttEnd\teVal\tbitScore\n' > result.txt && \
+                echo 'qId\ttId\tseqIdentity\talnLen\tmismatchCnt\tgapOpenCnt\tqStart\tqEnd\ttStart\ttEnd\teVal\tbitScore' > result.txt && \
                 cat temp/result.m8 >> result.txt && \
                 rm -r temp \
             `;
@@ -146,13 +139,13 @@ module.exports.process = (tool, files, settings, cb) => {
                     -i ${settings['k-means-iterations']} \
                     ${files['fasta-input']} \
                     1> ${conf.jobDir + job}/result.txt \
-                    2> ${conf.jobDir + job}/log.txt \
+                    2> ${log} \
             `;
             break;
     }
 
     try {
-        exec(`docker exec qbio_${tool} bash -c "${cmd}"`, (error, stdout, stderr) => {
+        exec(`docker exec qbio_${tool} bash -c "exec &>> ${conf.jobDir + job + "/log.txt"} && ${cmd}"`, (error, stdout, stderr) => {
             jobs.update(job, {
                 finished_at: Date.now(),
                 error: error && error.message
