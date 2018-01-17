@@ -1,0 +1,9 @@
+{
+    "name": "MetaBAT",
+    "func": "metabat",
+    "caption": "",
+    "author": "Dongwan D. Kang1, Jeff Froula1, Rob Egan1, Zhong Wang",
+    "version": "2.12.1",
+    "source": "https://bitbucket.org/berkeleylab/metabat",
+    "description": "(2015) MetaBAT, an efficient tool for accurately reconstructing single genomes from complex microbial communities. PeerJ 3:e1165 https://doi.org/10.7717/peerj.1165"
+}

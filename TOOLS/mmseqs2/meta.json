@@ -1,0 +1,9 @@
+{
+    "name": "MMseqs2",
+    "func": "mmseqs2",
+    "caption": "Many-against-Many searching",
+    "author": "Martin Steinegger",
+    "version": "593212e",
+    "source": "https://github.com/soedinglab/MMseqs2",
+    "description": "MMseqs2 is a software suite to search and cluster huge protein sequence sets.<br>Steinegger M and Soeding J. MMseqs2 enables sensitive protein sequence searching for the analysis of massive data sets. Nature Biotechnology, doi: 10.1038/nbt.3988 (2017)"
+}

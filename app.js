@@ -9,6 +9,8 @@ const args = process.argv.slice(2);
 
 const PORT = 3000;
 
+const tools = require("./libs/tools.js");
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -34,6 +36,11 @@ if (!args.find((arg) => arg == "--no-auth")) {
         return next();
     });
 }
+
+tools.getMeta((err, meta) => {
+    if (err) throw err;
+    app.set("tool_meta", meta);
+})
 
 app.use("/", require("./routes/index"));
 app.use("/jobs", require("./routes/jobs"));

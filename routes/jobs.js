@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/new', (req, res) => {
-    res.render('new-job.pug', { tools: require('../tools.json') });
+    res.render('new-job.pug', { tools: req.app.get("tool_meta") });
 })
 
 router.get('/status', (req, res) => {

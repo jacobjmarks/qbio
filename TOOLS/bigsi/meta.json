@@ -1,0 +1,9 @@
+{
+    "name": "BIGSI",
+    "func": "bigsi",
+    "caption": "BItsliced Genomic Signature Index",
+    "author": "Phelim Bradley, Henk den Bakker, Eduardo Rocha, Gil McVean, Zamin Iqbal",
+    "version": "0.1.5",
+    "source": "https://github.com/Phelimb/BIGSI",
+    "description": "BIGSI can search a collection of raw (fastq/bam), contigs or assembly for genes, variant alleles and arbitrary sequence.<br>bioRxiv 234955; doi: https://doi.org/10.1101/234955"
+}

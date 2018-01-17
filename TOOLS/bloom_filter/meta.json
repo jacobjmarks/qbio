@@ -1,0 +1,9 @@
+{
+    "name": "Bloom Filter",
+    "func": "bloom_filter",
+    "caption": "",
+    "author": "Benjamin Saljooghi",
+    "version": "7828b16",
+    "source": "https://github.com/benjaminsaljooghi/bloom-filter",
+    "description": "F# bloom filter implementation for fast DNA sequence comparison."
+}
