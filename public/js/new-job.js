@@ -73,6 +73,7 @@ function updateBreadcrumbs(breadcrumbs) {
 }
 
 function dataDirectory(dir, e) {
+    $("#serverData #overlay").show();
     $.ajax({
         method: "GET",
         url: `/data/server/${encodeURIComponent(dir)}`,
@@ -117,6 +118,9 @@ function dataDirectory(dir, e) {
         },
         error: (req, status, error) => {
             $(e).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
+        },
+        complete: () => {
+            $("#serverData #overlay").hide();
         }
     })
 }
