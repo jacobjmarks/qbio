@@ -79,6 +79,8 @@ function dataDirectory(dir, e) {
         success: (data, status, req) => {
             updateBreadcrumbs(data.breadcrumbs);
             $("#serverData tbody").empty();
+
+            let rows = [];
             data.files.forEach((file) => {
                 let path = data.dir + file.name;
                 
@@ -109,8 +111,9 @@ function dataDirectory(dir, e) {
                             }
                         })
 
-                $("#serverData tbody").append(row)
+                rows.push(row);
             });
+            $("#serverData tbody").append(rows);
         },
         error: (req, status, error) => {
             $(e).effect("highlight", {color:'rgba(255,0,0,0.5)'}, 1000);
