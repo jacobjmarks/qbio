@@ -42,7 +42,7 @@ module.exports.process = (tool, files, settings, cb) => {
                     let bigsi_blooms = [];
                     files['files'].forEach((file, index) => {
                         let filename = path.parse(file).name;
-                        bigsi_blooms.push(`bigsi bloom --db ${tempDir}/database.bigsi -c ${tempDir}/${filename}.ctx ${tempDir}/${filename}.bloom ${log}`);
+                        bigsi_blooms.push(`bigsi bloom --db ${tempDir}/database.bigsi -c ${tempDir}/${filename}.ctx ${tempDir}/${filename}.bloom`);
                     })
                     return bigsi_blooms.join(' && ');
                 })()} && \ 
@@ -139,7 +139,6 @@ module.exports.process = (tool, files, settings, cb) => {
                     -i ${settings['k-means-iterations']} \
                     ${files['fasta-input']} \
                     1> ${conf.jobDir + job}/result.txt \
-                    2> ${log} \
             `;
             break;
     }
