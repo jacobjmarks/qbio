@@ -47,7 +47,7 @@ $(document).ready(() => {
     })
 
     // Collapse other tool cards when opening one
-    $("#tools button").click((e) => {
+    $("#tools button.card-header").click((e) => {
         $("#tools .collapse").toArray().forEach((div) => {
             if (div != $($(e.currentTarget).attr("href"))[0]) {
                 $(div).collapse("hide");
