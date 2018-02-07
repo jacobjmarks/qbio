@@ -1,5 +1,6 @@
 {
     "dataDir": "/qbio/data/",
     "jobDir": "/qbio/jobs/",
-    "uploadDir": "/qbio/uploaded/"
+    "uploadDir": "/qbio/uploaded/",
+    "otherDir": "/qbio/other/"
 }

@@ -69,9 +69,7 @@ module.exports.upload = (file, cb) => {
 
 module.exports.getUploaded = (cb) => {
     fs.exists(conf.uploadDir, (exists) => {
-        if (!exists) {
-            return cb();
-        }
+        if (!exists) return cb();
 
         fs.readdir(conf.uploadDir, (err, files) => {
             if (err) return cb(new Error("Error retrieving uploaded datafiles."));
@@ -86,6 +84,31 @@ module.exports.getUploaded = (cb) => {
                     if (list.length == files.length) {
                         cb(null, list);
                     }
+                })
+            })
+        })
+    })
+}
+
+module.exports.readOtherDir = (dir, cb) => {
+    fs.exists(path.join(conf.otherDir, dir), (exists) => {
+        if (!exists) return cb(new Error(`'${path.join(conf.otherDir, dir)}' does not exist.`));
+
+        fs.stat(path.join(conf.otherDir, dir), (err, stats) => {
+            if (!stats.isDirectory) return cb(new Error(`'${path.join(conf.otherDir, dir)}' is not a directory.`));
+
+            fs.readdir(path.join(conf.otherDir, dir), (err, files) => {
+                let list = [];
+                files.forEach((file) => {
+                    fs.stat(path.join(conf.otherDir, dir, file), (err, stats) => {
+                        list.push({
+                            name: file,
+                            size: (!err ? Number.parseFloat(stats.size / 1000000.0).toFixed(3) : "-") + " MB"
+                        })
+                        if (list.length == files.length) {
+                            cb(null, list);
+                        }
+                    })
                 })
             })
         })

@@ -46,6 +46,47 @@ $(document).ready(() => {
         })
     })
 
+    $("a#nav-bigsi-saved-tab").click(() => {
+        $("#nav-bigsi-saved .fa-spinner").show();
+        $("#nav-bigsi-saved table tbody").empty();
+        $.ajax({
+            method: "GET",
+            url: "/tools/bigsi/getSavedDatabases",
+            success: (data, status, req) => {
+                if (!data) $("#no-saved-bigsi-databases").show();
+                $("#no-saved-bigsi-databases").hide();
+                console.log(data);
+                data.forEach((file) => {
+                    $("#nav-bigsi-saved table tbody").append(
+                        $("<tr>")
+                            .append(
+                                // File Icon
+                                $("<td>").html("<i class='fa fa-fw fa-file-alt'>")
+                            )
+                            .append(
+                                // Filename
+                                $("<td class='col filename'>").text(file.name)
+                            )
+                            .append(
+                                // Filesize
+                                $("<td class='filesize'>").text(file.size)
+                            )
+                            .append(
+                                // Checkbox
+                                $("<td>").html("<input type='radio' name='bigsi-saved-selected'>")
+                            )
+                    )
+                })
+            },
+            error: (req, status, error) => {
+                console.log(error);
+            },
+            complete: () => {
+                $("#nav-bigsi-saved .fa-spinner").hide();
+            }
+        })
+    })
+
     // Collapse other tool cards when opening one
     $("#tools button.card-header").click((e) => {
         $("#tools .collapse").toArray().forEach((div) => {

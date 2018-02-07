@@ -4,12 +4,18 @@ const fs = require('fs');
 const app = express();
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const args = process.argv.slice(2);
 
 const PORT = 3000;
 
+const conf = require('./conf.json');
 const tools = require("./libs/tools.js");
+
+fs.exists(conf.otherDir, (exists) => {
+    if (!exists) fs.mkdirSync(conf.otherDir);
+})
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

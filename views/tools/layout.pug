@@ -36,9 +36,9 @@ mixin select(label)
                 option(selected=(option == attributes.default))= option
 
 mixin checkbox(label)
-    .form-group
-        label &nbsp;
-        label.custom-form-check-label.form-control
+    .form-group.mb-0
+        //- label &nbsp;
+        label.custom-form-check-label.form-control.mb-0
             input.setting.custom-form-check-input(type="checkbox" name!=attributes.name)
             | #{label}
 

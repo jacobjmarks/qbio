@@ -7,7 +7,22 @@ block settings
     form
         .row
             .col
-                +dataSelection("Target/s")(name="files" type="table")
+                label Database
+                nav.nav.nav-tabs(role="tablist")
+                    a#nav-bigsi-new-tab.nav-item.nav-link.active(data-toggle="tab" href="#nav-bigsi-new" role="tab" aria-controls="nav-bigsi-new" aria-selected="true")
+                        | New
+                    a#nav-bigsi-saved-tab.nav-item.nav-link(data-toggle="tab" href="#nav-bigsi-saved" role="tab" aria-controls="nav-bigsi-saved" aria-selected="false")
+                        | Saved
+                .tab-content.p-3.mb-3.bg-white.border.border-top-0
+                    #nav-bigsi-new.tab-pane.show.active(role="tabpanel" aria-labelledby="nav-bigsi-new-tab")
+                        +dataSelection("Target/s")(name="files" type="table")
+                        +checkbox("Save for reuse")(name="save-bigsi")
+                    #nav-bigsi-saved.tab-pane(role="tabpanel" aria-labelledby="nav-bigsi-saved-tab")
+                        .text-center
+                            i.fa.fa-spin.fa-spinner
+                            #no-saved-bigsi-databases(style="display:none") No Saved Databases
+                        table.table.table-sm.table-responsive.table-hover.mb-0
+                            tbody
         .row
             .col
                 +input("Query")(name="query-seq" type="text" placeholder="Sequence..." required=true caption=">= Kmer Size")

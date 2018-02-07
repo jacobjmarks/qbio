@@ -26,6 +26,20 @@ module.exports.process = (tool, files, settings, cb) => {
         case "bigsi":
             let tempDir = conf.jobDir + job + '/temp';
 
+            let bigsiFile =
+                path.join(
+                    (() => {
+                        if (settings['save-bigsi']) {
+                            let bigsiStore = path.join(conf.otherDir, "/bigsi/");
+                            if (!fs.existsSync(bigsiStore)) fs.mkdirSync(bigsiStore);
+                            return bigsiStore;
+                        } else {
+                            return tempDir;
+                        }
+                    })(),
+                    `${job}.bigsi`
+                );
+
             cmd = `\
                 echo 'QBIO: PREPARING DATA...' && \
                 ${(() => {
@@ -37,17 +51,17 @@ module.exports.process = (tool, files, settings, cb) => {
                     return mccortex_builds.join(' && ');
                 })()} && \
                 echo 'QBIO: CONSTRUCTING BLOOM FILTERS...' && \
-                bigsi init ${tempDir}/database.bigsi --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} && \
+                bigsi init ${bigsiFile} --k ${settings['kmer-size']} --m ${settings['m']} --h ${settings['h']} && \
                 ${(() => {
                     let bigsi_blooms = [];
                     files['files'].forEach((file, index) => {
                         let filename = path.parse(file).name;
-                        bigsi_blooms.push(`bigsi bloom --db ${tempDir}/database.bigsi -c ${tempDir}/${filename}.ctx ${tempDir}/${filename}.bloom`);
+                        bigsi_blooms.push(`bigsi bloom --db ${bigsiFile} -c ${tempDir}/${filename}.ctx ${tempDir}/${filename}.bloom`);
                     })
                     return bigsi_blooms.join(' && ');
-                })()} && \ 
+                })()} && \
                 echo 'QBIO: BUILDING COMBINED GRAPH...' && \
-                bigsi build ${tempDir}/database.bigsi \
+                bigsi build ${bigsiFile} \
                     ${(() => {
                         let bloom_files = [];
                         files['files'].forEach((file, index) => {
@@ -57,7 +71,7 @@ module.exports.process = (tool, files, settings, cb) => {
                         return bloom_files.join(' ');
                     })()} && \
                 echo 'QBIO: QUERYING...' && \
-                bigsi search --db ${tempDir}/database.bigsi -s ${settings['query-seq']} -o ${settings['output']} > ${conf.jobDir}${job}/result.txt && \
+                bigsi search --db ${bigsiFile} -s ${settings['query-seq']} -o ${settings['output']} > ${conf.jobDir}${job}/result.txt && \
                 rm -Rf ${tempDir} \
             `;
             break;
